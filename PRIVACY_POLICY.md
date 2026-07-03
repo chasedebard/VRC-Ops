@@ -4,11 +4,11 @@
 
 This Privacy Policy explains how VRC ("**the App**," "**we**," "**us**") collects, uses, stores, and protects information when you use the VRC iOS, iPadOS, or macOS application and its associated backend services.
 
-If you have questions about this policy, contact us at **`CONTACT_EMAIL`** (placeholder — e.g. `support@[YOUR_DOMAIN].com`).
+If you have questions about this policy, contact us at **`povchaos@gmail.com`**.
 
 ## 1. Who we are
 
-VRC is operated by **[COMPANY / DEVELOPER NAME — PLACEHOLDER]**, a **[LEGAL ENTITY TYPE — PLACEHOLDER, e.g. sole proprietorship / LLC]** based in **[JURISDICTION — PLACEHOLDER]**. This section should be completed with the actual legal entity operating the App before this policy is published.
+VRC is operated by **some random fella named Chase DeBard**, a **sinlge man operation** based in **Pennsylvania**. This section should be completed with the actual legal entity operating the App before this policy is published.
 
 ## 2. Information we collect
 
