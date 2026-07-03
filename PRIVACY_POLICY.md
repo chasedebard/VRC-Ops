@@ -1,5 +1,3 @@
-> **Draft notice:** This document is a **template/draft** privacy policy prepared for the VRC (Virtual Race Control / RFS Race Control) app. It is **not legal advice** and has **not been reviewed by legal counsel**. Before using this policy in production, have it reviewed by a qualified attorney familiar with your jurisdiction and the jurisdictions of your users, and replace all placeholders (marked like `[PLACEHOLDER]` or `CONTACT_EMAIL`) with real, verified information.
-
 # Privacy Policy
 
 **Last updated:** July 3, 2026
