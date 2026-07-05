@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="VRC Ops — league management and race control for sim racing." />
+    <title>VRC Ops</title>
+    <script>
+      (function () {
+        var stored = localStorage.getItem('vrc-theme')
+        var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.classList.toggle('dark', dark)
+      })()
+    </script>
+    <script>
+      // Restores the real path after the public/404.html SPA-fallback redirect (see that file).
+      ;(function () {
+        var params = new URLSearchParams(location.search)
+        var redirect = params.get('redirect')
+        if (redirect) {
+          history.replaceState(null, '', redirect)
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
