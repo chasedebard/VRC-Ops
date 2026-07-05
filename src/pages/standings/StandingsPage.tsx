@@ -39,7 +39,13 @@ export default function StandingsPage() {
       const catalog =
         type === 'class' ? classesService : type === 'regional' ? regionsService : teamsService
       const all = await catalog.list(selectedLeague!.league.id)
-      const options = keys.map((k) => ({ id: k, label: all.find((c) => c.id === k)?.name ?? k }))
+      // group_key values written by the native app are uppercase UUID strings
+      // (Swift's `UUID().uuidString`), while classes/regions/teams ids come
+      // back from Postgres lowercase — compare case-insensitively.
+      const options = keys.map((k) => ({
+        id: k,
+        label: all.find((c) => c.id.toLowerCase() === k.toLowerCase())?.name ?? k,
+      }))
       setGroupOptions(options)
       setGroupKey(options[0]?.id ?? null)
     }

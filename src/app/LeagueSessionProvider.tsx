@@ -47,7 +47,7 @@ export function LeagueSessionProvider({ children }: { children: ReactNode }) {
     const [profileRow, acceptedGeneral, myLeagues] = await Promise.all([
       getOwnProfile(userId),
       hasAcceptedCurrent('general'),
-      getMyLeagues(),
+      getMyLeagues(userId),
     ])
     setProfile(profileRow)
     setLegalAccepted(acceptedGeneral)

@@ -25,11 +25,12 @@ export default function InviteAcceptancePage() {
   const [status, setStatus] = useState<'pending' | 'success' | 'error'>('pending')
   const [leagueName, setLeagueName] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const userId = state.kind === 'authenticated' ? state.user.id : null
 
   useEffect(() => {
     if (!token) return
 
-    if (state.kind !== 'authenticated') {
+    if (!userId) {
       window.localStorage.setItem(PENDING_INVITE_KEY, token)
       return
     }
@@ -40,7 +41,7 @@ export default function InviteAcceptancePage() {
         if (cancelled) return
         window.localStorage.removeItem(PENDING_INVITE_KEY)
         await refresh()
-        const leagues = await getMyLeagues()
+        const leagues = await getMyLeagues(userId)
         const league = leagues.find((l) => l.league.id === leagueId)
         selectLeague(leagueId)
         setLeagueName(league?.league.name ?? null)
@@ -54,7 +55,7 @@ export default function InviteAcceptancePage() {
     return () => {
       cancelled = true
     }
-  }, [token, state.kind, refresh, selectLeague])
+  }, [token, userId, refresh, selectLeague])
 
   if (state.kind !== 'authenticated') {
     return (

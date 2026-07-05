@@ -7,12 +7,19 @@ export interface MyLeagueMembership {
   roles: VrcRole[]
 }
 
-/** Every league the signed-in user is an active member of, with their role set. */
-export async function getMyLeagues(): Promise<MyLeagueMembership[]> {
+/**
+ * Every league the signed-in user is an active member of, with their role set.
+ * Must filter by `user_id` explicitly — RLS on `memberships` allows reading
+ * every co-league member's row (for member-management screens), not just the
+ * caller's own, so omitting this filter returns one row per *member of every
+ * shared league*, not one row per *league the caller belongs to*.
+ */
+export async function getMyLeagues(userId: string): Promise<MyLeagueMembership[]> {
   const { data: memberships, error } = await supabase
     .from('memberships')
     .select('id, league_id, status, leagues(*), membership_roles(role)')
     .eq('status', 'active')
+    .eq('user_id', userId)
     .returns<
       (MembershipRow & { leagues: LeagueRow; membership_roles: Pick<MembershipRoleRow, 'role'>[] })[]
     >()
