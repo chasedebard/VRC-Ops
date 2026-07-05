@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>VRC Ops</title>
+    <!--
+      GitHub Pages has no server-side rewrites, so a deep link like
+      /drivers/123 hits this 404 page on a hard refresh. This redirects to
+      index.html with the original path encoded in the query string; the
+      matching script in index.html restores it via history.replaceState
+      before the React app mounts, so React Router still sees /drivers/123.
+      Standard "spa-github-pages" pattern.
+    -->
+    <script>
+      var path = location.pathname + location.search + location.hash
+      location.replace('/?redirect=' + encodeURIComponent(path))
+    </script>
+  </head>
+  <body></body>
+</html>
