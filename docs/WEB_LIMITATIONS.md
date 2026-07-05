@@ -82,6 +82,20 @@ read-only web-build context. Follow-up: once those identifiers are confirmed, ad
 (**in the Xcode repo, by whoever owns that repo** — this website repo must not modify it) to
 point `VRC_AUTH_REDIRECT_URL` at the HTTPS host.
 
+## Two-factor authentication is web-only, enforced client-side
+
+The website requires TOTP MFA for every sign-in — the native app does not, and this is
+intentional (the user explicitly asked for extra security on the web version specifically).
+Enforcement lives entirely in `src/hooks/useMfaGate.ts` + `src/app/ProtectedLayout.tsx`, checking
+Supabase Auth's Authenticator Assurance Level (`getAuthenticatorAssuranceLevel()`) after email
+verification and before anything else in the app renders. No backend schema or RLS policy was
+touched: MFA factors are account-level in Supabase Auth, but nothing in this repo requires `aal2`
+at the database layer, so native sign-ins remain password-only and are completely unaffected.
+
+If backend-level enforcement (RLS policies requiring `aal2` for writes) is wanted later, that
+would need migrations in the RFSRaceControl Supabase project and corresponding MFA
+enrollment/challenge UI in the native app — out of scope here by design.
+
 ## Schema types are hand-written, not generated
 
 `src/types/database.ts` was hand-derived from the migration SQL because no Supabase CLI/project

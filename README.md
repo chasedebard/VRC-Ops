@@ -14,6 +14,7 @@ VRC is built for sim racing league organizers, race directors, and stewards who 
 
 - **Leagues, championships & seasons** — create a league, structure it into championships and seasons, and invite staff and drivers by email.
 - **Roles & permissions** — Owner, Admin, Marshal, Driver, and Viewer roles control who can configure a series versus who can only follow it.
+- **Two-factor authentication (web-only)** — vrc-ops.org requires TOTP MFA for every sign-in, enforced client-side via Supabase Auth's Authenticator Assurance Level; native app sign-in is unaffected.
 - **Driver roster & profiles** — manage a driver roster with profiles, driver photos, team/class/region assignments, and season-by-season history.
 - **Track library & bulk import** — a shared, per-game track catalog with support for bulk-importing tracks from a file instead of adding them one at a time.
 - **Events & race weekends** — schedule events and race weekends tied to a season and a track.

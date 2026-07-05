@@ -10,16 +10,52 @@ import {
   type BlockingLeague,
 } from '@/services/account'
 import { getLeagueMembers, transferLeagueOwnership } from '@/services/leagues'
+import { listTotpFactors, unenrollFactor, type EnrolledFactor } from '@/services/mfa'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Field } from '@/components/Field'
 import { Button } from '@/components/Button'
+import { MfaEnrollForm } from '@/components/MfaEnrollForm'
 import { ROLE_LABEL } from '@/permissions/resolver'
+import { formatDate } from '@/utils/format'
 
 export default function AccountPage() {
   const { state, signOut } = useAuth()
   const { profile, selectedLeague, leagues, refresh } = useLeagueSession()
   const [displayName, setDisplayName] = useState(profile?.display_name ?? '')
   const [savingProfile, setSavingProfile] = useState(false)
+
+  const [factors, setFactors] = useState<EnrolledFactor[] | null>(null)
+  const [addingFactor, setAddingFactor] = useState(false)
+  const [mfaError, setMfaError] = useState<string | null>(null)
+
+  async function loadFactors() {
+    try {
+      setFactors(await listTotpFactors())
+    } catch (err) {
+      setMfaError(err instanceof Error ? err.message : 'Could not load your authenticator devices.')
+    }
+  }
+
+  useEffect(() => {
+    loadFactors()
+  }, [])
+
+  async function handleRemoveFactor(factorId: string) {
+    if (
+      !confirm(
+        "Remove this authenticator device? You'll be asked to set up MFA again next time you sign in.",
+      )
+    ) {
+      return
+    }
+    setMfaError(null)
+    try {
+      await unenrollFactor(factorId)
+      await loadFactors()
+    } catch (err) {
+      setMfaError(err instanceof Error ? err.message : 'Could not remove that device.')
+    }
+  }
 
   const [showDelete, setShowDelete] = useState(false)
   const [blockingLeagues, setBlockingLeagues] = useState<BlockingLeague[] | null>(null)
@@ -114,6 +150,50 @@ export default function AccountPage() {
           <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
             You're not a member of any league yet.
           </p>
+        )}
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Two-factor authentication</CardTitle>
+        </CardHeader>
+        <p className="mb-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+          Required for every VRC Ops web sign-in.
+        </p>
+        {mfaError && <p className="mb-3 text-sm" style={{ color: 'var(--color-danger)' }}>{mfaError}</p>}
+        {factors === null ? (
+          <p className="text-sm">Loading…</p>
+        ) : (
+          <>
+            {factors.length > 0 && (
+              <ul className="mb-3 space-y-2">
+                {factors.map((f) => (
+                  <li
+                    key={f.id}
+                    className="flex items-center justify-between rounded-lg border p-2 text-sm"
+                    style={{ borderColor: 'var(--color-border)' }}
+                  >
+                    <span>Authenticator app · added {formatDate(f.createdAt)}</span>
+                    <Button variant="secondary" onClick={() => handleRemoveFactor(f.id)}>
+                      Remove
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {addingFactor ? (
+              <MfaEnrollForm
+                onDone={() => {
+                  setAddingFactor(false)
+                  loadFactors()
+                }}
+              />
+            ) : (
+              <Button variant="secondary" onClick={() => setAddingFactor(true)}>
+                Add another device
+              </Button>
+            )}
+          </>
         )}
       </Card>
 

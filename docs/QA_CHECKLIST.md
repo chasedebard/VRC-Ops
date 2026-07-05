@@ -13,6 +13,21 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 - [ ] "Forgot password" sends a reset email; the reset link reaches `/reset-password/update` and
       a new password actually works on the next sign-in.
 - [ ] Sign out clears the session and redirects to `/login`.
+
+## Two-factor authentication (web-only requirement)
+
+- [ ] A verified sign-in with no enrolled authenticator is forced into the "Set up two-factor
+      authentication" screen before reaching anything else — not skippable via URL navigation.
+- [ ] The QR code renders as an actual scannable image (not literal text/broken image).
+- [ ] Entering a valid 6-digit code from the authenticator app completes enrollment and proceeds
+      to the dashboard/onboarding gate.
+- [ ] Signing out and back in with an enrolled account shows "Enter your authenticator code"
+      (challenge), not the enrollment screen again.
+- [ ] An invalid/expired code shows an inline error and does not proceed.
+- [ ] Account settings lists enrolled authenticator device(s) with a "Remove" option and an "Add
+      another device" flow; removing the only device forces re-enrollment on the next sign-in.
+- [ ] Native iOS/Android sign-in is unaffected (MFA is enforced only in this web app's client-side
+      gate, not via backend RLS).
 - [ ] Refreshing any authenticated route preserves the session (no forced re-login).
 - [ ] Visiting a protected route while signed out redirects to `/login`, not a blank page.
 
