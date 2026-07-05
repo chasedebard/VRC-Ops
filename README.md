@@ -4,7 +4,7 @@
 
 VRC (also known as RFS Race Control) is an iOS, iPadOS, and macOS app for running sim‑racing leagues and championships end to end — from setting up a season, to running qualifying and race sessions, to publishing standings and results your drivers can actually trust.
 
-This repository is the **documentation and operations hub** for the app. It does not contain application source code — see [PRIVACY_POLICY.md](PRIVACY_POLICY.md) and [SUPPORT.md](SUPPORT.md) for the other documents kept here.
+This repository is both the **documentation hub** for the product and the source for the **[vrc-ops.org](https://vrc-ops.org)** companion website, a GitHub Pages web app that talks to the same Supabase backend as the native apps.
 
 ## Who it's for
 
@@ -25,15 +25,50 @@ VRC is built for sim racing league organizers, race directors, and stewards who 
 
 ## Supported platforms
 
-- iOS
-- iPadOS
-- macOS
+- iOS, iPadOS, macOS (native app — source lives in a separate, private repository)
+- Web (this repository, [vrc-ops.org](https://vrc-ops.org)) — a companion read/write dashboard covering the same league operations, built for desktop, tablet, and mobile browsers
 
 ## Backend
 
-VRC is backed by Supabase: Postgres with row-level security, authentication, file storage (for driver photos and similar assets), and edge functions/scheduled jobs for things like league invite email delivery.
+VRC is backed by Supabase: Postgres with row-level security, authentication, file storage (for driver photos and similar assets), and edge functions/scheduled jobs for things like league invite email delivery. The website talks to the exact same Supabase project via the public anon key — every mutation is authorized server-side by RLS policies and `SECURITY DEFINER` RPCs, so the browser never needs elevated privileges.
+
+## Website: local setup
+
+```bash
+npm install
+cp .env.example .env   # fill in VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY
+npm run dev
+```
+
+Available scripts:
+
+| Script             | Purpose                                   |
+| ------------------ | ------------------------------------------ |
+| `npm run dev`       | Local dev server (Vite)                    |
+| `npm run build`     | Type-check and build a production bundle   |
+| `npm run preview`   | Serve the production build locally         |
+| `npm run typecheck` | `tsc` project-wide, no emit                |
+| `npm run lint`      | ESLint over the whole project              |
+
+### Environment variables
+
+Only the **anon/publishable** Supabase key belongs in this app (see `.env.example`) — it's safe for a public client because Row Level Security enforces every permission check server-side. Never add a `service-role` key here; the few operations that require one (account deletion, championship deletion, invite email delivery) are proxied through existing Supabase Edge Functions instead. See [docs/WEB_LIMITATIONS.md](docs/WEB_LIMITATIONS.md).
+
+| Variable                  | Purpose                                                        |
+| -------------------------- | --------------------------------------------------------------- |
+| `VITE_SUPABASE_URL`        | Supabase project URL                                            |
+| `VITE_SUPABASE_ANON_KEY`   | Supabase anon/publishable key                                   |
+| `VITE_APP_BASE_URL`        | This deployment's base URL, used to build invite/reset links    |
+
+## Website: deployment
+
+Deployed to GitHub Pages at the custom domain **vrc-ops.org**. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the full GitHub Pages + DNS + GitHub Desktop workflow.
 
 ## More documentation
 
 - [Privacy Policy](PRIVACY_POLICY.md) — what data VRC collects, how it's used, and your rights.
 - [Support](SUPPORT.md) — getting started, tips for common workflows, and troubleshooting.
+- [docs/XCODE_SOURCE_ANALYSIS.md](docs/XCODE_SOURCE_ANALYSIS.md) — how the native app's screens, roles, data model, and business logic were mapped onto this website.
+- [docs/WEB_LIMITATIONS.md](docs/WEB_LIMITATIONS.md) — what can't (or doesn't yet) run on GitHub Pages, and why.
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — GitHub Pages + custom domain deployment steps.
+- [docs/QA_CHECKLIST.md](docs/QA_CHECKLIST.md) — manual QA checklist by role.
