@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { getEvent, getEventDrivers } from '@/services/events'
 import { getSeasonEvents } from '@/services/events'
@@ -219,7 +219,14 @@ export default function ResultsPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Results</h1>
-        {resultSet?.official && <Badge tone="success">Official</Badge>}
+        <div className="flex items-center gap-2">
+          {resultSet?.official && <Badge tone="success">Official</Badge>}
+          {permissions.canApproveResults && eventId && (
+            <Link to={`/results/${eventId}/audit`} className="text-sm underline" style={{ color: 'var(--color-text-muted)' }}>
+              Audit log
+            </Link>
+          )}
+        </div>
       </div>
 
       {rows.length === 0 ? (

@@ -23,6 +23,7 @@ import RaceWeekendEventPage from '@/pages/raceWeekend/RaceWeekendEventPage'
 import RacePrepPage from '@/pages/raceWeekend/RacePrepPage'
 import QualifyingPage from '@/pages/raceWeekend/QualifyingPage'
 import ResultsPage from '@/pages/raceWeekend/ResultsPage'
+import ResultsAuditLogPage from '@/pages/raceWeekend/ResultsAuditLogPage'
 import StandingsPage from '@/pages/standings/StandingsPage'
 import PredictionsPage from '@/pages/predictions/PredictionsPage'
 import AdminPage from '@/pages/admin/AdminPage'
@@ -66,6 +67,7 @@ export function AppRoutes() {
         <Route path="/race-prep/:eventId" element={<RacePrepPage />} />
         <Route path="/qualifying/:eventId" element={<QualifyingPage />} />
         <Route path="/results/:eventId" element={<ResultsPage />} />
+        <Route path="/results/:eventId/audit" element={<ResultsAuditLogPage />} />
 
         <Route path="/standings" element={<StandingsPage />} />
         <Route path="/predictions" element={<PredictionsPage />} />
