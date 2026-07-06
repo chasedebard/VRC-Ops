@@ -198,6 +198,7 @@ export default function DashboardPage() {
             latestOutputs.filter((output) => output.driver_id === id).map((output) => output.total_points),
           ]),
         )
+        const reliabilityByDriver = new Map(factorInputs.map((f) => [f.driverId, f.reliability]))
         const outlook = simulateChampionshipOutlook(
           standingsInput,
           pastPointsByDriver,
@@ -206,6 +207,7 @@ export default function DashboardPage() {
           maxPointsPerRound,
           undefined,
           outlookState,
+          reliabilityByDriver,
         )
 
         const roundByEvent = new Map(events.map((e) => [e.id, e.round]))

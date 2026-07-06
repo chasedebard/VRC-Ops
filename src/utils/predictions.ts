@@ -463,6 +463,7 @@ const OUTLOOK_CLINCH_THRESHOLD = 0.6
 const OUTLOOK_ELIMINATION_THRESHOLD = 0.6
 const OUTLOOK_TRIALS = 600
 const OUTLOOK_POOL_PRIOR_STRENGTH = 3
+const OUTLOOK_DEFAULT_RELIABILITY = 0.85
 const MIN_OPEN_PROBABILITY = 0.01
 const MAX_OPEN_PROBABILITY = 0.99
 
@@ -479,6 +480,14 @@ interface ChampionshipOutlookState {
  * simulated round. That gives every driver a probability (not just the eventual champion
  * and the already-dead) plus an estimated round for when the underlying deterministic
  * fact is likely to land.
+ *
+ * Each simulated round also independently rolls a bad-round/incident chance from
+ * `reliabilityByDriver` (the Bayesian+PSF-adjusted reliability from buildFactorInputs)
+ * before falling back to bootstrapping a point value. Without this, a driver whose small
+ * early-season sample happens to be spotless can never generate a bad round in the
+ * simulation — a handful of clean races reads as gospel that the same driver is immune to
+ * incidents for the rest of the season, understating the field's real uncertainty this
+ * early and producing runaway near-100%/near-0% splits well before they're warranted.
  */
 export function simulateChampionshipOutlook(
   standings: { driverId: string; displayName: string; points: number }[],
@@ -488,6 +497,7 @@ export function simulateChampionshipOutlook(
   maxPointsPerRound: number,
   trials: number = OUTLOOK_TRIALS,
   currentState?: ChampionshipOutlookState,
+  reliabilityByDriver?: Map<string, number>,
 ): DriverOutlook[] {
   if (standings.length === 0) return []
 
@@ -532,11 +542,22 @@ export function simulateChampionshipOutlook(
       return [s.driverId, { own, ownWeight }]
     }),
   )
+  // A driver whose small sample so far has been perfectly consistent (e.g. winning every
+  // round outright) produces a bootstrap pool with zero spread, which reads as ironclad
+  // future certainty — every remaining round would replay their best-case result exactly.
+  // Real week-to-week performance always has more variance than a handful of races can
+  // reveal, so every draw gets jitter scaled to the field's own point spread (floored at a
+  // small minimum so an early, unusually consistent field doesn't collapse the jitter too).
+  const jitterMagnitude = Math.max(2, Math.sqrt(populationVariance(leaguePool.length > 1 ? leaguePool : [0, 0])) * 0.5)
   function drawPoints(driverId: string): number {
+    const reliability = reliabilityByDriver?.get(driverId) ?? OUTLOOK_DEFAULT_RELIABILITY
+    if (Math.random() > reliability) return 0
     const pool = pools.get(driverId)!
     const useOwn = pool.own.length > 0 && Math.random() < pool.ownWeight
     const source = useOwn ? pool.own : leaguePool.length > 0 ? leaguePool : pool.own.length > 0 ? pool.own : [0]
-    return source[Math.floor(Math.random() * source.length)]
+    const base = source[Math.floor(Math.random() * source.length)]
+    const jitter = (Math.random() - 0.5) * 2 * jitterMagnitude
+    return Math.max(0, base + jitter)
   }
 
   const clinchWins = new Map(standings.map((s) => [s.driverId, 0]))
