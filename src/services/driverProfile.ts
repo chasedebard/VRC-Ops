@@ -1,28 +1,36 @@
 import { supabase } from '@/supabase/client'
 import type { DriverHistoryRow, DriverRow } from '@/types/database'
 
-export async function getDriverHistory(driverId: string): Promise<DriverHistoryRow[]> {
+/**
+ * driver_history itself has no event date/round — `saved_at` is when the
+ * result was *persisted* (which can be long after the race, e.g. on a later
+ * correction) and must never be used as a proxy for "when the race happened".
+ * Embed the actual event so callers can sort/display by round and event_date.
+ */
+export interface DriverHistoryEntry extends DriverHistoryRow {
+  events: { round: number; event_date: string | null; custom_title: string | null; title: string | null } | null
+}
+
+export async function getDriverHistory(driverId: string): Promise<DriverHistoryEntry[]> {
   const { data, error } = await supabase
     .from('driver_history')
-    .select('*')
+    .select('*, events(round, event_date, custom_title, title)')
     .eq('driver_id', driverId)
-    .order('saved_at', { ascending: false })
-    .returns<DriverHistoryRow[]>()
+    .returns<DriverHistoryEntry[]>()
   if (error) throw error
-  return data ?? []
+  return (data ?? []).sort((a, b) => (b.events?.round ?? 0) - (a.events?.round ?? 0))
 }
 
 /** Every driver's history within one season — used by the predictions engine
  *  to build recent-form/track-history/reliability factors for the whole field. */
-export async function getSeasonDriverHistory(seasonId: string): Promise<DriverHistoryRow[]> {
+export async function getSeasonDriverHistory(seasonId: string): Promise<DriverHistoryEntry[]> {
   const { data, error } = await supabase
     .from('driver_history')
-    .select('*')
+    .select('*, events(round, event_date, custom_title, title)')
     .eq('season_id', seasonId)
-    .order('saved_at', { ascending: true })
-    .returns<DriverHistoryRow[]>()
+    .returns<DriverHistoryEntry[]>()
   if (error) throw error
-  return data ?? []
+  return (data ?? []).sort((a, b) => (a.events?.round ?? 0) - (b.events?.round ?? 0))
 }
 
 export interface DriverCareerStats {

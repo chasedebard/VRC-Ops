@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { getDriver, updateDriver } from '@/services/drivers'
-import { computeCareerStats, getDriverHistory } from '@/services/driverProfile'
+import { computeCareerStats, getDriverHistory, type DriverHistoryEntry } from '@/services/driverProfile'
 import { deleteDriverPhoto, uploadDriverPhoto } from '@/services/storage'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Badge } from '@/components/Badge'
@@ -12,7 +12,7 @@ import { DriverAvatar } from '@/components/DriverAvatar'
 import { TrendChart, type TrendPoint } from '@/components/charts/TrendChart'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
 import { formatDate, formatLapTime } from '@/utils/format'
-import type { DriverHistoryRow, DriverRow } from '@/types/database'
+import type { DriverRow } from '@/types/database'
 
 /** Ports DriverTrendService's formLabel heuristic (native: last 3 races). */
 function trendFormLabel(recentPoints: number[], recentPositions: (number | null)[]): string {
@@ -35,7 +35,7 @@ export default function DriverProfilePage() {
   const { state } = useAuth()
   const { permissions } = useLeagueSession()
   const [driver, setDriver] = useState<DriverRow | null | undefined>(undefined)
-  const [history, setHistory] = useState<DriverHistoryRow[] | null>(null)
+  const [history, setHistory] = useState<DriverHistoryEntry[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -86,7 +86,7 @@ export default function DriverProfilePage() {
   const career = computeCareerStats(history)
   const races = history
     .filter((h) => h.result_kind === 'race')
-    .sort((a, b) => (b.saved_at ?? '').localeCompare(a.saved_at ?? ''))
+    .sort((a, b) => (b.events?.round ?? 0) - (a.events?.round ?? 0))
   const racesChronological = [...races].reverse()
   const trendPoints: TrendPoint[] = racesChronological.map((r, i) => ({
     label: `${i + 1}`,
@@ -171,6 +171,7 @@ export default function DriverProfilePage() {
             <table className="w-full text-left text-sm">
               <thead>
                 <tr style={{ color: 'var(--color-text-muted)' }}>
+                  <th className="pb-2 pr-4">Round</th>
                   <th className="pb-2 pr-4">Date</th>
                   <th className="pb-2 pr-4">Finish</th>
                   <th className="pb-2 pr-4">Status</th>
@@ -183,7 +184,8 @@ export default function DriverProfilePage() {
               <tbody className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
                 {races.map((r) => (
                   <tr key={r.id}>
-                    <td className="py-2 pr-4">{formatDate(r.saved_at)}</td>
+                    <td className="py-2 pr-4">{r.events?.round ?? '—'}</td>
+                    <td className="py-2 pr-4">{formatDate(r.events?.event_date)}</td>
                     <td className="py-2 pr-4">{r.finish_position ?? '—'}</td>
                     <td className="py-2 pr-4 uppercase">{r.status ?? '—'}</td>
                     <td className="py-2 pr-4">{r.points ?? 0}</td>

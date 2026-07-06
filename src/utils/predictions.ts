@@ -1,4 +1,4 @@
-import type { DriverHistoryRow } from '@/types/database'
+import type { DriverHistoryEntry } from '@/services/driverProfile'
 
 /**
  * Ports the deterministic forecast math from VRCPredictionEngineV2 /
@@ -116,12 +116,12 @@ function clamp01(value: number): number {
 export function buildFactorInputs(
   driverId: string,
   displayName: string,
-  seasonHistory: DriverHistoryRow[],
+  seasonHistory: DriverHistoryEntry[],
   currentTrackId: string | null,
 ): DriverFactorInputs {
   const raceRows = seasonHistory
     .filter((r) => r.result_kind === 'race' && r.driver_id === driverId)
-    .sort((a, b) => (a.saved_at ?? '').localeCompare(b.saved_at ?? ''))
+    .sort((a, b) => (a.events?.round ?? 0) - (b.events?.round ?? 0))
 
   const completedRaceCount = raceRows.length
   if (completedRaceCount === 0) {
@@ -282,10 +282,10 @@ export function buildChampionshipForecast(
 }
 
 /** Blended pace for projecting remaining-season points: 60% last-3-races average + 40% season average. */
-export function computePace(history: DriverHistoryRow[], driverId: string): number {
+export function computePace(history: DriverHistoryEntry[], driverId: string): number {
   const raceRows = history
     .filter((r) => r.result_kind === 'race' && r.driver_id === driverId)
-    .sort((a, b) => (a.saved_at ?? '').localeCompare(b.saved_at ?? ''))
+    .sort((a, b) => (a.events?.round ?? 0) - (b.events?.round ?? 0))
   if (raceRows.length === 0) return 0
   const points = raceRows.map((r) => r.points ?? 0)
   return average(points.slice(-3)) * 0.6 + average(points) * 0.4
