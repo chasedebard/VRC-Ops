@@ -12,11 +12,13 @@ import { DEFAULT_SCORING_RULE } from '@/utils/scoring'
 import {
   buildChampionshipForecast,
   buildFactorInputs,
+  computeLeaguePriors,
   computePace,
   confidenceTier,
   fastestLapScore,
   formatPercent,
-  normalizeToProbabilities,
+  leagueAveragePacePerRound,
+  normalizeToProbabilitiesBayesian,
   podiumScore,
   poleScore,
   predictionConfidence,
@@ -43,9 +45,10 @@ export default function PredictionsPage() {
   const [context, setContext] = useState<{ championship: ChampionshipRow; season: SeasonRow } | null | undefined>(
     undefined,
   )
-  const [markets, setMarkets] = useState<Record<'raceWin' | 'podium' | 'pole' | 'fastestLap', MarketRow[]> | null>(
-    null,
-  )
+  const [markets, setMarkets] = useState<Record<
+    'raceWin' | 'podium' | 'pole' | 'fastestLap' | 'incidentRisk',
+    MarketRow[]
+  > | null>(null)
   const [confidence, setConfidence] = useState(0)
   const [completedRaces, setCompletedRaces] = useState(0)
   const [totalRounds, setTotalRounds] = useState(0)
@@ -76,9 +79,10 @@ export default function PredictionsPage() {
       setTotalRounds(events.length)
 
       const driverIds = Array.from(new Set(history.map((h) => h.driver_id)))
+      const leaguePriors = computeLeaguePriors(history)
       const factorInputs = driverIds.map((id) => {
         const driver = drivers.find((d) => d.id === id)
-        return buildFactorInputs(id, driver?.display_name ?? 'Driver', history, upcoming?.track_id ?? null)
+        return buildFactorInputs(id, driver?.display_name ?? 'Driver', history, upcoming?.track_id ?? null, leaguePriors)
       })
 
       const completed = new Set(history.filter((h) => h.result_kind === 'race').map((h) => h.event_id)).size
@@ -86,8 +90,8 @@ export default function PredictionsPage() {
       setConfidence(predictionConfidence(completed, events.length))
 
       function toMarket(scoreFn: (f: (typeof factorInputs)[number]) => number): MarketRow[] {
-        const scored = factorInputs.map((f) => ({ driverId: f.driverId, score: scoreFn(f) }))
-        const probs = normalizeToProbabilities(scored)
+        const scored = factorInputs.map((f) => ({ driverId: f.driverId, score: scoreFn(f), sampleSize: f.completedRaceCount }))
+        const probs = normalizeToProbabilitiesBayesian(scored)
         return probs
           .map((p) => ({
             driverId: p.driverId,
@@ -98,11 +102,19 @@ export default function PredictionsPage() {
           .slice(0, 5)
       }
 
+      function toIncidentRiskMarket(): MarketRow[] {
+        return factorInputs
+          .map((f) => ({ driverId: f.driverId, displayName: f.displayName, probability: f.incidentRisk }))
+          .sort((a, b) => b.probability - a.probability)
+          .slice(0, 5)
+      }
+
       setMarkets({
         raceWin: toMarket(raceWinnerScore),
         podium: toMarket(podiumScore),
         pole: toMarket(poleScore),
         fastestLap: toMarket(fastestLapScore),
+        incidentRisk: toIncidentRiskMarket(),
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not build predictions.')
@@ -158,7 +170,8 @@ export default function PredictionsPage() {
           points: r.points,
           position: r.position,
         }))
-        const paceByDriver = new Map(driverIds.map((id) => [id, computePace(history, id)]))
+        const leagueAvgPace = leagueAveragePacePerRound(history)
+        const paceByDriver = new Map(driverIds.map((id) => [id, computePace(history, id, leagueAvgPace)]))
         setForecast(
           buildChampionshipForecast(standingsInput, paceByDriver, completedRaces, totalRounds, MAX_POINTS_PER_ROUND),
         )
@@ -215,11 +228,16 @@ export default function PredictionsPage() {
         <Badge tone={tone}>{tier} confidence</Badge>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <MarketCard title="Race winner" rows={markets.raceWin} />
         <MarketCard title="Podium" rows={markets.podium} />
         <MarketCard title="Pole position" rows={markets.pole} />
         <MarketCard title="Fastest lap" rows={markets.fastestLap} />
+        <MarketCard
+          title="Incident risk"
+          rows={markets.incidentRisk}
+          note="Performance Shaping Factor read on human-error exposure — track unfamiliarity, a recent racecraft-losses trend, and DNF rate. Each driver's own figure, not a share-of-field probability like the markets above."
+        />
       </div>
 
       {permissions.canOperateRaceControl && (
@@ -314,7 +332,7 @@ export default function PredictionsPage() {
   )
 }
 
-function MarketCard({ title, rows }: { title: string; rows: MarketRow[] }) {
+function MarketCard({ title, rows, note }: { title: string; rows: MarketRow[]; note?: string }) {
   return (
     <Card>
       <CardHeader>
@@ -333,6 +351,11 @@ function MarketCard({ title, rows }: { title: string; rows: MarketRow[] }) {
             </li>
           ))}
         </ul>
+      )}
+      {note && (
+        <p className="mt-3 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          {note}
+        </p>
       )}
     </Card>
   )

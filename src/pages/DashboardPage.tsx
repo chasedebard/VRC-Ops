@@ -18,9 +18,11 @@ import { DEFAULT_SCORING_RULE } from '@/utils/scoring'
 import {
   buildChampionshipForecast,
   buildFactorInputs,
+  computeLeaguePriors,
   computePace,
   formatPercent,
-  normalizeToProbabilities,
+  leagueAveragePacePerRound,
+  normalizeToProbabilitiesBayesian,
   poleScore,
   raceWinnerScore,
   simulateChampionshipOutlook,
@@ -79,6 +81,7 @@ interface DashboardData {
   poleFavorite: { driverId: string; displayName: string; probability: number } | null
   forecast: ChampionshipForecast | null
   outlook: DriverOutlook[]
+  incidentRiskByDriver: Map<string, number>
   pointsSeries: { xLabels: string[]; series: TrendSeries[] }
   upcomingTrackName: string | null
   classLeaders: GroupLeader[]
@@ -151,13 +154,15 @@ export default function DashboardPage() {
         )
 
         const driverIds = Array.from(new Set(history.map((h) => h.driver_id)))
+        const leaguePriors = computeLeaguePriors(history)
+        const leagueAvgPace = leagueAveragePacePerRound(history)
         const factorInputs = driverIds.map((id) => {
           const driver = drivers.find((d) => d.id === id)
-          return buildFactorInputs(id, driver?.display_name ?? 'Driver', history, upcoming?.track_id ?? null)
+          return buildFactorInputs(id, driver?.display_name ?? 'Driver', history, upcoming?.track_id ?? null, leaguePriors)
         })
         function topPick(scoreFn: (f: (typeof factorInputs)[number]) => number) {
-          const scored = factorInputs.map((f) => ({ driverId: f.driverId, score: scoreFn(f) }))
-          const best = normalizeToProbabilities(scored).sort((a, b) => b.probability - a.probability)[0]
+          const scored = factorInputs.map((f) => ({ driverId: f.driverId, score: scoreFn(f), sampleSize: f.completedRaceCount }))
+          const best = normalizeToProbabilitiesBayesian(scored).sort((a, b) => b.probability - a.probability)[0]
           if (!best) return null
           const driver = factorInputs.find((f) => f.driverId === best.driverId)
           return { driverId: best.driverId, displayName: driver?.displayName ?? 'Driver', probability: best.probability }
@@ -179,7 +184,7 @@ export default function DashboardPage() {
             points: r.points,
             position: r.position,
           }))
-        const paceByDriver = new Map(driverIds.map((id) => [id, computePace(history, id)]))
+        const paceByDriver = new Map(driverIds.map((id) => [id, computePace(history, id, leagueAvgPace)]))
         const forecast = buildChampionshipForecast(
           standingsInput,
           paceByDriver,
@@ -269,6 +274,7 @@ export default function DashboardPage() {
           poleFavorite: topPick(poleScore),
           forecast,
           outlook,
+          incidentRiskByDriver: new Map(factorInputs.map((f) => [f.driverId, f.incidentRisk])),
           pointsSeries,
           upcomingTrackName,
           classLeaders,
@@ -483,6 +489,7 @@ export default function DashboardPage() {
                       <th className="pb-2 pr-4">Driver</th>
                       <th className="pb-2 pr-4">Clinch probability</th>
                       <th className="pb-2 pr-4">Elimination probability</th>
+                      <th className="pb-2 pr-4">Incident risk</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
@@ -509,11 +516,21 @@ export default function DashboardPage() {
                             </span>
                           )}
                         </td>
+                        <td className="py-2 pr-4">
+                          <span className="font-mono">
+                            {formatPercent(data.incidentRiskByDriver.get(o.driverId) ?? 0)}
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+              <p className="mt-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                Incident risk blends track unfamiliarity and a recent racecraft-losses trend with the driver's DNF
+                rate — a Performance Shaping Factor read on how error-exposed they are right now, shrunk toward the
+                league baseline until there's enough of their own history to trust.
+              </p>
             </Card>
           )}
 
