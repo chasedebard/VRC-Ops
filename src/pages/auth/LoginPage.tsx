@@ -32,6 +32,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <Card className="w-full max-w-sm">
+        <img src="/vrc-icon-512.png" alt="VRC" className="mb-3 h-12 w-12 rounded-xl" />
         <h1 className="mb-1 text-xl font-bold">Sign in to VRC Ops</h1>
         <p className="mb-5 text-sm" style={{ color: 'var(--color-text-muted)' }}>
           League management and race control for sim racing.
