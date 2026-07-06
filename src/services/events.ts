@@ -124,3 +124,15 @@ export function resolveUpcomingEvent(events: EventRow[]): EventRow | null {
 
   return dated.length > 0 ? dated[dated.length - 1] : usable[usable.length - 1]
 }
+
+/** Most recent event whose race has actually happened — for a dashboard "last race" summary. */
+export function resolveLastCompletedEvent(events: EventRow[]): EventRow | null {
+  const completed = events.filter((e) => e.status === 'completed').sort((a, b) => b.round - a.round)
+  if (completed.length > 0) return completed[0]
+
+  const todayKey = new Date().toISOString().slice(0, 10)
+  const past = events
+    .filter((e) => e.event_date && e.event_date < todayKey && e.status !== 'cancelled')
+    .sort((a, b) => b.round - a.round)
+  return past[0] ?? null
+}

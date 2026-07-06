@@ -44,10 +44,7 @@ export function Layout() {
           >
             ☰
           </button>
-          <span className="flex items-center gap-2 text-lg font-bold tracking-tight">
-            <img src="/vrc-icon-512.png" alt="" className="h-7 w-7 rounded-md" />
-            VRC Ops
-          </span>
+          <img src="/vrc-icon-512.png" alt="VRC Ops" className="h-9 w-9 rounded-lg" />
 
           {leagues.length > 0 && (
             <select

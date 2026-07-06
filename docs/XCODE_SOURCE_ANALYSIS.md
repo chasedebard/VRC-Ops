@@ -137,6 +137,29 @@ secrets and re-authorizes via that token. See `src/services/account.ts` and
   `RacePrepUpcomingEventResolver.select()`: earliest event dated today-or-later, falling back to
   the most recent incomplete event once the calendar is finished.
 
+## Home dashboard: native reference, deliberately exceeded on web
+
+The native "Home" tab (`VRCAdminHomeView.swift` for Owner/Admin, `ViewerDashboardView.swift` for
+Viewers — Drivers/Marshals fall back to whichever of those two they have context for) is
+intentionally lean: championship header, an upcoming-race card, a last-race card, a driver
+spotlight, and a championship-prediction-evolution line chart backed by the
+`championship_prediction_snapshots` table. `src/pages/DashboardPage.tsx` uses that as a starting
+point but goes further, since a browser has far more room than a phone screen:
+
+- A league-at-a-glance stat row (active drivers, races scheduled/completed, season progress %)
+  that the native Home doesn't surface as a stat block at all (the underlying counts exist in
+  `AdminHomeDashboardData`, just aren't shown together).
+- A setup checklist (Owner/Admin only) flagging a season with no events, an empty roster, an
+  empty track catalog, or classes/regions enabled but not yet created.
+- Standings snapshot (top 5, with movement indicators) and forecast highlights (race-winner/pole
+  favorites, championship narrative) inline on the dashboard rather than requiring navigation.
+- A **multi-driver** points-progression chart (`MultiSeriesTrendChart`) built from every
+  `standings_snapshot_rows` entry across the season (one snapshot per event save — see
+  `getStandingsHistory` in `src/services/standings.ts`), rather than the native single
+  most-recent-snapshot view. This sidesteps needing the native's
+  `championship_prediction_snapshots` table (which may not even be populated for every league)
+  since the web already has genuine round-by-round history to chart.
+
 ## Telemetry boundary
 
 Per the native app's `RW-MINIMAL-002/003` design (see `Documentation/backend-safeguards.md`),

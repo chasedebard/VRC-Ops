@@ -86,6 +86,45 @@ export async function getPreviousStandingsRows(
   return rows ?? []
 }
 
+/**
+ * Every "overall" standings snapshot across the season, oldest first — used
+ * to chart a points-progression trend for the dashboard (richer than the
+ * native app's single most-recent snapshot view, since the web has the room
+ * to show it). One snapshot is written per event save, so this doubles as a
+ * round-by-round history without needing the native's separate
+ * championship_prediction_snapshots table.
+ */
+export async function getStandingsHistory(
+  seasonId: string,
+  standingsType: StandingsType = 'overall',
+): Promise<{ snapshot: StandingsSnapshotRow; rows: StandingsSnapshotRowRow[] }[]> {
+  const { data: snapshots, error } = await supabase
+    .from('standings_snapshots')
+    .select('*')
+    .eq('season_id', seasonId)
+    .eq('standings_type', standingsType)
+    .is('group_key', null)
+    .order('calculated_at', { ascending: true })
+    .returns<StandingsSnapshotRow[]>()
+  if (error) throw error
+  if (!snapshots || snapshots.length === 0) return []
+
+  const { data: rows, error: rowsError } = await supabase
+    .from('standings_snapshot_rows')
+    .select('*')
+    .in('snapshot_id', snapshots.map((s) => s.id))
+    .returns<StandingsSnapshotRowRow[]>()
+  if (rowsError) throw rowsError
+
+  const rowsBySnapshot = new Map<string, StandingsSnapshotRowRow[]>()
+  for (const row of rows ?? []) {
+    const list = rowsBySnapshot.get(row.snapshot_id) ?? []
+    list.push(row)
+    rowsBySnapshot.set(row.snapshot_id, list)
+  }
+  return snapshots.map((snapshot) => ({ snapshot, rows: rowsBySnapshot.get(snapshot.id) ?? [] }))
+}
+
 export async function getAvailableStandingsGroups(
   seasonId: string,
   standingsType: StandingsType,
