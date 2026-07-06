@@ -4,13 +4,12 @@ import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { resolveActiveSeason } from '@/utils/activeSeason'
 import { getDrivers } from '@/services/drivers'
 import { getSeasonEvents, resolveLastCompletedEvent, resolveUpcomingEvent } from '@/services/events'
-import { getSeasonDriverHistory } from '@/services/driverProfile'
+import { getSeasonDriverHistory, type DriverHistoryEntry } from '@/services/driverProfile'
 import { getRaceResults, getResultSet } from '@/services/results'
 import {
   getAvailableStandingsGroups,
   getLatestStandings,
   getPreviousStandingsRows,
-  getStandingsHistory,
 } from '@/services/standings'
 import { classesService, regionsService } from '@/services/catalog'
 import { getTracks } from '@/services/tracks'
@@ -19,6 +18,7 @@ import {
   buildChampionshipForecast,
   buildFactorInputs,
   computePace,
+  formatPercent,
   normalizeToProbabilities,
   poleScore,
   raceWinnerScore,
@@ -46,7 +46,6 @@ import type {
 
 const MAX_POINTS_PER_ROUND =
   DEFAULT_SCORING_RULE.positionPoints[0] + DEFAULT_SCORING_RULE.poleBonus + DEFAULT_SCORING_RULE.fastestLapBonus
-const TREND_CHART_ROUNDS = 5
 
 interface GroupLeader {
   label: string
@@ -105,12 +104,11 @@ export default function DashboardPage() {
           return
         }
 
-        const [events, standingsResult, previousRows, history, snapshotHistory] = await Promise.all([
+        const [events, standingsResult, previousRows, history] = await Promise.all([
           getSeasonEvents(active.season.id),
           getLatestStandings(active.season.id, 'overall'),
           getPreviousStandingsRows(active.season.id, 'overall'),
           getSeasonDriverHistory(active.season.id),
-          getStandingsHistory(active.season.id, 'overall'),
         ])
 
         // events.status is administrative workflow state, not a reliable "this race
@@ -194,21 +192,10 @@ export default function DashboardPage() {
         )
 
         const roundByEvent = new Map(events.map((e) => [e.id, e.round]))
-        const recentSnapshotHistory = snapshotHistory.slice(-TREND_CHART_ROUNDS)
         const allStandingsDriverIds = standingsRows
           .map((r) => r.driver_id)
           .filter((id): id is string => Boolean(id))
-        const pointsSeries = {
-          xLabels: recentSnapshotHistory.map(({ snapshot }) =>
-            snapshot.event_id ? `R${roundByEvent.get(snapshot.event_id) ?? '?'}` : '—',
-          ),
-          series: allStandingsDriverIds.map((id, index) => ({
-            id,
-            label: drivers.find((d) => d.id === id)?.display_name ?? 'Driver',
-            color: seriesColor(index),
-            values: recentSnapshotHistory.map(({ rows }) => rows.find((r) => r.driver_id === id)?.points ?? 0),
-          })),
-        }
+        const pointsSeries = buildCumulativePointsSeries(history, roundByEvent, allStandingsDriverIds, drivers)
 
         const tracks = await getTracks(active.championship.game_id, leagueId)
         const upcomingTrackName = upcoming?.track_id ? tracks.find((t) => t.id === upcoming.track_id)?.name ?? null : null
@@ -495,7 +482,7 @@ export default function DashboardPage() {
                           </Link>
                         </td>
                         <td className="py-2 pr-4">
-                          <span className="font-mono">{Math.round(o.clinchProbability * 100)}%</span>
+                          <span className="font-mono">{formatPercent(o.clinchProbability)}</span>
                           {o.estimatedClinchRound != null && (
                             <span className="ml-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
                               Est. clinch round {o.estimatedClinchRound}
@@ -503,7 +490,7 @@ export default function DashboardPage() {
                           )}
                         </td>
                         <td className="py-2 pr-4">
-                          <span className="font-mono">{Math.round(o.eliminationProbability * 100)}%</span>
+                          <span className="font-mono">{formatPercent(o.eliminationProbability)}</span>
                           {o.estimatedEliminationRound != null && (
                             <span className="ml-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
                               Est. elimination round {o.estimatedEliminationRound}
@@ -558,6 +545,84 @@ export default function DashboardPage() {
       )}
     </div>
   )
+}
+
+function buildCumulativePointsSeries(
+  history: DriverHistoryEntry[],
+  roundByEvent: Map<string, number>,
+  preferredDriverIds: string[],
+  drivers: DriverRow[],
+): { xLabels: string[]; series: TrendSeries[] } {
+  const latestRows = latestRaceHistoryRows(history)
+  const eventsById = new Map<string, { eventId: string; round: number; rows: DriverHistoryEntry[] }>()
+
+  for (const row of latestRows) {
+    const round = row.events?.round ?? roundByEvent.get(row.event_id)
+    if (round == null) continue
+
+    const event = eventsById.get(row.event_id) ?? { eventId: row.event_id, round, rows: [] }
+    event.rows.push(row)
+    eventsById.set(row.event_id, event)
+  }
+
+  const orderedEvents = Array.from(eventsById.values()).sort(
+    (a, b) => a.round - b.round || a.eventId.localeCompare(b.eventId),
+  )
+  const fallbackDriverIds = Array.from(
+    latestRows.reduce((totals, row) => {
+      totals.set(row.driver_id, (totals.get(row.driver_id) ?? 0) + (row.points ?? 0))
+      return totals
+    }, new Map<string, number>()),
+  )
+    .sort((a, b) => b[1] - a[1])
+    .map(([driverId]) => driverId)
+  const driverIds = preferredDriverIds.length > 0 ? preferredDriverIds : fallbackDriverIds
+  const driverById = new Map(drivers.map((driver) => [driver.id, driver]))
+
+  return {
+    xLabels: orderedEvents.map((event) => `R${event.round}`),
+    series: driverIds.map((driverId, index) => {
+      let cumulativePoints = 0
+      return {
+        id: driverId,
+        label: driverById.get(driverId)?.display_name ?? 'Driver',
+        color: seriesColor(index),
+        values: orderedEvents.map((event) => {
+          cumulativePoints += event.rows
+            .filter((row) => row.driver_id === driverId)
+            .reduce((sum, row) => sum + (row.points ?? 0), 0)
+          return cumulativePoints
+        }),
+      }
+    }),
+  }
+}
+
+function latestRaceHistoryRows(history: DriverHistoryEntry[]): DriverHistoryEntry[] {
+  const latestByDriverEvent = new Map<string, DriverHistoryEntry>()
+
+  for (const row of history) {
+    if (row.result_kind !== 'race') continue
+
+    const key = `${row.event_id}:${row.driver_id}`
+    const current = latestByDriverEvent.get(key)
+    if (!current || compareHistoryFreshness(row, current) > 0) {
+      latestByDriverEvent.set(key, row)
+    }
+  }
+
+  return Array.from(latestByDriverEvent.values())
+}
+
+function compareHistoryFreshness(a: DriverHistoryEntry, b: DriverHistoryEntry): number {
+  const revisionDelta = (a.result_revision ?? 0) - (b.result_revision ?? 0)
+  if (revisionDelta !== 0) return revisionDelta
+  return historyTimestamp(a) - historyTimestamp(b)
+}
+
+function historyTimestamp(row: DriverHistoryEntry): number {
+  const parsed = Date.parse(row.saved_at ?? row.created_at)
+  return Number.isFinite(parsed) ? parsed : 0
 }
 
 function StatTile({ label, value }: { label: string; value: string | number }) {

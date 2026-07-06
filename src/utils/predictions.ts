@@ -96,6 +96,8 @@ export function normalizeToProbabilities(scores: { driverId: string; score: numb
 }
 
 export function formatPercent(probability: number): string {
+  if (probability <= 0) return '0%'
+  if (probability >= 1) return '100%'
   const pct = probability * 100
   if (pct < 1) return '<1%'
   if (pct > 99) return '>99%'
@@ -297,6 +299,8 @@ export interface DriverOutlook {
 const OUTLOOK_CLINCH_THRESHOLD = 0.6
 const OUTLOOK_ELIMINATION_THRESHOLD = 0.6
 const OUTLOOK_TRIALS = 600
+const MIN_OPEN_PROBABILITY = 0.01
+const MAX_OPEN_PROBABILITY = 0.99
 
 /**
  * Monte Carlo extension of buildChampionshipForecast's deterministic clinch/elimination
@@ -318,8 +322,19 @@ export function simulateChampionshipOutlook(
   if (standings.length === 0) return []
 
   const remainingRounds = Math.max(0, totalRounds - roundsScored)
+  const sorted = [...standings].sort((a, b) => b.points - a.points)
+  const leader = sorted[0]
+  const currentClinchedDriverId =
+    remainingRounds === 0 || sorted.slice(1).every((s) => leader.points > s.points + remainingRounds * maxPointsPerRound)
+      ? leader.driverId
+      : null
+  const currentlyEliminated = new Set(
+    sorted
+      .filter((s) => s.driverId !== leader.driverId && s.points + remainingRounds * maxPointsPerRound < leader.points)
+      .map((s) => s.driverId),
+  )
+
   if (remainingRounds === 0) {
-    const leader = [...standings].sort((a, b) => b.points - a.points)[0]
     return standings.map((s) => ({
       driverId: s.driverId,
       displayName: s.displayName,
@@ -385,8 +400,18 @@ export function simulateChampionshipOutlook(
   return standings.map((s) => {
     const clinchCount = clinchWins.get(s.driverId) ?? 0
     const eliminationCount = eliminatedCount.get(s.driverId) ?? 0
-    const clinchProbability = clinchCount / trials
-    const eliminationProbability = eliminationCount / trials
+    const isClinched = currentClinchedDriverId === s.driverId
+    const isEliminated = currentlyEliminated.has(s.driverId)
+    const clinchProbability = isClinched
+      ? 1
+      : isEliminated
+        ? 0
+        : clampOpenOutlookProbability(clinchCount / trials)
+    const eliminationProbability = isEliminated
+      ? 1
+      : isClinched
+        ? 0
+        : clampOpenOutlookProbability(eliminationCount / trials)
     return {
       driverId: s.driverId,
       displayName: s.displayName,
@@ -402,6 +427,10 @@ export function simulateChampionshipOutlook(
           : null,
     }
   })
+}
+
+function clampOpenOutlookProbability(value: number): number {
+  return Math.min(MAX_OPEN_PROBABILITY, Math.max(MIN_OPEN_PROBABILITY, value))
 }
 
 /** Blended pace for projecting remaining-season points: 60% last-3-races average + 40% season average. */
