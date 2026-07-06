@@ -125,8 +125,28 @@ export function resolveUpcomingEvent(events: EventRow[]): EventRow | null {
   return dated.length > 0 ? dated[dated.length - 1] : usable[usable.length - 1]
 }
 
-/** Most recent event whose race has actually happened — for a dashboard "last race" summary. */
-export function resolveLastCompletedEvent(events: EventRow[]): EventRow | null {
+/**
+ * Most recent event whose race actually has official results — for a
+ * dashboard "last race" summary and season-progress counts.
+ *
+ * `events.status` is administrative workflow state, not a reliable "this
+ * race happened" signal — an event can sit at `scheduled` indefinitely even
+ * after `vrc_save_results` finalizes its race results (status has to be
+ * changed separately). The only trustworthy signal is whether the event has
+ * a `race`-kind driver_history entry, so callers should pass the set of
+ * event ids derived from season driver history
+ * (`new Set(history.filter(h => h.result_kind === 'race').map(h => h.event_id))`).
+ * Falls back to the `status`/date heuristic only if that set is omitted or empty.
+ */
+export function resolveLastCompletedEvent(
+  events: EventRow[],
+  completedEventIds?: Set<string>,
+): EventRow | null {
+  if (completedEventIds && completedEventIds.size > 0) {
+    const withResults = events.filter((e) => completedEventIds.has(e.id)).sort((a, b) => b.round - a.round)
+    if (withResults.length > 0) return withResults[0]
+  }
+
   const completed = events.filter((e) => e.status === 'completed').sort((a, b) => b.round - a.round)
   if (completed.length > 0) return completed[0]
 

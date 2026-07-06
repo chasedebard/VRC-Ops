@@ -60,6 +60,7 @@ interface DashboardData {
   drivers: DriverRow[]
   upcoming: EventRow | null
   lastEvent: EventRow | null
+  racesCompleted: number
   lastRace: { winner?: RaceResultRow; pole?: RaceResultRow; fastest?: RaceResultRow } | null
   standingsRows: StandingsSnapshotRowRow[]
   movement: Map<string, number>
@@ -98,8 +99,15 @@ export default function DashboardPage() {
           getStandingsHistory(active.season.id, 'overall'),
         ])
 
+        // events.status is administrative workflow state, not a reliable "this race
+        // happened" signal — it can stay 'scheduled' even after results are finalized.
+        // The only trustworthy signal is a race-kind driver_history entry for the event.
+        const completedEventIds = new Set(
+          history.filter((h) => h.result_kind === 'race').map((h) => h.event_id),
+        )
+
         const upcoming = resolveUpcomingEvent(events)
-        const lastEvent = resolveLastCompletedEvent(events)
+        const lastEvent = resolveLastCompletedEvent(events, completedEventIds)
 
         let lastRace: DashboardData['lastRace'] = null
         if (lastEvent) {
@@ -200,6 +208,7 @@ export default function DashboardPage() {
           drivers,
           upcoming,
           lastEvent,
+          racesCompleted: completedEventIds.size,
           lastRace,
           standingsRows,
           movement,
@@ -223,13 +232,7 @@ export default function DashboardPage() {
   if (error) return <EmptyState title="Could not load dashboard" description={error} />
   if (data === undefined) return <LoadingState />
 
-  const racesCompleted = data
-    ? new Set(
-        data.events
-          .filter((e) => e.status === 'completed')
-          .map((e) => e.id),
-      ).size
-    : 0
+  const racesCompleted = data?.racesCompleted ?? 0
   const seasonProgress = data && data.events.length > 0 ? Math.round((racesCompleted / data.events.length) * 100) : 0
   const activeDrivers = data?.drivers.filter((d) => d.is_active).length ?? 0
 
