@@ -281,6 +281,129 @@ export function buildChampionshipForecast(
   }
 }
 
+export interface DriverOutlook {
+  driverId: string
+  displayName: string
+  /** 0-1: share of simulated season completions where this driver is the sole mathematically-alive contender. */
+  clinchProbability: number
+  /** 0-1: share of simulated season completions where this driver becomes mathematically eliminated. */
+  eliminationProbability: number
+  /** Round number (not remaining-round count) the clinch is projected to land, only set once clinchProbability >= 60%. */
+  estimatedClinchRound: number | null
+  /** Round number the elimination is projected to land, only set once eliminationProbability > 60%. */
+  estimatedEliminationRound: number | null
+}
+
+const OUTLOOK_CLINCH_THRESHOLD = 0.6
+const OUTLOOK_ELIMINATION_THRESHOLD = 0.6
+const OUTLOOK_TRIALS = 600
+
+/**
+ * Monte Carlo extension of buildChampionshipForecast's deterministic clinch/elimination
+ * math: instead of a single boolean at the current point-in-time, this bootstraps each
+ * driver's own past per-round point hauls forward over the remaining rounds many times,
+ * re-running the same "maxReachable < current leader" elimination test after every
+ * simulated round. That gives every driver a probability (not just the eventual champion
+ * and the already-dead) plus an estimated round for when the underlying deterministic
+ * fact is likely to land.
+ */
+export function simulateChampionshipOutlook(
+  standings: { driverId: string; displayName: string; points: number }[],
+  pastPointsByDriver: Map<string, number[]>,
+  roundsScored: number,
+  totalRounds: number,
+  maxPointsPerRound: number,
+  trials: number = OUTLOOK_TRIALS,
+): DriverOutlook[] {
+  if (standings.length === 0) return []
+
+  const remainingRounds = Math.max(0, totalRounds - roundsScored)
+  if (remainingRounds === 0) {
+    const leader = [...standings].sort((a, b) => b.points - a.points)[0]
+    return standings.map((s) => ({
+      driverId: s.driverId,
+      displayName: s.displayName,
+      clinchProbability: s.driverId === leader.driverId ? 1 : 0,
+      eliminationProbability: s.driverId === leader.driverId ? 0 : 1,
+      estimatedClinchRound: s.driverId === leader.driverId ? roundsScored : null,
+      estimatedEliminationRound: s.driverId === leader.driverId ? null : roundsScored,
+    }))
+  }
+
+  const leaguePool = Array.from(pastPointsByDriver.values()).flat()
+  const pools = new Map(
+    standings.map((s) => {
+      const own = pastPointsByDriver.get(s.driverId) ?? []
+      return [s.driverId, own.length > 0 ? own : leaguePool.length > 0 ? leaguePool : [0]]
+    }),
+  )
+
+  const clinchWins = new Map(standings.map((s) => [s.driverId, 0]))
+  const clinchRoundSum = new Map(standings.map((s) => [s.driverId, 0]))
+  const eliminatedCount = new Map(standings.map((s) => [s.driverId, 0]))
+  const eliminationRoundSum = new Map(standings.map((s) => [s.driverId, 0]))
+
+  for (let t = 0; t < trials; t++) {
+    const running = new Map(standings.map((s) => [s.driverId, s.points]))
+    const eliminatedAt = new Map<string, number>()
+    let clinchedDriverId: string | null = null
+    let clinchedRound = 0
+
+    for (let r = 1; r <= remainingRounds; r++) {
+      for (const s of standings) {
+        const pool = pools.get(s.driverId)!
+        const draw = pool[Math.floor(Math.random() * pool.length)]
+        running.set(s.driverId, (running.get(s.driverId) ?? 0) + draw)
+      }
+      const remainingAfter = remainingRounds - r
+      const leaderPoints = Math.max(...running.values())
+      for (const s of standings) {
+        if (eliminatedAt.has(s.driverId)) continue
+        const points = running.get(s.driverId)!
+        const maxReachable = points + remainingAfter * maxPointsPerRound
+        if (maxReachable < leaderPoints) eliminatedAt.set(s.driverId, roundsScored + r)
+      }
+      if (clinchedDriverId === null) {
+        const stillAlive = standings.filter((s) => !eliminatedAt.has(s.driverId))
+        if (stillAlive.length === 1) {
+          clinchedDriverId = stillAlive[0].driverId
+          clinchedRound = roundsScored + r
+        }
+      }
+    }
+
+    if (clinchedDriverId !== null) {
+      clinchWins.set(clinchedDriverId, (clinchWins.get(clinchedDriverId) ?? 0) + 1)
+      clinchRoundSum.set(clinchedDriverId, (clinchRoundSum.get(clinchedDriverId) ?? 0) + clinchedRound)
+    }
+    for (const [driverId, round] of eliminatedAt) {
+      eliminatedCount.set(driverId, (eliminatedCount.get(driverId) ?? 0) + 1)
+      eliminationRoundSum.set(driverId, (eliminationRoundSum.get(driverId) ?? 0) + round)
+    }
+  }
+
+  return standings.map((s) => {
+    const clinchCount = clinchWins.get(s.driverId) ?? 0
+    const eliminationCount = eliminatedCount.get(s.driverId) ?? 0
+    const clinchProbability = clinchCount / trials
+    const eliminationProbability = eliminationCount / trials
+    return {
+      driverId: s.driverId,
+      displayName: s.displayName,
+      clinchProbability,
+      eliminationProbability,
+      estimatedClinchRound:
+        clinchProbability >= OUTLOOK_CLINCH_THRESHOLD && clinchCount > 0
+          ? Math.round((clinchRoundSum.get(s.driverId) ?? 0) / clinchCount)
+          : null,
+      estimatedEliminationRound:
+        eliminationProbability > OUTLOOK_ELIMINATION_THRESHOLD && eliminationCount > 0
+          ? Math.round((eliminationRoundSum.get(s.driverId) ?? 0) / eliminationCount)
+          : null,
+    }
+  })
+}
+
 /** Blended pace for projecting remaining-season points: 60% last-3-races average + 40% season average. */
 export function computePace(history: DriverHistoryEntry[], driverId: string): number {
   const raceRows = history
