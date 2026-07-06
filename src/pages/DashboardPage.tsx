@@ -33,10 +33,12 @@ import { seriesColor } from '@/utils/colors'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Badge } from '@/components/Badge'
 import { DriverAvatar } from '@/components/DriverAvatar'
+import { DriverComparisonTile } from '@/components/DriverComparisonTile'
 import { StandingsMovementIndicator } from '@/components/StandingsMovementIndicator'
 import { MultiSeriesTrendChart, type TrendSeries } from '@/components/charts/MultiSeriesTrendChart'
 import { EmptyState, LoadingState } from '@/components/States'
 import { formatDate, formatLapTime } from '@/utils/format'
+import { buildDriverComparisonStats, type DriverComparisonStats } from '@/utils/driverComparison'
 import { ROLE_LABEL } from '@/permissions/resolver'
 import type {
   ChampionshipRow,
@@ -83,6 +85,7 @@ interface DashboardData {
   outlook: DriverOutlook[]
   incidentRiskByDriver: Map<string, number>
   pointsSeries: { xLabels: string[]; series: TrendSeries[] }
+  driverComparisonStats: DriverComparisonStats[]
   upcomingTrackName: string | null
   classLeaders: GroupLeader[]
   regionLeaders: GroupLeader[]
@@ -216,16 +219,28 @@ export default function DashboardPage() {
           .filter((id): id is string => Boolean(id))
         const pointsSeries = buildCumulativePointsSeries(latestOutputs, roundByEvent, allStandingsDriverIds, drivers)
 
-        const tracks = await getTracks(active.championship.game_id, leagueId)
+        const [tracks, classRows, regionRows] = await Promise.all([
+          getTracks(active.championship.game_id, leagueId),
+          active.championship.classes_enabled ? classesService.list(leagueId) : Promise.resolve([]),
+          active.championship.regions_enabled ? regionsService.list(leagueId) : Promise.resolve([]),
+        ])
         const upcomingTrackName = upcoming?.track_id ? tracks.find((t) => t.id === upcoming.track_id)?.name ?? null : null
+        const classLabelById = new Map(classRows.map((row) => [row.id, row.name]))
+        const regionLabelById = new Map(regionRows.map((row) => [row.id, row.name]))
+        const driverComparisonStats = buildDriverComparisonStats({
+          drivers,
+          history,
+          standingsRows,
+          classLabelById,
+          regionLabelById,
+        })
 
         async function loadGroupLeaders(
           standingsType: 'class' | 'regional',
-          catalog: { list(leagueId: string): Promise<{ id: string; name: string }[]> },
+          catalogRows: { id: string; name: string }[],
         ): Promise<GroupLeader[]> {
           const keys = await getAvailableStandingsGroups(active!.season.id, standingsType)
           if (keys.length === 0) return []
-          const catalogRows = await catalog.list(leagueId)
           const leaders = await Promise.all(
             keys.map(async (key) => {
               const result = await getLatestStandings(active!.season.id, standingsType, key)
@@ -240,8 +255,8 @@ export default function DashboardPage() {
         }
 
         const [classLeaders, regionLeaders] = await Promise.all([
-          active.championship.classes_enabled ? loadGroupLeaders('class', classesService) : Promise.resolve([]),
-          active.championship.regions_enabled ? loadGroupLeaders('regional', regionsService) : Promise.resolve([]),
+          active.championship.classes_enabled ? loadGroupLeaders('class', classRows) : Promise.resolve([]),
+          active.championship.regions_enabled ? loadGroupLeaders('regional', regionRows) : Promise.resolve([]),
         ])
 
         let setupWarnings: string[] = []
@@ -251,12 +266,10 @@ export default function DashboardPage() {
           if (drivers.length === 0) setupWarnings.push('No drivers in the league roster yet.')
           if (tracks.length === 0) setupWarnings.push('No tracks in the catalog for this game yet.')
           if (active.championship.classes_enabled) {
-            const classes = await classesService.list(leagueId)
-            if (classes.length === 0) setupWarnings.push('Classes are enabled but none have been created yet.')
+            if (classRows.length === 0) setupWarnings.push('Classes are enabled but none have been created yet.')
           }
           if (active.championship.regions_enabled) {
-            const regions = await regionsService.list(leagueId)
-            if (regions.length === 0) setupWarnings.push('Regions are enabled but none have been created yet.')
+            if (regionRows.length === 0) setupWarnings.push('Regions are enabled but none have been created yet.')
           }
         }
 
@@ -278,6 +291,7 @@ export default function DashboardPage() {
           outlook,
           incidentRiskByDriver: new Map(factorInputs.map((f) => [f.driverId, f.incidentRisk])),
           pointsSeries,
+          driverComparisonStats,
           upcomingTrackName,
           classLeaders,
           regionLeaders,
@@ -542,6 +556,8 @@ export default function DashboardPage() {
             </CardHeader>
             <MultiSeriesTrendChart xLabels={data.pointsSeries.xLabels} series={data.pointsSeries.series} />
           </Card>
+
+          <DriverComparisonTile drivers={data.drivers} stats={data.driverComparisonStats} />
 
           <div>
             <h2 className="mb-3 text-lg font-semibold">Quick links</h2>
