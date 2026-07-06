@@ -153,12 +153,11 @@ point but goes further, since a browser has far more room than a phone screen:
   empty track catalog, or classes/regions enabled but not yet created.
 - Standings snapshot (top 5, with movement indicators) and forecast highlights (race-winner/pole
   favorites, championship narrative) inline on the dashboard rather than requiring navigation.
-- A **multi-driver** points-progression chart (`MultiSeriesTrendChart`) built from every
-  `standings_snapshot_rows` entry across the season (one snapshot per event save — see
-  `getStandingsHistory` in `src/services/standings.ts`), rather than the native single
-  most-recent-snapshot view. This sidesteps needing the native's
-  `championship_prediction_snapshots` table (which may not even be populated for every league)
-  since the web already has genuine round-by-round history to chart.
+- A **multi-driver** points-progression chart (`MultiSeriesTrendChart`) built from race-kind
+  `driver_history` rows, grouped by event round and cumulatively summed per driver. This avoids
+  replaying the latest standings total across old snapshots after later corrections, while still
+  sidestepping the native's `championship_prediction_snapshots` table (which may not even be
+  populated for every league).
 
 ## Telemetry boundary
 
