@@ -153,11 +153,11 @@ point but goes further, since a browser has far more room than a phone screen:
   empty track catalog, or classes/regions enabled but not yet created.
 - Standings snapshot (top 5, with movement indicators) and forecast highlights (race-winner/pole
   favorites, championship narrative) inline on the dashboard rather than requiring navigation.
-- A **multi-driver** points-progression chart (`MultiSeriesTrendChart`) built from race-kind
-  `driver_history` rows, grouped by event round and cumulatively summed per driver. This avoids
-  replaying the latest standings total across old snapshots after later corrections, while still
-  sidestepping the native's `championship_prediction_snapshots` table (which may not even be
-  populated for every league).
+- A **multi-driver** points-progression chart (`MultiSeriesTrendChart`) built from
+  `scoring_outputs.total_points`, grouped by event round and cumulatively summed per driver.
+  This avoids replaying the latest standings total across old snapshots or driver-history rows
+  after later corrections, while still sidestepping the native's
+  `championship_prediction_snapshots` table (which may not even be populated for every league).
 
 ## Telemetry boundary
 

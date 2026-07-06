@@ -302,6 +302,11 @@ const OUTLOOK_TRIALS = 600
 const MIN_OPEN_PROBABILITY = 0.01
 const MAX_OPEN_PROBABILITY = 0.99
 
+interface ChampionshipOutlookState {
+  clinchedDriverIds?: Set<string>
+  eliminatedDriverIds?: Set<string>
+}
+
 /**
  * Monte Carlo extension of buildChampionshipForecast's deterministic clinch/elimination
  * math: instead of a single boolean at the current point-in-time, this bootstraps each
@@ -318,23 +323,28 @@ export function simulateChampionshipOutlook(
   totalRounds: number,
   maxPointsPerRound: number,
   trials: number = OUTLOOK_TRIALS,
+  currentState?: ChampionshipOutlookState,
 ): DriverOutlook[] {
   if (standings.length === 0) return []
 
   const remainingRounds = Math.max(0, totalRounds - roundsScored)
   const sorted = [...standings].sort((a, b) => b.points - a.points)
   const leader = sorted[0]
-  const currentClinchedDriverId =
+  const hasExplicitCurrentState = Boolean(currentState?.clinchedDriverIds || currentState?.eliminatedDriverIds)
+  const derivedClinchedDriverIds = new Set<string>(
     remainingRounds === 0 || sorted.slice(1).every((s) => leader.points > s.points + remainingRounds * maxPointsPerRound)
-      ? leader.driverId
-      : null
-  const currentlyEliminated = new Set(
+      ? [leader.driverId]
+      : [],
+  )
+  const derivedEliminatedDriverIds = new Set(
     sorted
       .filter((s) => s.driverId !== leader.driverId && s.points + remainingRounds * maxPointsPerRound < leader.points)
       .map((s) => s.driverId),
   )
+  const clinchedDriverIds = currentState?.clinchedDriverIds ?? derivedClinchedDriverIds
+  const eliminatedDriverIds = currentState?.eliminatedDriverIds ?? derivedEliminatedDriverIds
 
-  if (remainingRounds === 0) {
+  if (remainingRounds === 0 && !hasExplicitCurrentState) {
     return standings.map((s) => ({
       driverId: s.driverId,
       displayName: s.displayName,
@@ -400,8 +410,8 @@ export function simulateChampionshipOutlook(
   return standings.map((s) => {
     const clinchCount = clinchWins.get(s.driverId) ?? 0
     const eliminationCount = eliminatedCount.get(s.driverId) ?? 0
-    const isClinched = currentClinchedDriverId === s.driverId
-    const isEliminated = currentlyEliminated.has(s.driverId)
+    const isClinched = clinchedDriverIds.has(s.driverId)
+    const isEliminated = eliminatedDriverIds.has(s.driverId)
     const clinchProbability = isClinched
       ? 1
       : isEliminated

@@ -4,12 +4,13 @@ import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { resolveActiveSeason } from '@/utils/activeSeason'
 import { getDrivers } from '@/services/drivers'
 import { getSeasonEvents, resolveLastCompletedEvent, resolveUpcomingEvent } from '@/services/events'
-import { getSeasonDriverHistory, type DriverHistoryEntry } from '@/services/driverProfile'
+import { getSeasonDriverHistory } from '@/services/driverProfile'
 import { getRaceResults, getResultSet } from '@/services/results'
 import {
   getAvailableStandingsGroups,
   getLatestStandings,
   getPreviousStandingsRows,
+  getSeasonScoringOutputs,
 } from '@/services/standings'
 import { classesService, regionsService } from '@/services/catalog'
 import { getTracks } from '@/services/tracks'
@@ -42,6 +43,7 @@ import type {
   RaceResultRow,
   SeasonRow,
   StandingsSnapshotRowRow,
+  ScoringOutputRow,
 } from '@/types/database'
 
 const MAX_POINTS_PER_ROUND =
@@ -104,11 +106,12 @@ export default function DashboardPage() {
           return
         }
 
-        const [events, standingsResult, previousRows, history] = await Promise.all([
+        const [events, standingsResult, previousRows, history, scoringOutputs] = await Promise.all([
           getSeasonEvents(active.season.id),
           getLatestStandings(active.season.id, 'overall'),
           getPreviousStandingsRows(active.season.id, 'overall'),
           getSeasonDriverHistory(active.season.id),
+          getSeasonScoringOutputs(active.season.id),
         ])
 
         // events.status is administrative workflow state, not a reliable "this race
@@ -161,6 +164,13 @@ export default function DashboardPage() {
         }
 
         const completedRaceCount = new Set(history.filter((h) => h.result_kind === 'race').map((h) => h.event_id)).size
+        const configuredRoundCount = readConfiguredRoundCount(active.season.scoring_config)
+        const totalForecastRounds = resolveForecastTotalRounds(active.season, events, completedRaceCount, configuredRoundCount)
+        const latestOutputs = latestScoringOutputs(scoringOutputs)
+        const maxPointsPerRound = resolveMaxPointsPerRound(active.season.scoring_config, latestOutputs)
+        const outlookState = hasReliableForecastHorizon(active.season, events, completedRaceCount, configuredRoundCount)
+          ? undefined
+          : { clinchedDriverIds: new Set<string>(), eliminatedDriverIds: new Set<string>() }
         const standingsInput = standingsRows
           .filter((r) => r.driver_id)
           .map((r) => ({
@@ -174,28 +184,30 @@ export default function DashboardPage() {
           standingsInput,
           paceByDriver,
           completedRaceCount,
-          events.length,
-          MAX_POINTS_PER_ROUND,
+          totalForecastRounds,
+          maxPointsPerRound,
         )
         const pastPointsByDriver = new Map(
           driverIds.map((id) => [
             id,
-            history.filter((h) => h.result_kind === 'race' && h.driver_id === id).map((h) => h.points ?? 0),
+            latestOutputs.filter((output) => output.driver_id === id).map((output) => output.total_points),
           ]),
         )
         const outlook = simulateChampionshipOutlook(
           standingsInput,
           pastPointsByDriver,
           completedRaceCount,
-          events.length,
-          MAX_POINTS_PER_ROUND,
+          totalForecastRounds,
+          maxPointsPerRound,
+          undefined,
+          outlookState,
         )
 
         const roundByEvent = new Map(events.map((e) => [e.id, e.round]))
         const allStandingsDriverIds = standingsRows
           .map((r) => r.driver_id)
           .filter((id): id is string => Boolean(id))
-        const pointsSeries = buildCumulativePointsSeries(history, roundByEvent, allStandingsDriverIds, drivers)
+        const pointsSeries = buildCumulativePointsSeries(latestOutputs, roundByEvent, allStandingsDriverIds, drivers)
 
         const tracks = await getTracks(active.championship.game_id, leagueId)
         const upcomingTrackName = upcoming?.track_id ? tracks.find((t) => t.id === upcoming.track_id)?.name ?? null : null
@@ -547,17 +559,71 @@ export default function DashboardPage() {
   )
 }
 
+function resolveForecastTotalRounds(
+  season: SeasonRow,
+  events: EventRow[],
+  completedRaceCount: number,
+  configured: number | null,
+): number {
+  const maxScheduledRound = events.reduce((max, event) => Math.max(max, event.round), 0)
+  if (configured != null) return Math.max(configured, maxScheduledRound, events.length, completedRaceCount)
+  if (season.status === 'completed') return Math.max(maxScheduledRound, events.length, completedRaceCount)
+  return Math.max(maxScheduledRound, events.length, completedRaceCount + 1)
+}
+
+function readConfiguredRoundCount(config: Record<string, unknown> | null): number | null {
+  const keys = ['totalRounds', 'total_rounds', 'scheduledRounds', 'scheduled_rounds', 'raceCount', 'race_count', 'rounds']
+  const value = readConfiguredNumber(config, keys)
+  return value == null ? null : Math.round(value)
+}
+
+function resolveMaxPointsPerRound(config: Record<string, unknown> | null, scoringOutputs: ScoringOutputRow[]): number {
+  const configured = readConfiguredNumber(config, [
+    'maxPointsPerRound',
+    'max_points_per_round',
+    'maxRacePoints',
+    'max_race_points',
+    'pointsPerRound',
+    'points_per_round',
+  ])
+  const observed = scoringOutputs.reduce((max, output) => Math.max(max, output.total_points), 0)
+  return Math.max(MAX_POINTS_PER_ROUND, configured ?? 0, observed)
+}
+
+function readConfiguredNumber(config: Record<string, unknown> | null, keys: string[]): number | null {
+  if (!config) return null
+  for (const key of keys) {
+    const value = config[key]
+    if (typeof value === 'number' && Number.isFinite(value) && value > 0) return value
+    if (typeof value === 'string') {
+      const parsed = Number(value)
+      if (Number.isFinite(parsed) && parsed > 0) return parsed
+    }
+  }
+  return null
+}
+
+function hasReliableForecastHorizon(
+  season: SeasonRow,
+  events: EventRow[],
+  completedRaceCount: number,
+  configuredRoundCount: number | null,
+): boolean {
+  if (season.status === 'completed' || configuredRoundCount != null) return true
+  return events.some((event) => event.round > completedRaceCount)
+}
+
 function buildCumulativePointsSeries(
-  history: DriverHistoryEntry[],
+  scoringOutputs: ScoringOutputRow[],
   roundByEvent: Map<string, number>,
   preferredDriverIds: string[],
   drivers: DriverRow[],
 ): { xLabels: string[]; series: TrendSeries[] } {
-  const latestRows = latestRaceHistoryRows(history)
-  const eventsById = new Map<string, { eventId: string; round: number; rows: DriverHistoryEntry[] }>()
+  const outputs = latestScoringOutputs(scoringOutputs)
+  const eventsById = new Map<string, { eventId: string; round: number; rows: ScoringOutputRow[] }>()
 
-  for (const row of latestRows) {
-    const round = row.events?.round ?? roundByEvent.get(row.event_id)
+  for (const row of outputs) {
+    const round = roundByEvent.get(row.event_id)
     if (round == null) continue
 
     const event = eventsById.get(row.event_id) ?? { eventId: row.event_id, round, rows: [] }
@@ -569,8 +635,8 @@ function buildCumulativePointsSeries(
     (a, b) => a.round - b.round || a.eventId.localeCompare(b.eventId),
   )
   const fallbackDriverIds = Array.from(
-    latestRows.reduce((totals, row) => {
-      totals.set(row.driver_id, (totals.get(row.driver_id) ?? 0) + (row.points ?? 0))
+    outputs.reduce((totals, row) => {
+      totals.set(row.driver_id, (totals.get(row.driver_id) ?? 0) + row.total_points)
       return totals
     }, new Map<string, number>()),
   )
@@ -590,7 +656,7 @@ function buildCumulativePointsSeries(
         values: orderedEvents.map((event) => {
           cumulativePoints += event.rows
             .filter((row) => row.driver_id === driverId)
-            .reduce((sum, row) => sum + (row.points ?? 0), 0)
+            .reduce((sum, row) => sum + row.total_points, 0)
           return cumulativePoints
         }),
       }
@@ -598,30 +664,22 @@ function buildCumulativePointsSeries(
   }
 }
 
-function latestRaceHistoryRows(history: DriverHistoryEntry[]): DriverHistoryEntry[] {
-  const latestByDriverEvent = new Map<string, DriverHistoryEntry>()
+function latestScoringOutputs(outputs: ScoringOutputRow[]): ScoringOutputRow[] {
+  const latestByDriverEvent = new Map<string, ScoringOutputRow>()
 
-  for (const row of history) {
-    if (row.result_kind !== 'race') continue
-
-    const key = `${row.event_id}:${row.driver_id}`
+  for (const output of outputs) {
+    const key = `${output.event_id}:${output.driver_id}`
     const current = latestByDriverEvent.get(key)
-    if (!current || compareHistoryFreshness(row, current) > 0) {
-      latestByDriverEvent.set(key, row)
+    if (!current || scoringOutputTimestamp(output) > scoringOutputTimestamp(current)) {
+      latestByDriverEvent.set(key, output)
     }
   }
 
   return Array.from(latestByDriverEvent.values())
 }
 
-function compareHistoryFreshness(a: DriverHistoryEntry, b: DriverHistoryEntry): number {
-  const revisionDelta = (a.result_revision ?? 0) - (b.result_revision ?? 0)
-  if (revisionDelta !== 0) return revisionDelta
-  return historyTimestamp(a) - historyTimestamp(b)
-}
-
-function historyTimestamp(row: DriverHistoryEntry): number {
-  const parsed = Date.parse(row.saved_at ?? row.created_at)
+function scoringOutputTimestamp(output: ScoringOutputRow): number {
+  const parsed = Date.parse(output.created_at)
   return Number.isFinite(parsed) ? parsed : 0
 }
 
