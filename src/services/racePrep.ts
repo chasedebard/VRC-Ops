@@ -1,5 +1,25 @@
 import { supabase } from '@/supabase/client'
-import type { DriverRow, RwEventDriverAggregateRow } from '@/types/database'
+import type { CaptureSummaryRow, DriverRow, RwEventDriverAggregateRow } from '@/types/database'
+
+/**
+ * Individual saved capture summaries for an event — the native app's
+ * "Capture > History" tab (per-device list of saved sessions). There is no
+ * cross-device "currently capturing" signal: capture state is 100% local
+ * until a driver saves and the parsed summary uploads via
+ * vrc_submit_capture_summary, at which point this row (and the pooled
+ * rw_event_driver_aggregates view) appear here via the same realtime
+ * subscription Race Prep already uses.
+ */
+export async function getCaptureSummaries(eventId: string): Promise<CaptureSummaryRow[]> {
+  const { data, error } = await supabase
+    .from('capture_summaries')
+    .select('*')
+    .eq('event_id', eventId)
+    .order('device_updated_at', { ascending: false })
+    .returns<CaptureSummaryRow[]>()
+  if (error) throw error
+  return data ?? []
+}
 
 export async function getPracticeAggregates(
   eventId: string,
