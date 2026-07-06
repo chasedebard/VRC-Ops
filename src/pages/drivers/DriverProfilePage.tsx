@@ -4,10 +4,11 @@ import { useAuth } from '@/hooks/useAuth'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { getDriver, updateDriver } from '@/services/drivers'
 import { computeCareerStats, getDriverHistory } from '@/services/driverProfile'
-import { deleteDriverPhoto, getDriverPhotoUrl, uploadDriverPhoto } from '@/services/storage'
+import { deleteDriverPhoto, uploadDriverPhoto } from '@/services/storage'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Badge } from '@/components/Badge'
 import { Button } from '@/components/Button'
+import { DriverAvatar } from '@/components/DriverAvatar'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
 import { formatDate, formatLapTime } from '@/utils/format'
 import type { DriverHistoryRow, DriverRow } from '@/types/database'
@@ -18,7 +19,6 @@ export default function DriverProfilePage() {
   const { permissions } = useLeagueSession()
   const [driver, setDriver] = useState<DriverRow | null | undefined>(undefined)
   const [history, setHistory] = useState<DriverHistoryRow[] | null>(null)
-  const [photoUrl, setPhotoUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -30,7 +30,6 @@ export default function DriverProfilePage() {
       const [d, h] = await Promise.all([getDriver(id), getDriverHistory(id)])
       setDriver(d)
       setHistory(h)
-      setPhotoUrl(d?.profile_image_path ? await getDriverPhotoUrl(d.profile_image_path) : null)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not load this driver.')
     }
@@ -75,21 +74,7 @@ export default function DriverProfilePage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        {photoUrl ? (
-          <img
-            src={photoUrl}
-            alt={driver.display_name}
-            className="h-16 w-16 rounded-full object-cover"
-            style={{ border: '1px solid var(--color-border)' }}
-          />
-        ) : (
-          <div
-            className="flex h-16 w-16 items-center justify-center rounded-full text-lg font-semibold"
-            style={{ backgroundColor: 'var(--color-border)' }}
-          >
-            {driver.display_name.slice(0, 1).toUpperCase()}
-          </div>
-        )}
+        <DriverAvatar driver={driver} size="hero" />
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold">{driver.display_name}</h1>
           {driver.driver_number != null && <Badge tone="accent">#{driver.driver_number}</Badge>}
@@ -112,7 +97,7 @@ export default function DriverProfilePage() {
             onClick={() => fileInputRef.current?.click()}
             type="button"
           >
-            {uploading ? 'Uploading…' : photoUrl ? 'Replace photo' : 'Upload photo'}
+            {uploading ? 'Uploading…' : driver.profile_image_path || driver.image_url ? 'Replace photo' : 'Upload photo'}
           </Button>
         </div>
       )}

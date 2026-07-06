@@ -32,6 +32,7 @@ export function subscribeToCaptureSummaries(eventId: string, onChange: () => voi
 export interface RacePrepRow {
   driverId: string
   displayName: string
+  driver: DriverRow | null
   lapsCompleted: number
   averageLapTimeMs: number | null
   fastestLapTimeMs: number | null
@@ -53,6 +54,7 @@ export function buildRacePrepLeaderboard(
   const rows: RacePrepRow[] = aggregates.map((agg) => ({
     driverId: agg.driver_id,
     displayName: driverById.get(agg.driver_id)?.display_name ?? 'Unknown driver',
+    driver: driverById.get(agg.driver_id) ?? null,
     lapsCompleted: agg.total_completed_laps,
     averageLapTimeMs: agg.average_representative_ms,
     fastestLapTimeMs: agg.fastest_representative_ms,

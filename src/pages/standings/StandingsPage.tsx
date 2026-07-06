@@ -7,8 +7,15 @@ import { getDriversByIds } from '@/services/driverProfile'
 import { classesService, regionsService, teamsService } from '@/services/catalog'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Badge } from '@/components/Badge'
+import { DriverAvatar } from '@/components/DriverAvatar'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
-import type { ChampionshipRow, SeasonRow, StandingsSnapshotRowRow, StandingsType } from '@/types/database'
+import type {
+  ChampionshipRow,
+  DriverRow,
+  SeasonRow,
+  StandingsSnapshotRowRow,
+  StandingsType,
+} from '@/types/database'
 
 export default function StandingsPage() {
   const { selectedLeague } = useLeagueSession()
@@ -19,7 +26,7 @@ export default function StandingsPage() {
   const [groupOptions, setGroupOptions] = useState<{ id: string; label: string }[]>([])
   const [groupKey, setGroupKey] = useState<string | null>(null)
   const [rows, setRows] = useState<StandingsSnapshotRowRow[] | null>(null)
-  const [driverNames, setDriverNames] = useState<Map<string, string>>(new Map())
+  const [drivers, setDrivers] = useState<Map<string, DriverRow>>(new Map())
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -59,8 +66,8 @@ export default function StandingsPage() {
       const result = await getLatestStandings(context.season.id, type, groupKey)
       setRows(result?.rows ?? [])
       const ids = (result?.rows ?? []).map((r) => r.driver_id).filter((id): id is string => Boolean(id))
-      const drivers = await getDriversByIds(ids)
-      setDriverNames(new Map(drivers.map((d) => [d.id, d.display_name])))
+      const driverRows = await getDriversByIds(ids)
+      setDrivers(new Map(driverRows.map((d) => [d.id, d])))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not load standings.')
     }
@@ -148,8 +155,11 @@ export default function StandingsPage() {
                     <td className="py-2 pr-4">{row.position}</td>
                     <td className="py-2 pr-4 font-medium">
                       {row.driver_id ? (
-                        <Link to={`/drivers/${row.driver_id}`} className="hover:underline">
-                          {driverNames.get(row.driver_id) ?? 'Driver'}
+                        <Link to={`/drivers/${row.driver_id}`} className="flex items-center gap-2 hover:underline">
+                          {drivers.get(row.driver_id) && (
+                            <DriverAvatar driver={drivers.get(row.driver_id)!} size="sm" />
+                          )}
+                          {drivers.get(row.driver_id)?.display_name ?? 'Driver'}
                         </Link>
                       ) : (
                         'Team'

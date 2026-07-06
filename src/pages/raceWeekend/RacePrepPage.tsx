@@ -9,6 +9,7 @@ import {
   type RacePrepRow,
 } from '@/services/racePrep'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
+import { DriverAvatar } from '@/components/DriverAvatar'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
 import { formatLapTime } from '@/utils/format'
 
@@ -73,7 +74,12 @@ export default function RacePrepPage() {
                 {rows.map((row, index) => (
                   <tr key={row.driverId}>
                     <td className="py-2 pr-4">{index + 1}</td>
-                    <td className="py-2 pr-4 font-medium">{row.displayName}</td>
+                    <td className="py-2 pr-4">
+                      <div className="flex items-center gap-2 font-medium">
+                        {row.driver && <DriverAvatar driver={row.driver} size="sm" />}
+                        {row.displayName}
+                      </div>
+                    </td>
                     <td className="py-2 pr-4">{row.lapsCompleted}</td>
                     <td className="py-2 pr-4 font-mono">{formatLapTime(row.averageLapTimeMs)}</td>
                     <td className="py-2 pr-4 font-mono">{formatLapTime(row.fastestLapTimeMs)}</td>

@@ -14,6 +14,7 @@ import {
 import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { Badge } from '@/components/Badge'
+import { DriverAvatar } from '@/components/DriverAvatar'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
 import type {
   DriverRow,
@@ -26,6 +27,7 @@ import type {
 interface RowState {
   driverId: string
   displayName: string
+  driver: DriverRow
   finishPosition: string
   status: RaceResultStatus
   fastestLap: boolean
@@ -72,6 +74,7 @@ export default function ResultsPage() {
           return {
             driverId: driver.id,
             displayName: driver.display_name,
+            driver,
             finishPosition: prior?.finish_position != null ? String(prior.finish_position) : '',
             status: prior?.status ?? 'fin',
             fastestLap: prior?.fastest_lap ?? false,
@@ -239,7 +242,10 @@ export default function ResultsPage() {
           <div className="space-y-2">
             {rows.map((row) => (
               <div key={row.driverId} className="flex flex-wrap items-center gap-2 border-b py-2 text-sm" style={{ borderColor: 'var(--color-border)' }}>
-                <span className="w-40 font-medium">{row.displayName}</span>
+                <span className="flex w-40 items-center gap-2 font-medium">
+                  <DriverAvatar driver={row.driver} size="sm" />
+                  {row.displayName}
+                </span>
                 <input
                   type="number"
                   placeholder="Pos"

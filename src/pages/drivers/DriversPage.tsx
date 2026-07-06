@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { Field } from '@/components/Field'
 import { Badge } from '@/components/Badge'
+import { DriverAvatar } from '@/components/DriverAvatar'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
 import type { DriverRow } from '@/types/database'
 
@@ -102,7 +103,8 @@ export default function DriversPage() {
           <ul className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
             {visible.map((driver) => (
               <li key={driver.id} className="flex items-center justify-between gap-3 py-2.5">
-                <Link to={`/drivers/${driver.id}`} className="font-medium hover:underline">
+                <Link to={`/drivers/${driver.id}`} className="flex items-center gap-3 font-medium hover:underline">
+                  <DriverAvatar driver={driver} size="sm" />
                   {driver.display_name}
                   {driver.driver_number != null ? ` #${driver.driver_number}` : ''}
                 </Link>

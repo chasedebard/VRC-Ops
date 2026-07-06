@@ -7,6 +7,7 @@ import { getQualifyingResults, getResultSet, saveResults } from '@/services/resu
 import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { Badge } from '@/components/Badge'
+import { DriverAvatar } from '@/components/DriverAvatar'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
 import { formatLapTime, parseLapTime } from '@/utils/format'
 import type { DriverRow, QualifyingResultRow, QualifyingStatus, ResultSetRow } from '@/types/database'
@@ -14,6 +15,7 @@ import type { DriverRow, QualifyingResultRow, QualifyingStatus, ResultSetRow } f
 interface RowState {
   driverId: string
   displayName: string
+  driver: DriverRow
   lapTimeText: string
   status: QualifyingStatus
 }
@@ -51,6 +53,7 @@ export default function QualifyingPage() {
           return {
             driverId: driver.id,
             displayName: driver.display_name,
+            driver,
             lapTimeText: prior?.best_lap_ms != null ? formatLapTime(prior.best_lap_ms) : '',
             status: prior?.status ?? 'set',
           }
@@ -136,7 +139,10 @@ export default function QualifyingPage() {
           <div className="space-y-2">
             {rows.map((row) => (
               <div key={row.driverId} className="flex flex-wrap items-center gap-2 border-b py-2 text-sm" style={{ borderColor: 'var(--color-border)' }}>
-                <span className="w-40 font-medium">{row.displayName}</span>
+                <span className="flex w-40 items-center gap-2 font-medium">
+                  <DriverAvatar driver={row.driver} size="sm" />
+                  {row.displayName}
+                </span>
                 <input
                   type="text"
                   placeholder="1:23.456"
