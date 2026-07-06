@@ -20,12 +20,29 @@ the signed-in user's bearer token; the edge function re-authorizes via that toke
 its own secrets. No secret is ever present in the web bundle or repository — only
 `VITE_SUPABASE_URL` and the public anon/publishable key (see `.env.example`).
 
-## Telemetry: parsed data only
+## Telemetry: parsed data only, no live capture
 
 Raw GT7 UDP telemetry capture is Darwin/local-network-specific native app behavior and is not,
-and should not be, replicated on the web. The website only reads the already-aggregated
-`rw_event_driver_aggregates` view (laps completed, average/fastest representative lap,
-consistency/variance) for the Race Prep screen. It never uploads telemetry of any kind.
+and should not be, replicated on the web — a browser has no raw UDP/local-network packet access
+to a PS5. The native app's "Capture" tab (Start / Active / History / Uploads / Storage, Driver +
+Admin/Marshal only) is almost entirely local-device UI around that capture: a live dashboard
+(elapsed time, current/best lap, tire temps, speed, RPM) updates every second **on the recording
+device only** while a capture runs. Confirmed by reading the native capture pipeline: **nothing
+about an in-progress capture is ever written to Supabase** — no "is capturing" flag, no
+mid-session updates. Other users only ever see a capture once the driver saves it locally and the
+parsed summary uploads via `vrc_submit_capture_summary`. So there is no cross-device "live
+capture" signal to build even in principle.
+
+What the website does read (Race Prep, `src/services/racePrep.ts`):
+- `rw_event_driver_aggregates` — the pooled pace leaderboard, refreshed in near-real-time via a
+  realtime subscription on `capture_summaries` (this *is* the closest real equivalent to "live"
+  data — a leaderboard that updates within moments of a driver's capture uploading).
+- `capture_summaries` directly — a "Capture history" list (phase, lap breakdown, confidence,
+  validation state, upload time) mirroring the native app's "History" tab, gated to
+  Driver/Admin/Marshal/Owner like the native Capture category (Viewers don't see it).
+
+It never uploads telemetry of any kind, and there's no "Start capture" control — that's
+inherently local-device-only.
 
 ## Features explicitly out of scope for v1
 

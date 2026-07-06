@@ -87,6 +87,9 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
       to the latest incomplete event once the calendar is finished).
 - [ ] Race Prep leaderboard sorts by fastest average lap, then fastest lap, then laps completed,
       matching the native app's ordering; drivers without practice data sort to the bottom.
+- [ ] Race Prep's "Capture history" section is visible to Driver/Admin/Marshal/Owner but hidden
+      for Viewers, and lists each individual uploaded capture (not just the pooled leaderboard)
+      with phase, lap breakdown, confidence, and validation status.
 - [ ] Entering qualifying times and saving assigns pole to P1 automatically.
 - [ ] Manually marking a different driver's pole in Results overrides the qualifying auto-pole.
 - [ ] Saving race results updates `/standings` immediately (overall, then class/region/team tabs
