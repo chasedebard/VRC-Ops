@@ -19,8 +19,8 @@ VRC is built for sim racing league organizers, race directors, and stewards who 
 - **Track library & bulk import** — a shared, per-game track catalog with support for bulk-importing tracks from a file instead of adding them one at a time.
 - **Events & race weekends** — schedule events and race weekends tied to a season and a track.
 - **Qualifying & race results** — enter qualifying results (best lap, gaps, grid adjustments, penalties) and race results (finishing order, gaps, status such as DNS/DNF/DSQ, pole position, and fastest lap), with pole position auto-filled from qualifying.
-- **Standings** — automatically computed championship standings, including breakdowns by class, region, and team where a championship enables them.
-- **Predictions & forecasts** — a deterministic odds/prediction engine that surfaces race and championship forecasts based on the data already in the series.
+- **Standings** — automatically computed championship standings, including breakdowns by class, region, and team where a championship enables them, with round-over-round movement indicators.
+- **Predictions & forecasts** — a deterministic odds/prediction engine for race winner/podium/pole/fastest-lap, plus a championship forecast (clinch/magic-number/elimination math) scoped to overall, class, or regional standings, and a points-trend chart on driver profiles.
 - **Telemetry Capture** — optionally parse local telemetry summaries (for example, from Gran Turismo 7 on PS5) to enrich results with lap and pace data.
 - **Live session state** — race control tooling to manage session status through an event, with an audit trail of transitions.
 

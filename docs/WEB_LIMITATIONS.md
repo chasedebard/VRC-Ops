@@ -36,18 +36,33 @@ implemented:
 - **Race replay** — lap-by-lap animated playback and replay authoring.
 - **Share cards / image export** — 1080×1080 result/standings/story share images.
 - **Raw telemetry capture** — GT7 UDP packet capture itself (only parsed summaries are read).
-- **Results audit log UI** — `result_audit` is populated server-side by every RPC the web app
-  calls, but there isn't yet a dedicated audit-log *viewing* screen on the web (native has
-  `VRCResultsAuditLogView`). The data is there; the screen is a good follow-up.
-- **Driver photo upload** — the `driver-profile-images` Storage bucket and its upload/crop flow
-  exists in the native app; the web app reads `drivers.image_url` / `profile_image_path` but
-  doesn't yet provide an upload UI.
+- **Scenario / what-if calculator** — the native `ScenarioCalculatorService` (project standings
+  impact if a specific driver finishes a hypothetical race with a chosen position/status/pole/
+  fastest-lap) is fully derivable from Supabase data but not yet built on the web. The
+  championship-forecast math it would reuse (`buildChampionshipForecast` in
+  `src/utils/predictions.ts`) is already ported, so this is mostly a UI/inputs exercise.
+- **Driver head-to-head compare** — `DriverHeadToHeadService`'s direct/all-time/grouped stat
+  comparison (record, average-finish delta, reliability, etc.) doesn't have a web screen yet.
+  Not derivability-blocked, just not built in this pass.
+- **Driver photo cropping** — upload works, but the native app's crop/framing controls
+  (`imageCropX/Y/Scale`) aren't replicated; the web upload always stores the image as-is.
+
+## Driver avatars: web-derived colors, not class colors
+
+The native app tints a driver's initials-fallback circle using their assigned class's color.
+The `classes` table in this schema has no `color` column (only `teams` does), so
+`src/components/DriverAvatar.tsx` instead derives a stable color per driver from a hash of their
+id. Visually similar (a colored initials circle), but a given driver's color won't match their
+class-mate's the way it does natively. If a `classes.color` column is added later, swap the hash
+in `colorForDriver()` for a lookup.
 
 ## Predictions: simplified factor inputs
 
-The web prediction engine (`src/utils/predictions.ts`) ports the native app's scoring formulas
-and confidence-decay curve exactly (see `docs/XCODE_SOURCE_ANALYSIS.md`), but two input factors
-are deliberately simplified relative to `VRCPredictionEngineV2`:
+The web prediction engine (`src/utils/predictions.ts`) ports the native app's next-race scoring
+formulas and confidence-decay curve, and separately ports `VRCForecastEngine`'s championship/
+class/region clinch-magic-number-elimination math exactly (`buildChampionshipForecast`) — see
+`docs/XCODE_SOURCE_ANALYSIS.md`. Two next-race factor inputs are deliberately simplified relative
+to `VRCPredictionEngineV2`:
 
 - **Class strength** is currently a flat placeholder (`0.5`) rather than computed from
   class-relative field strength — the native engine's class-strength derivation depends on data

@@ -92,8 +92,12 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 - [ ] Saving race results updates `/standings` immediately (overall, then class/region/team tabs
       if the championship enables them).
 - [ ] Clinched/eliminated badges appear correctly once the math supports them.
-- [ ] Results audit trail is being written (verify via Supabase dashboard, since there's no
-      dedicated audit UI yet — see `docs/WEB_LIMITATIONS.md`).
+- [ ] Results audit log (Owner/Admin only, linked from the Results screen) lists every
+      submit/approve/lock/reopen for that event's result sets.
+- [ ] Standings rows show an up/down movement arrow (or "Even") reflecting the change since the
+      previous saved snapshot, per driver.
+- [ ] Driver avatars appear next to names in Drivers, Standings, Race Prep, Qualifying, and
+      Results rows — a photo if one's set, otherwise consistent initials on a colored circle.
 
 ## Predictions
 
@@ -101,6 +105,11 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
       has at least one completed race.
 - [ ] Confidence badge is "low" early in a season and rises as more races complete.
 - [ ] "Save forecast" is only visible to Owner/Admin/Marshal, and succeeds when clicked.
+- [ ] Championship forecast section shows a narrative, magic number, and clinched/eliminated
+      badges once at least 2 official races are complete; Overall/Class/Regional tabs each show
+      the correct scoped standings and narrative.
+- [ ] Driver profile shows a points-trend chart (once 2+ races) with a form label ("Win streak
+      pressure", "Podium form", "Improving finishes", "Recent dip", or "Stable form").
 
 ## Driver profile
 

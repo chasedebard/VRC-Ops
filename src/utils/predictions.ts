@@ -177,3 +177,116 @@ function populationVariance(values: number[]): number {
   const mean = average(values)
   return average(values.map((v) => (v - mean) ** 2))
 }
+
+/**
+ * Ports VRCForecastEngine.swift's championship market — clinch/magic-number/
+ * elimination math, generalized so it also drives the class- and
+ * region-scoped championship markets (same math, just a filtered driver set
+ * and group-scoped standings rows).
+ */
+export interface ChampionshipContender {
+  driverId: string
+  displayName: string
+  currentPoints: number
+  currentPosition: number
+  projectedPoints: number
+  projectedPosition: number
+  gapToLeader: number
+  maxReachable: number
+  canStillWin: boolean
+  clinched: boolean
+  eliminated: boolean
+}
+
+export interface ChampionshipForecast {
+  remainingRounds: number
+  totalRounds: number
+  roundsScored: number
+  leaderId: string | null
+  clinched: boolean
+  leaderMagicNumber: number
+  stillAliveCount: number
+  contenders: ChampionshipContender[]
+  narrative: string
+}
+
+const MINIMUM_OFFICIAL_ROUNDS = 2
+
+export function buildChampionshipForecast(
+  standings: { driverId: string; displayName: string; points: number; position: number }[],
+  paceByDriver: Map<string, number>,
+  roundsScored: number,
+  totalRounds: number,
+  maxPointsPerRound: number,
+): ChampionshipForecast | null {
+  if (standings.length === 0 || roundsScored < MINIMUM_OFFICIAL_ROUNDS) return null
+
+  const remainingRounds = Math.max(0, totalRounds - roundsScored)
+  const sorted = [...standings].sort((a, b) => b.points - a.points)
+  const leader = sorted[0]
+
+  const withProjection = sorted.map((s) => {
+    const pace = paceByDriver.get(s.driverId) ?? s.points / Math.max(1, roundsScored)
+    return {
+      ...s,
+      projectedPoints: Math.round(s.points + pace * remainingRounds),
+      maxReachable: s.points + remainingRounds * maxPointsPerRound,
+    }
+  })
+
+  const clinched = withProjection.slice(1).every((c) => leader.points > c.maxReachable)
+  const secondPlace = withProjection[1]
+  const leaderMagicNumber =
+    clinched || !secondPlace
+      ? 0
+      : Math.max(0, secondPlace.points + remainingRounds * maxPointsPerRound - leader.points + 1)
+
+  const projectedOrder = [...withProjection].sort((a, b) => b.projectedPoints - a.projectedPoints)
+  const projectedPositionById = new Map(projectedOrder.map((c, i) => [c.driverId, i + 1]))
+
+  const contenders: ChampionshipContender[] = withProjection.map((c) => ({
+    driverId: c.driverId,
+    displayName: c.displayName,
+    currentPoints: c.points,
+    currentPosition: c.position,
+    projectedPoints: c.projectedPoints,
+    projectedPosition: projectedPositionById.get(c.driverId) ?? c.position,
+    gapToLeader: leader.points - c.points,
+    maxReachable: c.maxReachable,
+    canStillWin: c.maxReachable >= leader.points,
+    clinched: c.driverId === leader.driverId && clinched,
+    eliminated: c.driverId !== leader.driverId && c.maxReachable < leader.points,
+  }))
+
+  const stillAliveCount = contenders.filter((c) => c.canStillWin).length
+
+  const narrative = clinched
+    ? `${leader.displayName} has clinched the championship.`
+    : remainingRounds === 0
+      ? `${leader.displayName} leads with the season complete.`
+      : stillAliveCount <= 1
+        ? `${leader.displayName} controls their own destiny with ${remainingRounds} round(s) remaining.`
+        : `${stillAliveCount} drivers are still mathematically alive for the title with ${remainingRounds} round(s) remaining. ${leader.displayName} needs ${leaderMagicNumber} more point(s) to clinch.`
+
+  return {
+    remainingRounds,
+    totalRounds,
+    roundsScored,
+    leaderId: leader.driverId,
+    clinched,
+    leaderMagicNumber,
+    stillAliveCount,
+    contenders: contenders.sort((a, b) => b.projectedPoints - a.projectedPoints),
+    narrative,
+  }
+}
+
+/** Blended pace for projecting remaining-season points: 60% last-3-races average + 40% season average. */
+export function computePace(history: DriverHistoryRow[], driverId: string): number {
+  const raceRows = history
+    .filter((r) => r.result_kind === 'race' && r.driver_id === driverId)
+    .sort((a, b) => (a.saved_at ?? '').localeCompare(b.saved_at ?? ''))
+  if (raceRows.length === 0) return 0
+  const points = raceRows.map((r) => r.points ?? 0)
+  return average(points.slice(-3)) * 0.6 + average(points) * 0.4
+}

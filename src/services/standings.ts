@@ -55,6 +55,37 @@ export async function getLatestStandings(
   return { snapshot, rows: rows ?? [] }
 }
 
+/** The snapshot immediately before the latest one — used to compute per-driver
+ *  position movement (StandingsMovementIndicator) since the previous round. */
+export async function getPreviousStandingsRows(
+  seasonId: string,
+  standingsType: StandingsType,
+  groupKey: string | null = null,
+): Promise<StandingsSnapshotRowRow[]> {
+  let query = supabase
+    .from('standings_snapshots')
+    .select('*')
+    .eq('season_id', seasonId)
+    .eq('standings_type', standingsType)
+    .order('calculated_at', { ascending: false })
+    .range(1, 1)
+
+  query = groupKey ? query.eq('group_key', groupKey) : query.is('group_key', null)
+
+  const { data: snapshots, error } = await query.returns<StandingsSnapshotRow[]>()
+  if (error) throw error
+  const snapshot = snapshots?.[0]
+  if (!snapshot) return []
+
+  const { data: rows, error: rowsError } = await supabase
+    .from('standings_snapshot_rows')
+    .select('*')
+    .eq('snapshot_id', snapshot.id)
+    .returns<StandingsSnapshotRowRow[]>()
+  if (rowsError) throw rowsError
+  return rows ?? []
+}
+
 export async function getAvailableStandingsGroups(
   seasonId: string,
   standingsType: StandingsType,

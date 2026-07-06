@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { resolveActiveSeason } from '@/utils/activeSeason'
-import { getLatestStandings, getAvailableStandingsGroups } from '@/services/standings'
+import {
+  getLatestStandings,
+  getAvailableStandingsGroups,
+  getPreviousStandingsRows,
+} from '@/services/standings'
 import { getDriversByIds } from '@/services/driverProfile'
 import { classesService, regionsService, teamsService } from '@/services/catalog'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Badge } from '@/components/Badge'
 import { DriverAvatar } from '@/components/DriverAvatar'
+import { StandingsMovementIndicator } from '@/components/StandingsMovementIndicator'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
 import type {
   ChampionshipRow,
@@ -26,6 +31,7 @@ export default function StandingsPage() {
   const [groupOptions, setGroupOptions] = useState<{ id: string; label: string }[]>([])
   const [groupKey, setGroupKey] = useState<string | null>(null)
   const [rows, setRows] = useState<StandingsSnapshotRowRow[] | null>(null)
+  const [movement, setMovement] = useState<Map<string, number>>(new Map())
   const [drivers, setDrivers] = useState<Map<string, DriverRow>>(new Map())
   const [error, setError] = useState<string | null>(null)
 
@@ -63,8 +69,24 @@ export default function StandingsPage() {
     if (!context) return
     setError(null)
     try {
-      const result = await getLatestStandings(context.season.id, type, groupKey)
+      const [result, previousRows] = await Promise.all([
+        getLatestStandings(context.season.id, type, groupKey),
+        getPreviousStandingsRows(context.season.id, type, groupKey),
+      ])
       setRows(result?.rows ?? [])
+      const previousPositionByDriver = new Map(
+        previousRows.filter((r) => r.driver_id).map((r) => [r.driver_id as string, r.position]),
+      )
+      setMovement(
+        new Map(
+          (result?.rows ?? [])
+            .filter((r) => r.driver_id)
+            .map((r) => {
+              const previous = previousPositionByDriver.get(r.driver_id as string)
+              return [r.driver_id as string, previous != null ? previous - r.position : 0]
+            }),
+        ),
+      )
       const ids = (result?.rows ?? []).map((r) => r.driver_id).filter((id): id is string => Boolean(id))
       const driverRows = await getDriversByIds(ids)
       setDrivers(new Map(driverRows.map((d) => [d.id, d])))
@@ -152,7 +174,12 @@ export default function StandingsPage() {
               <tbody className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
                 {rows.map((row) => (
                   <tr key={row.id}>
-                    <td className="py-2 pr-4">{row.position}</td>
+                    <td className="py-2 pr-4">
+                      <div className="flex items-center gap-1.5">
+                        {row.position}
+                        {row.driver_id && <StandingsMovementIndicator movement={movement.get(row.driver_id) ?? 0} />}
+                      </div>
+                    </td>
                     <td className="py-2 pr-4 font-medium">
                       {row.driver_id ? (
                         <Link to={`/drivers/${row.driver_id}`} className="flex items-center gap-2 hover:underline">

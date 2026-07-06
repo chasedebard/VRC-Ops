@@ -9,9 +9,26 @@ import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Badge } from '@/components/Badge'
 import { Button } from '@/components/Button'
 import { DriverAvatar } from '@/components/DriverAvatar'
+import { TrendChart, type TrendPoint } from '@/components/charts/TrendChart'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
 import { formatDate, formatLapTime } from '@/utils/format'
 import type { DriverHistoryRow, DriverRow } from '@/types/database'
+
+/** Ports DriverTrendService's formLabel heuristic (native: last 3 races). */
+function trendFormLabel(recentPoints: number[], recentPositions: (number | null)[]): string {
+  if (recentPoints.length < 2) return 'Not enough races yet'
+  const wins = recentPositions.filter((p) => p === 1).length
+  const podiums = recentPositions.filter((p) => p != null && p <= 3).length
+  if (wins >= 2) return 'Win streak pressure'
+  if (podiums >= 2) return 'Podium form'
+  const first = recentPositions[0]
+  const last = recentPositions[recentPositions.length - 1]
+  if (first != null && last != null) {
+    if (last < first) return 'Improving finishes'
+    if (last > first) return 'Recent dip'
+  }
+  return 'Stable form'
+}
 
 export default function DriverProfilePage() {
   const { id } = useParams<{ id: string }>()
@@ -70,6 +87,18 @@ export default function DriverProfilePage() {
   const races = history
     .filter((h) => h.result_kind === 'race')
     .sort((a, b) => (b.saved_at ?? '').localeCompare(a.saved_at ?? ''))
+  const racesChronological = [...races].reverse()
+  const trendPoints: TrendPoint[] = racesChronological.map((r, i) => ({
+    label: `${i + 1}`,
+    value: r.points ?? 0,
+    isWin: r.finish_position === 1 && r.status === 'fin',
+    isPodium: (r.finish_position ?? 99) <= 3 && r.status === 'fin',
+  }))
+  const recentThree = racesChronological.slice(-3)
+  const formLabel = trendFormLabel(
+    recentThree.map((r) => r.points ?? 0),
+    recentThree.map((r) => r.finish_position),
+  )
 
   return (
     <div className="space-y-6">
@@ -118,6 +147,16 @@ export default function DriverProfilePage() {
           <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
             {driver.bio}
           </p>
+        </Card>
+      )}
+
+      {races.length >= 2 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Points trend</CardTitle>
+            <Badge tone="accent">{formLabel}</Badge>
+          </CardHeader>
+          <TrendChart points={trendPoints} />
         </Card>
       )}
 
