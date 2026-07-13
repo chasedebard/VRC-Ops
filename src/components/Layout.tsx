@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { useTheme } from '@/hooks/useTheme'
 import { ROLE_LABEL } from '@/permissions/resolver'
+import { SiteFooter } from '@/components/LegalLinks'
 
 interface NavItem {
   to: string
@@ -30,7 +31,7 @@ export function Layout() {
   ]
 
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <header
         className="sticky top-0 z-20 border-b backdrop-blur"
         style={{ borderColor: 'var(--color-border)', backgroundColor: 'color-mix(in srgb, var(--color-surface) 92%, transparent)' }}
@@ -124,9 +125,10 @@ export function Layout() {
         )}
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 py-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
         <Outlet />
       </main>
+      <SiteFooter />
     </div>
   )
 }

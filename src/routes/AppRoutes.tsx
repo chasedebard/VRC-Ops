@@ -28,6 +28,7 @@ import StandingsPage from '@/pages/standings/StandingsPage'
 import PredictionsPage from '@/pages/predictions/PredictionsPage'
 import AdminPage from '@/pages/admin/AdminPage'
 import { ProGate } from '@/components/ProGate'
+import LegalSupportPage from '@/pages/LegalSupportPage'
 
 function RootRedirect() {
   const { state, loading } = useAuth()
@@ -47,6 +48,11 @@ export function AppRoutes() {
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
       <Route path="/invite/:token" element={<InviteAcceptancePage />} />
       <Route path="/join" element={<JoinPage />} />
+      <Route path="/legal" element={<LegalSupportPage />} />
+      <Route path="/eula" element={<Navigate to="/legal#eula" replace />} />
+      <Route path="/privacy" element={<Navigate to="/legal#privacy" replace />} />
+      <Route path="/terms" element={<Navigate to="/legal#terms" replace />} />
+      <Route path="/support" element={<Navigate to="/legal#support" replace />} />
 
       <Route element={<ProtectedLayout />}>
         <Route path="/dashboard" element={<DashboardPage />} />

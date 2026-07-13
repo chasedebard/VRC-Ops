@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { getActiveLegalDocuments, acceptLegalDocument } from '@/services/legal'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { Button } from '@/components/Button'
@@ -50,6 +51,10 @@ export default function LegalAcceptancePage() {
         >
           {general?.content ?? 'No terms document is currently published.'}
         </div>
+        <p className="mt-3 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          You can also read the public <Link to="/legal#terms" className="font-semibold underline">Terms of Use</Link> and{' '}
+          <Link to="/legal#privacy" className="font-semibold underline">Privacy Policy</Link>.
+        </p>
         {error && <p className="mt-2 text-sm" style={{ color: 'var(--color-danger)' }}>{error}</p>}
         <Button onClick={handleAccept} disabled={busy || !general} className="mt-4 w-full">
           {busy ? 'Saving…' : 'I agree, continue'}

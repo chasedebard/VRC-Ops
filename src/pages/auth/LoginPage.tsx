@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { Field } from '@/components/Field'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import { LegalLinks } from '@/components/LegalLinks'
 
 export default function LoginPage() {
   const { refresh } = useAuth()
@@ -67,6 +68,7 @@ export default function LoginPage() {
             Create account
           </Link>
         </div>
+        <LegalLinks className="mt-5 justify-center border-t pt-4" />
       </Card>
     </div>
   )

@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { Field } from '@/components/Field'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import { LegalLinks } from '@/components/LegalLinks'
 
 export default function SignupPage() {
   const { refresh } = useAuth()
@@ -45,6 +46,7 @@ export default function SignupPage() {
           <Link to="/login" className="mt-4 inline-block text-sm underline" style={{ color: 'var(--color-accent)' }}>
             Back to sign in
           </Link>
+          <LegalLinks className="mt-5 justify-center border-t pt-4" />
         </Card>
       </div>
     )
@@ -93,6 +95,7 @@ export default function SignupPage() {
             Already have an account? Sign in
           </Link>
         </div>
+        <LegalLinks className="mt-5 justify-center border-t pt-4" />
       </Card>
     </div>
   )
