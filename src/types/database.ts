@@ -717,3 +717,43 @@ export interface PredictionEvaluationRow {
   evaluated_at: string | null
   created_at: string
 }
+
+/** Personal ("VRC Ops Pro") status; league-wide status also uses this enum plus 'pending_verification'. */
+export type SubscriptionStatus = 'active' | 'grace_period' | 'billing_retry' | 'expired' | 'revoked'
+export type LeagueSubscriptionStatus = SubscriptionStatus | 'pending_verification'
+export type SubscriptionEnvironment = 'Sandbox' | 'Production' | 'Xcode' | 'LocalTesting'
+
+/** Individual "VRC Ops Pro" entitlement, written only by the verify-subscription/apple-notifications Edge Functions. */
+export interface SubscriptionRow {
+  id: string
+  user_id: string
+  product_id: string
+  original_transaction_id: string
+  latest_transaction_id: string | null
+  status: SubscriptionStatus
+  expires_at: string | null
+  purchased_at: string | null
+  renewal_state: string | null
+  environment: SubscriptionEnvironment
+  last_verified_at: string
+  created_at: string
+  updated_at: string
+}
+
+/** League-wide "VRC League Plus" entitlement; inherited by every active member regardless of role. */
+export interface LeagueSubscriptionRow {
+  id: string
+  league_id: string
+  purchaser_user_id: string
+  product_id: string
+  original_transaction_id: string
+  latest_transaction_id: string | null
+  status: LeagueSubscriptionStatus
+  expires_at: string | null
+  purchased_at: string | null
+  renewal_state: string | null
+  environment: SubscriptionEnvironment
+  last_verified_at: string
+  created_at: string
+  updated_at: string
+}

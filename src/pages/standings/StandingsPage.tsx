@@ -13,7 +13,9 @@ import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Badge } from '@/components/Badge'
 import { DriverAvatar } from '@/components/DriverAvatar'
 import { StandingsMovementIndicator } from '@/components/StandingsMovementIndicator'
+import { ProLockedState } from '@/components/ProLockedState'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
+import { useEntitlement } from '@/hooks/useEntitlement'
 import type {
   ChampionshipRow,
   DriverRow,
@@ -24,10 +26,15 @@ import type {
 
 export default function StandingsPage() {
   const { selectedLeague } = useLeagueSession()
+  const { hasAccess } = useEntitlement()
   const [context, setContext] = useState<{ championship: ChampionshipRow; season: SeasonRow } | null | undefined>(
     undefined,
   )
   const [type, setType] = useState<StandingsType>('overall')
+  // Class and regional breakdowns are VRC Ops Pro features (VRCSubseriesStandingsGate on
+  // iOS); overall and team standings stay free. Nav stays discoverable — only the table
+  // content is gated, matching iOS's "premium features stay visible" pattern.
+  const locked = (type === 'class' || type === 'regional') && !hasAccess
   const [groupOptions, setGroupOptions] = useState<{ id: string; label: string }[]>([])
   const [groupKey, setGroupKey] = useState<string | null>(null)
   const [rows, setRows] = useState<StandingsSnapshotRowRow[] | null>(null)
@@ -43,7 +50,7 @@ export default function StandingsPage() {
   useEffect(() => {
     if (!context || !selectedLeague) return
     async function loadGroups() {
-      if (type === 'overall') {
+      if (type === 'overall' || locked) {
         setGroupOptions([])
         setGroupKey(null)
         return
@@ -63,10 +70,13 @@ export default function StandingsPage() {
       setGroupKey(options[0]?.id ?? null)
     }
     loadGroups()
-  }, [context, type, selectedLeague])
+  }, [context, type, selectedLeague, locked])
 
   async function load() {
-    if (!context) return
+    if (!context || locked) {
+      setRows(locked ? [] : null)
+      return
+    }
     setError(null)
     try {
       const [result, previousRows] = await Promise.all([
@@ -98,7 +108,7 @@ export default function StandingsPage() {
   useEffect(() => {
     load()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [context, type, groupKey])
+  }, [context, type, groupKey, locked])
 
   if (!selectedLeague) return <EmptyState title="No league selected" />
   if (error) return <ErrorState message={error} onRetry={load} />
@@ -147,68 +157,75 @@ export default function StandingsPage() {
         </select>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Standings</CardTitle>
-        </CardHeader>
-        {rows === null ? (
-          <LoadingState />
-        ) : rows.length === 0 ? (
-          <EmptyState title="No standings yet" description="Standings update automatically once results are saved." />
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr style={{ color: 'var(--color-text-muted)' }}>
-                  <th className="pb-2 pr-4">#</th>
-                  <th className="pb-2 pr-4">Driver</th>
-                  <th className="pb-2 pr-4">Points</th>
-                  <th className="pb-2 pr-4">Wins</th>
-                  <th className="pb-2 pr-4">Podiums</th>
-                  <th className="pb-2 pr-4">Poles</th>
-                  <th className="pb-2 pr-4">FL</th>
-                  <th className="pb-2 pr-4">Starts</th>
-                  <th className="pb-2 pr-4"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
-                {rows.map((row) => (
-                  <tr key={row.id}>
-                    <td className="py-2 pr-4">
-                      <div className="flex items-center gap-1.5">
-                        {row.position}
-                        {row.driver_id && <StandingsMovementIndicator movement={movement.get(row.driver_id) ?? 0} />}
-                      </div>
-                    </td>
-                    <td className="py-2 pr-4 font-medium">
-                      {row.driver_id ? (
-                        <Link to={`/drivers/${row.driver_id}`} className="flex items-center gap-2 hover:underline">
-                          {drivers.get(row.driver_id) && (
-                            <DriverAvatar driver={drivers.get(row.driver_id)!} size="sm" />
-                          )}
-                          {drivers.get(row.driver_id)?.display_name ?? 'Driver'}
-                        </Link>
-                      ) : (
-                        'Team'
-                      )}
-                    </td>
-                    <td className="py-2 pr-4">{row.points}</td>
-                    <td className="py-2 pr-4">{row.wins}</td>
-                    <td className="py-2 pr-4">{row.podiums}</td>
-                    <td className="py-2 pr-4">{row.poles}</td>
-                    <td className="py-2 pr-4">{row.fastest_laps}</td>
-                    <td className="py-2 pr-4">{row.starts}</td>
-                    <td className="py-2 pr-4">
-                      {row.clinched && <Badge tone="success">Clinched</Badge>}
-                      {row.eliminated && <Badge tone="danger">Eliminated</Badge>}
-                    </td>
+      {locked ? (
+        <ProLockedState
+          title="Class & Regional standings require VRC Ops Pro"
+          description="Overall and team standings stay free — class and regional breakdowns are part of VRC Ops Pro."
+        />
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>Standings</CardTitle>
+          </CardHeader>
+          {rows === null ? (
+            <LoadingState />
+          ) : rows.length === 0 ? (
+            <EmptyState title="No standings yet" description="Standings update automatically once results are saved." />
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr style={{ color: 'var(--color-text-muted)' }}>
+                    <th className="pb-2 pr-4">#</th>
+                    <th className="pb-2 pr-4">Driver</th>
+                    <th className="pb-2 pr-4">Points</th>
+                    <th className="pb-2 pr-4">Wins</th>
+                    <th className="pb-2 pr-4">Podiums</th>
+                    <th className="pb-2 pr-4">Poles</th>
+                    <th className="pb-2 pr-4">FL</th>
+                    <th className="pb-2 pr-4">Starts</th>
+                    <th className="pb-2 pr-4"></th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </Card>
+                </thead>
+                <tbody className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
+                  {rows.map((row) => (
+                    <tr key={row.id}>
+                      <td className="py-2 pr-4">
+                        <div className="flex items-center gap-1.5">
+                          {row.position}
+                          {row.driver_id && <StandingsMovementIndicator movement={movement.get(row.driver_id) ?? 0} />}
+                        </div>
+                      </td>
+                      <td className="py-2 pr-4 font-medium">
+                        {row.driver_id ? (
+                          <Link to={`/drivers/${row.driver_id}`} className="flex items-center gap-2 hover:underline">
+                            {drivers.get(row.driver_id) && (
+                              <DriverAvatar driver={drivers.get(row.driver_id)!} size="sm" />
+                            )}
+                            {drivers.get(row.driver_id)?.display_name ?? 'Driver'}
+                          </Link>
+                        ) : (
+                          'Team'
+                        )}
+                      </td>
+                      <td className="py-2 pr-4">{row.points}</td>
+                      <td className="py-2 pr-4">{row.wins}</td>
+                      <td className="py-2 pr-4">{row.podiums}</td>
+                      <td className="py-2 pr-4">{row.poles}</td>
+                      <td className="py-2 pr-4">{row.fastest_laps}</td>
+                      <td className="py-2 pr-4">{row.starts}</td>
+                      <td className="py-2 pr-4">
+                        {row.clinched && <Badge tone="success">Clinched</Badge>}
+                        {row.eliminated && <Badge tone="danger">Eliminated</Badge>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </Card>
+      )}
     </div>
   )
 }

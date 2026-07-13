@@ -34,6 +34,7 @@ import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Badge } from '@/components/Badge'
 import { DriverAvatar } from '@/components/DriverAvatar'
 import { DriverComparisonTile } from '@/components/DriverComparisonTile'
+import { ProGate } from '@/components/ProGate'
 import { StandingsMovementIndicator } from '@/components/StandingsMovementIndicator'
 import { MultiSeriesTrendChart, type TrendSeries } from '@/components/charts/MultiSeriesTrendChart'
 import { EmptyState, LoadingState } from '@/components/States'
@@ -557,7 +558,12 @@ export default function DashboardPage() {
             <MultiSeriesTrendChart xLabels={data.pointsSeries.xLabels} series={data.pointsSeries.series} />
           </Card>
 
-          <DriverComparisonTile drivers={data.drivers} stats={data.driverComparisonStats} />
+          <ProGate
+            title="Driver Comparison requires VRC Ops Pro"
+            description="Head-to-head driver comparisons are part of VRC Ops Pro."
+          >
+            <DriverComparisonTile drivers={data.drivers} stats={data.driverComparisonStats} />
+          </ProGate>
 
           <div>
             <h2 className="mb-3 text-lg font-semibold">Quick links</h2>

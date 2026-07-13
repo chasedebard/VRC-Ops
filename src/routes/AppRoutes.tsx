@@ -27,6 +27,7 @@ import ResultsAuditLogPage from '@/pages/raceWeekend/ResultsAuditLogPage'
 import StandingsPage from '@/pages/standings/StandingsPage'
 import PredictionsPage from '@/pages/predictions/PredictionsPage'
 import AdminPage from '@/pages/admin/AdminPage'
+import { ProGate } from '@/components/ProGate'
 
 function RootRedirect() {
   const { state, loading } = useAuth()
@@ -70,7 +71,17 @@ export function AppRoutes() {
         <Route path="/results/:eventId/audit" element={<ResultsAuditLogPage />} />
 
         <Route path="/standings" element={<StandingsPage />} />
-        <Route path="/predictions" element={<PredictionsPage />} />
+        <Route
+          path="/predictions"
+          element={
+            <ProGate
+              title="Predictions require VRC Ops Pro"
+              description="Race forecasts, championship outlook, and incident-risk markets are part of VRC Ops Pro."
+            >
+              <PredictionsPage />
+            </ProGate>
+          }
+        />
 
         <Route path="/admin/*" element={<AdminPage />} />
       </Route>

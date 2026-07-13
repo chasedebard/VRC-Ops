@@ -1,6 +1,7 @@
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from '@/app/AuthProvider'
 import { LeagueSessionProvider } from '@/app/LeagueSessionProvider'
+import { EntitlementProvider } from '@/app/EntitlementProvider'
 import { AppRoutes } from '@/routes/AppRoutes'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 
@@ -10,7 +11,9 @@ export default function App() {
       <BrowserRouter>
         <AuthProvider>
           <LeagueSessionProvider>
-            <AppRoutes />
+            <EntitlementProvider>
+              <AppRoutes />
+            </EntitlementProvider>
           </LeagueSessionProvider>
         </AuthProvider>
       </BrowserRouter>
