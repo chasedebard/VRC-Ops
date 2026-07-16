@@ -52,22 +52,39 @@ export interface MemberSummary {
 export async function getLeagueMembers(leagueId: string): Promise<MemberSummary[]> {
   const { data, error } = await supabase
     .from('memberships')
-    .select('id, user_id, status, profiles(display_name), membership_roles(role)')
+    .select('id, user_id, status, membership_roles(role)')
     .eq('league_id', leagueId)
     .returns<
       {
         id: string
         user_id: string
         status: string
-        profiles: { display_name: string | null } | null
         membership_roles: { role: VrcRole }[]
       }[]
     >()
   if (error) throw error
-  return (data ?? []).map((m) => ({
+  const memberships = data ?? []
+
+  // `profiles` has no foreign key to `memberships` (both independently
+  // reference auth.users), so PostgREST can't embed it in the query above —
+  // fetch display names separately, keyed by user id. RLS (`profiles_select`)
+  // already allows reading any co-league member's profile.
+  const userIds = Array.from(new Set(memberships.map((m) => m.user_id)))
+  const displayNameByUserId = new Map<string, string | null>()
+  if (userIds.length > 0) {
+    const { data: profiles, error: profilesError } = await supabase
+      .from('profiles')
+      .select('id, display_name')
+      .in('id', userIds)
+      .returns<{ id: string; display_name: string | null }[]>()
+    if (profilesError) throw profilesError
+    for (const p of profiles ?? []) displayNameByUserId.set(p.id, p.display_name)
+  }
+
+  return memberships.map((m) => ({
     membershipId: m.id,
     userId: m.user_id,
-    displayName: m.profiles?.display_name ?? null,
+    displayName: displayNameByUserId.get(m.user_id) ?? null,
     roles: m.membership_roles.map((r) => r.role),
     status: m.status,
   }))
