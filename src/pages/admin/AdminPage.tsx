@@ -24,6 +24,7 @@ import { Field } from '@/components/Field'
 import { Badge } from '@/components/Badge'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
 import { ROLE_LABEL } from '@/permissions/resolver'
+import { toSafeErrorMessage } from '@/utils/errors'
 import type { InvitationRow, VrcRole } from '@/types/database'
 
 const ALL_ROLES: VrcRole[] = ['owner', 'admin', 'marshal', 'driver', 'viewer']
@@ -48,7 +49,7 @@ function AdminContent() {
   const [inviteResult, setInviteResult] = useState<string | null>(null)
   const [viewerCode, setViewerCode] = useState<string | null>(null)
 
-  async function load() {
+  async function load(cancelledRef?: { current: boolean }) {
     if (!selectedLeague) return
     setError(null)
     try {
@@ -56,15 +57,23 @@ function AdminContent() {
         getLeagueMembers(selectedLeague.league.id),
         getLeagueInvitations(selectedLeague.league.id),
       ])
+      if (cancelledRef?.current) return
       setMembers(m)
       setInvitations(inv)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not load league members.')
+      if (cancelledRef?.current) return
+      setError(toSafeErrorMessage(err, 'Could not load league members.'))
     }
   }
 
   useEffect(() => {
-    load()
+    const cancelledRef = { current: false }
+    setMembers(null)
+    setInvitations(null)
+    load(cancelledRef)
+    return () => {
+      cancelledRef.current = true
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedLeague?.league.id])
 
@@ -90,7 +99,7 @@ function AdminContent() {
       setInviteEmail('')
       await load()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not send invite.')
+      setError(toSafeErrorMessage(err, 'Could not send invite.'))
     } finally {
       setBusy(false)
     }
@@ -102,7 +111,7 @@ function AdminContent() {
     try {
       setViewerCode(await createViewerCode(selectedLeague.league.id))
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not create viewer code.')
+      setError(toSafeErrorMessage(err, 'Could not create viewer code.'))
     } finally {
       setBusy(false)
     }
@@ -114,6 +123,8 @@ function AdminContent() {
     try {
       await revokeViewerCode(selectedLeague.league.id)
       setViewerCode(null)
+    } catch (err) {
+      setError(toSafeErrorMessage(err, 'Could not revoke viewer code.'))
     } finally {
       setBusy(false)
     }
@@ -125,7 +136,7 @@ function AdminContent() {
       await addRole(membershipId, role)
       await load()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not add role.')
+      setError(toSafeErrorMessage(err, 'Could not add role.'))
     } finally {
       setBusy(false)
     }
@@ -137,7 +148,7 @@ function AdminContent() {
       await removeRole(membershipId, role)
       await load()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not remove role.')
+      setError(toSafeErrorMessage(err, 'Could not remove role.'))
     } finally {
       setBusy(false)
     }
@@ -150,7 +161,7 @@ function AdminContent() {
       await removeMember(membershipId)
       await load()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not remove member.')
+      setError(toSafeErrorMessage(err, 'Could not remove member.'))
     } finally {
       setBusy(false)
     }
@@ -251,7 +262,7 @@ function AdminContent() {
                     </Button>
                   )}
                   {inv.status === 'pending' && (
-                    <Button variant="secondary" onClick={() => revokeInvitation(inv.id).then(load)}>
+                    <Button variant="secondary" onClick={() => revokeInvitation(inv.id).then(() => load())}>
                       Revoke
                     </Button>
                   )}
