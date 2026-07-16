@@ -8,7 +8,7 @@ import UpdatePasswordPage from '@/pages/auth/UpdatePasswordPage'
 import AuthCallbackPage from '@/pages/auth/AuthCallbackPage'
 import InviteAcceptancePage from '@/pages/InviteAcceptancePage'
 import JoinPage from '@/pages/JoinPage'
-import DashboardPage from '@/pages/DashboardPage'
+import HomePage from '@/pages/HomePage'
 import AccountPage from '@/pages/AccountPage'
 import ChampionshipsPage from '@/pages/championships/ChampionshipsPage'
 import ChampionshipDetailPage from '@/pages/championships/ChampionshipDetailPage'
@@ -55,7 +55,7 @@ export function AppRoutes() {
       <Route path="/support" element={<Navigate to="/legal#support" replace />} />
 
       <Route element={<ProtectedLayout />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<HomePage />} />
         <Route path="/account" element={<AccountPage />} />
 
         <Route path="/championships" element={<ChampionshipsPage />} />
