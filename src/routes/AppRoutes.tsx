@@ -13,6 +13,7 @@ import AccountPage from '@/pages/AccountPage'
 import ChampionshipsPage from '@/pages/championships/ChampionshipsPage'
 import ChampionshipDetailPage from '@/pages/championships/ChampionshipDetailPage'
 import SeasonDetailPage from '@/pages/championships/SeasonDetailPage'
+import SeasonTeamsPage from '@/pages/championships/SeasonTeamsPage'
 import DriversPage from '@/pages/drivers/DriversPage'
 import DriverProfilePage from '@/pages/drivers/DriverProfilePage'
 import TracksPage from '@/pages/catalog/TracksPage'
@@ -61,6 +62,7 @@ export function AppRoutes() {
         <Route path="/championships" element={<ChampionshipsPage />} />
         <Route path="/championships/:id" element={<ChampionshipDetailPage />} />
         <Route path="/seasons/:id" element={<SeasonDetailPage />} />
+        <Route path="/seasons/:id/teams" element={<SeasonTeamsPage />} />
 
         <Route path="/drivers" element={<DriversPage />} />
         <Route path="/drivers/:id" element={<DriverProfilePage />} />

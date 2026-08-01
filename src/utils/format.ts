@@ -38,6 +38,12 @@ export function formatDateTime(value: string | null | undefined): string {
   })
 }
 
+/** "Off" when disabled, otherwise "+N pt"/"+N pts" ("pt" only for exactly 1). */
+export function formatBonusPoints(enabled: boolean, points: number): string {
+  if (!enabled) return 'Off'
+  return `+${points} pt${points === 1 ? '' : 's'}`
+}
+
 export function titleCase(value: string): string {
   return value
     .split(/[_\s]+/)

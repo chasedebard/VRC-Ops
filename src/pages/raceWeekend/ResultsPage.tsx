@@ -3,12 +3,15 @@ import { Link, useParams } from 'react-router-dom'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { getEvent, getEventDrivers } from '@/services/events'
 import { getSeasonEvents } from '@/services/events'
-import { getDrivers } from '@/services/drivers'
+import { getDrivers, getSeasonRoster } from '@/services/drivers'
+import { getSeason } from '@/services/championships'
 import { getQualifyingResults, getRaceResults, getResultSet, saveResults } from '@/services/results'
 import { getSeasonScoringOutputs } from '@/services/standings'
+import { getSeasonTeams } from '@/services/seasonTeams'
 import {
-  DEFAULT_SCORING_RULE,
+  buildSeasonScoringRule,
   buildSeasonStandingsRows,
+  buildTeamStandingsRows,
   pointsForResult,
 } from '@/utils/scoring'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
@@ -22,6 +25,7 @@ import type {
   RaceResultStatus,
   ResultSetRow,
   ScoringOutputRow,
+  SeasonRow,
 } from '@/types/database'
 
 interface RowState {
@@ -44,6 +48,7 @@ export default function ResultsPage() {
   const [busy, setBusy] = useState(false)
   const [loading, setLoading] = useState(true)
   const [seasonId, setSeasonId] = useState<string | null>(null)
+  const [season, setSeason] = useState<SeasonRow | null>(null)
 
   async function load() {
     if (!eventId || !selectedLeague) return
@@ -52,6 +57,7 @@ export default function ResultsPage() {
       const event = await getEvent(eventId)
       if (!event) throw new Error('Event not found.')
       setSeasonId(event.season_id)
+      getSeason(event.season_id).then(setSeason)
 
       const [eventDrivers, allDrivers, set, qualifying] = await Promise.all([
         getEventDrivers(eventId),
@@ -111,6 +117,10 @@ export default function ResultsPage() {
     setBusy(true)
     setError(null)
     try {
+      // The season-derived rule (pole/fastest-lap bonus enabled + point value) is the single
+      // authoritative scoring config — never a hardcoded default — matching the recompute path
+      // in src/services/scoringRecompute.ts.
+      const scoringRule = buildSeasonScoringRule(season)
       const raceRowsForScoring: RaceResultRow[] = rows.map((r) => ({
         id: '',
         result_set_id: '',
@@ -153,9 +163,9 @@ export default function ResultsPage() {
         season_id: seasonId,
         championship_id: '',
         driver_id: r.driver_id,
-        earned_points: pointsForResult(r, DEFAULT_SCORING_RULE),
+        earned_points: pointsForResult(r, scoringRule),
         adjustment_points: 0,
-        total_points: pointsForResult(r, DEFAULT_SCORING_RULE),
+        total_points: pointsForResult(r, scoringRule),
         finish_position: r.finish_position,
         status: r.status,
         earned_pole: r.earned_pole,
@@ -179,6 +189,26 @@ export default function ResultsPage() {
       const displayNames = new Map(rows.map((r) => [r.driverId, r.displayName]))
       const standingsRows = buildSeasonStandingsRows(mergedOutputs, displayNames, seasonEvents.length)
 
+      const snapshots: Record<string, unknown>[] = [
+        {
+          standings_type: 'overall',
+          group_key: null,
+          rows: standingsRows,
+        },
+      ]
+
+      if (season?.teams_enabled) {
+        const [roster, teams] = await Promise.all([getSeasonRoster(seasonId), getSeasonTeams(seasonId)])
+        const teamIdByDriver = new Map(
+          roster.filter((r) => r.team_id).map((r) => [r.driver_id, r.team_id as string]),
+        )
+        const teamNameById = new Map(teams.map((t) => [t.id, t.name]))
+        const teamRows = buildTeamStandingsRows(standingsRows, teamIdByDriver, teamNameById)
+        if (teamRows.length > 0) {
+          snapshots.push({ standings_type: 'team', group_key: null, rows: teamRows })
+        }
+      }
+
       const updated = await saveResults({
         eventId,
         kind: 'race',
@@ -195,13 +225,7 @@ export default function ResultsPage() {
           earned_pole: o.earned_pole,
           fastest_lap: o.fastest_lap,
         })),
-        snapshots: [
-          {
-            standings_type: 'overall',
-            group_key: null,
-            rows: standingsRows,
-          },
-        ],
+        snapshots,
         reason: 'Web race result entry',
       })
       setResultSet(updated)

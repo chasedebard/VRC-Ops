@@ -14,7 +14,7 @@ import {
 } from '@/services/standings'
 import { classesService, regionsService } from '@/services/catalog'
 import { getTracks } from '@/services/tracks'
-import { DEFAULT_SCORING_RULE } from '@/utils/scoring'
+import { buildSeasonScoringRule } from '@/utils/scoring'
 import {
   buildChampionshipForecast,
   buildFactorInputs,
@@ -50,9 +50,6 @@ import type {
   StandingsSnapshotRowRow,
   ScoringOutputRow,
 } from '@/types/database'
-
-const MAX_POINTS_PER_ROUND =
-  DEFAULT_SCORING_RULE.positionPoints[0] + DEFAULT_SCORING_RULE.poleBonus + DEFAULT_SCORING_RULE.fastestLapBonus
 
 interface GroupLeader {
   label: string
@@ -176,7 +173,7 @@ export default function DashboardPage() {
         const configuredRoundCount = readConfiguredRoundCount(active.season.scoring_config)
         const totalForecastRounds = resolveForecastTotalRounds(active.season, events, completedRaceCount, configuredRoundCount)
         const latestOutputs = latestScoringOutputs(scoringOutputs)
-        const maxPointsPerRound = resolveMaxPointsPerRound(active.season.scoring_config, latestOutputs)
+        const maxPointsPerRound = resolveMaxPointsPerRound(active.season, active.season.scoring_config, latestOutputs)
         const outlookState = hasReliableForecastHorizon(active.season, events, completedRaceCount, configuredRoundCount)
           ? undefined
           : { clinchedDriverIds: new Set<string>(), eliminatedDriverIds: new Set<string>() }
@@ -618,7 +615,13 @@ function readConfiguredRoundCount(config: Record<string, unknown> | null): numbe
   return value == null ? null : Math.round(value)
 }
 
-function resolveMaxPointsPerRound(config: Record<string, unknown> | null, scoringOutputs: ScoringOutputRow[]): number {
+function resolveMaxPointsPerRound(
+  season: SeasonRow,
+  config: Record<string, unknown> | null,
+  scoringOutputs: ScoringOutputRow[],
+): number {
+  const rule = buildSeasonScoringRule(season)
+  const seasonMax = rule.positionPoints[0] + rule.poleBonus + rule.fastestLapBonus
   const configured = readConfiguredNumber(config, [
     'maxPointsPerRound',
     'max_points_per_round',
@@ -628,7 +631,7 @@ function resolveMaxPointsPerRound(config: Record<string, unknown> | null, scorin
     'points_per_round',
   ])
   const observed = scoringOutputs.reduce((max, output) => Math.max(max, output.total_points), 0)
-  return Math.max(MAX_POINTS_PER_ROUND, configured ?? 0, observed)
+  return Math.max(seasonMax, configured ?? 0, observed)
 }
 
 function readConfiguredNumber(config: Record<string, unknown> | null, keys: string[]): number | null {

@@ -198,6 +198,14 @@ export interface SeasonRow {
   scoring_config: Record<string, unknown> | null
   drop_rounds: number
   tiebreak_config: Record<string, unknown> | null
+  /** Season-scoped teams gate — authoritative over the legacy `championships.teams_enabled`. */
+  teams_enabled: boolean
+  pole_bonus_enabled: boolean
+  /** Valid range 1-3; retained even while `pole_bonus_enabled` is false. */
+  pole_bonus_points: number
+  fastest_lap_bonus_enabled: boolean
+  /** Valid range 1-3; retained even while `fastest_lap_bonus_enabled` is false. */
+  fastest_lap_bonus_points: number
   created_at: string
   updated_at: string
 }
@@ -234,6 +242,13 @@ export interface TeamRow {
   logo_url: string | null
   color: string | null
   is_active: boolean
+  /** Season-scoped team fields (shared schema, also used by iOS/Android). */
+  season_id: string | null
+  championship_id: string | null
+  display_order: number | null
+  created_by: string | null
+  updated_by: string | null
+  archived_at: string | null
   created_at: string
   updated_at: string
 }

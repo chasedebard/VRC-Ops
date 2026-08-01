@@ -9,6 +9,7 @@ import {
 } from '@/services/standings'
 import { getDriversByIds } from '@/services/driverProfile'
 import { classesService, regionsService, teamsService } from '@/services/catalog'
+import { getSeasonTeams } from '@/services/seasonTeams'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Badge } from '@/components/Badge'
 import { DriverAvatar } from '@/components/DriverAvatar'
@@ -22,10 +23,18 @@ import type {
   SeasonRow,
   StandingsSnapshotRowRow,
   StandingsType,
+  TeamRow,
 } from '@/types/database'
 
+const STANDINGS_TAB_LABEL: Record<StandingsType, string> = {
+  overall: 'Drivers',
+  class: 'Class',
+  regional: 'Regional',
+  team: 'Teams',
+}
+
 export default function StandingsPage() {
-  const { selectedLeague } = useLeagueSession()
+  const { selectedLeague, permissions } = useLeagueSession()
   const { hasAccess } = useEntitlement()
   const [context, setContext] = useState<{ championship: ChampionshipRow; season: SeasonRow } | null | undefined>(
     undefined,
@@ -40,12 +49,26 @@ export default function StandingsPage() {
   const [rows, setRows] = useState<StandingsSnapshotRowRow[] | null>(null)
   const [movement, setMovement] = useState<Map<string, number>>(new Map())
   const [drivers, setDrivers] = useState<Map<string, DriverRow>>(new Map())
+  const [seasonTeams, setSeasonTeams] = useState<TeamRow[] | null>(null)
   const [error, setError] = useState<string | null>(null)
+
+  // The Teams tab is gated purely on season.teams_enabled — never on whether any team, team
+  // membership, or scored event already exists (a newly-enabled season must show it immediately).
+  const availableTabs: StandingsType[] = context?.season.teams_enabled
+    ? ['overall', 'class', 'regional', 'team']
+    : ['overall', 'class', 'regional']
 
   useEffect(() => {
     if (!selectedLeague) return
     resolveActiveSeason(selectedLeague.league.id).then(setContext).catch((err) => setError(err.message))
   }, [selectedLeague])
+
+  // If teams get disabled (or a season switch lands on one without teams) while the Teams tab
+  // is selected, fall back to Drivers rather than showing a tab that's no longer available.
+  useEffect(() => {
+    if (context && !availableTabs.includes(type)) setType('overall')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context, availableTabs.join(',')])
 
   useEffect(() => {
     if (!context || !selectedLeague) return
@@ -79,22 +102,27 @@ export default function StandingsPage() {
     }
     setError(null)
     try {
-      const [result, previousRows] = await Promise.all([
+      const [result, previousRows, teams] = await Promise.all([
         getLatestStandings(context.season.id, type, groupKey),
         getPreviousStandingsRows(context.season.id, type, groupKey),
+        type === 'team' ? getSeasonTeams(context.season.id) : Promise.resolve(null),
       ])
       setRows(result?.rows ?? [])
-      const previousPositionByDriver = new Map(
-        previousRows.filter((r) => r.driver_id).map((r) => [r.driver_id as string, r.position]),
+      setSeasonTeams(teams)
+      const idOf = (r: StandingsSnapshotRowRow) => r.driver_id ?? r.team_id
+      const previousPositionById = new Map(
+        previousRows.map((r) => [idOf(r), r.position]).filter((entry): entry is [string, number] => Boolean(entry[0])),
       )
       setMovement(
         new Map(
           (result?.rows ?? [])
-            .filter((r) => r.driver_id)
             .map((r) => {
-              const previous = previousPositionByDriver.get(r.driver_id as string)
-              return [r.driver_id as string, previous != null ? previous - r.position : 0]
-            }),
+              const id = idOf(r)
+              if (!id) return null
+              const previous = previousPositionById.get(id)
+              return [id, previous != null ? previous - r.position : 0] as [string, number]
+            })
+            .filter((entry): entry is [string, number] => entry !== null),
         ),
       )
       const ids = (result?.rows ?? []).map((r) => r.driver_id).filter((id): id is string => Boolean(id))
@@ -127,17 +155,17 @@ export default function StandingsPage() {
       </div>
 
       <div className="flex flex-wrap gap-1 rounded-lg border p-1" style={{ borderColor: 'var(--color-border)' }}>
-        {(['overall', 'class', 'regional', 'team'] as StandingsType[]).map((t) => (
+        {availableTabs.map((t) => (
           <button
             key={t}
             onClick={() => setType(t)}
-            className="rounded-md px-3 py-1.5 text-sm font-medium capitalize"
+            className="rounded-md px-3 py-1.5 text-sm font-medium"
             style={{
               backgroundColor: type === t ? 'var(--color-accent)' : 'transparent',
               color: type === t ? 'var(--color-accent-contrast)' : 'var(--color-text)',
             }}
           >
-            {t}
+            {STANDINGS_TAB_LABEL[t]}
           </button>
         ))}
       </div>
@@ -169,6 +197,26 @@ export default function StandingsPage() {
           </CardHeader>
           {rows === null ? (
             <LoadingState />
+          ) : rows.length === 0 && type === 'team' && (seasonTeams?.length ?? 0) === 0 ? (
+            <EmptyState
+              title="No teams configured for this season."
+              description={
+                permissions.canManageMembers ? undefined : 'Ask a league owner or admin to add teams.'
+              }
+              action={
+                permissions.canManageMembers ? (
+                  <Link
+                    to={`/seasons/${context.season.id}/teams`}
+                    className="text-sm underline"
+                    style={{ color: 'var(--color-accent)' }}
+                  >
+                    Manage teams →
+                  </Link>
+                ) : undefined
+              }
+            />
+          ) : rows.length === 0 && type === 'team' ? (
+            <EmptyState title="No team standings yet." description="Standings update automatically once results are saved." />
           ) : rows.length === 0 ? (
             <EmptyState title="No standings yet" description="Standings update automatically once results are saved." />
           ) : (
@@ -177,7 +225,7 @@ export default function StandingsPage() {
                 <thead>
                   <tr style={{ color: 'var(--color-text-muted)' }}>
                     <th className="pb-2 pr-4">#</th>
-                    <th className="pb-2 pr-4">Driver</th>
+                    <th className="pb-2 pr-4">{type === 'team' ? 'Team' : 'Driver'}</th>
                     <th className="pb-2 pr-4">Points</th>
                     <th className="pb-2 pr-4">Wins</th>
                     <th className="pb-2 pr-4">Podiums</th>
@@ -188,12 +236,15 @@ export default function StandingsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
-                  {rows.map((row) => (
+                  {rows.map((row) => {
+                    const team = row.team_id ? seasonTeams?.find((t) => t.id === row.team_id) : undefined
+                    const movementKey = row.driver_id ?? row.team_id
+                    return (
                     <tr key={row.id}>
                       <td className="py-2 pr-4">
                         <div className="flex items-center gap-1.5">
                           {row.position}
-                          {row.driver_id && <StandingsMovementIndicator movement={movement.get(row.driver_id) ?? 0} />}
+                          {movementKey && <StandingsMovementIndicator movement={movement.get(movementKey) ?? 0} />}
                         </div>
                       </td>
                       <td className="py-2 pr-4 font-medium">
@@ -204,6 +255,14 @@ export default function StandingsPage() {
                             )}
                             {drivers.get(row.driver_id)?.display_name ?? 'Driver'}
                           </Link>
+                        ) : row.team_id ? (
+                          <span className="flex items-center gap-2">
+                            <span
+                              className="h-3 w-3 rounded-full"
+                              style={{ backgroundColor: team?.color ?? 'var(--color-border)' }}
+                            />
+                            {team?.name ?? 'Team'}
+                          </span>
                         ) : (
                           'Team'
                         )}
@@ -219,7 +278,8 @@ export default function StandingsPage() {
                         {row.eliminated && <Badge tone="danger">Eliminated</Badge>}
                       </td>
                     </tr>
-                  ))}
+                    )
+                  })}
                 </tbody>
               </table>
             </div>
