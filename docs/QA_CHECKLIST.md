@@ -7,7 +7,10 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 
 - [ ] Sign up with a new email creates an account and shows "check your email".
 - [ ] Sign in with an unverified account shows the "verify your email" gate, not the dashboard.
-- [ ] Clicking the verification email link lands on `/auth/callback` and reaches the dashboard.
+- [ ] Clicking the verification email link opens `https://vrc-ops.org/auth/callback` (never
+      localhost), establishes a session, and reaches the dashboard or the correct onboarding gate.
+- [ ] A verification link sent after starting from `/invite/:token` returns to that invite after
+      confirmation and accepts it once the session is established.
 - [ ] Sign in with correct credentials reaches the dashboard (or onboarding gate, if new).
 - [ ] Sign in with wrong password shows an inline error, not a crash.
 - [ ] "Forgot password" sends a reset email; the reset link reaches `/reset-password/update` and
@@ -138,6 +141,9 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
       zero rows, not an error leaking existence).
 
 ## GitHub Pages deployment
+
+- [ ] `https://www.vrc-ops.org/...` redirects to the matching non-www `https://vrc-ops.org/...`
+      route.
 
 - [ ] `npm run build` succeeds locally with the real Supabase env vars.
 - [ ] The Actions workflow run succeeds on push to `main`.

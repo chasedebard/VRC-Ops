@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { sendPasswordRecovery } from '@/services/auth'
+import {
+  authPathWithRedirect,
+  getRedirectPathFromUrl,
+  getRequestedPostAuthRedirectPath,
+} from '@/services/authRedirects'
 import { Field } from '@/components/Field'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
@@ -10,13 +15,14 @@ export default function ResetPasswordPage() {
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const redirectPath = getRedirectPathFromUrl(window.location.href)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
     setBusy(true)
     try {
-      await sendPasswordRecovery(email)
+      await sendPasswordRecovery(email, getRequestedPostAuthRedirectPath(window.location.href))
       setSent(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not send reset email.')
@@ -52,7 +58,11 @@ export default function ResetPasswordPage() {
             </Button>
           </form>
         )}
-        <Link to="/login" className="mt-4 inline-block text-sm underline" style={{ color: 'var(--color-text-muted)' }}>
+        <Link
+          to={authPathWithRedirect('/login', redirectPath)}
+          className="mt-4 inline-block text-sm underline"
+          style={{ color: 'var(--color-text-muted)' }}
+        >
           Back to sign in
         </Link>
       </Card>

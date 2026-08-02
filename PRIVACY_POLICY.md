@@ -1,138 +1,132 @@
 # Privacy Policy
 
-**Last updated:** July 3, 2026
+**Effective date:** July 13, 2026<br>
+**Last updated:** July 13, 2026
 
-This Privacy Policy explains how VRC ("**the App**," "**we**," "**us**") collects, uses, stores, and protects information when you use the VRC iOS, iPadOS, or macOS application and its associated backend services.
+This Privacy Policy explains how VRC Ops (also known as Virtual Race Control or RFS Race Control) collects, uses, stores, and protects information when you use the VRC Ops iOS, iPadOS, or macOS applications, the website at [vrc-ops.org](https://vrc-ops.org), and associated backend services (together, the **Service**).
 
-If you have questions about this policy, contact us at **`povchaos@gmail.com`**.
+If you have questions or want to exercise a privacy right, email [povchaos@gmail.com](mailto:povchaos@gmail.com).
 
 ## 1. Who we are
 
-VRC is operated by **some random fella named Chase DeBard**, a **sinlge man operation** based in **Pennsylvania**. This section should be completed with the actual legal entity operating the App before this policy is published.
+VRC Ops is operated by **Chase DeBard**, an independent developer based in Pennsylvania, United States. In this policy, “VRC Ops,” “we,” “us,” and “our” refer to that operator.
 
 ## 2. Information we collect
 
-### 2.1 Account & authentication data
-When you create an account, we collect the **email address** and password you use to sign in. Authentication is handled by our backend provider, Supabase, using industry-standard practices. We do not store your plaintext password.
+### 2.1 Account and authentication data
+
+When you create an account, we collect your email address and authentication information needed to sign you in. Authentication is handled by Supabase. We do not store your plaintext password. The website may store session tokens and your light or dark theme preference in browser storage so you can remain signed in and keep your display preference.
 
 ### 2.2 Profile information
-Basic profile details you choose to provide, such as a display name.
+
+We collect profile details you choose to provide, such as your display name.
 
 ### 2.3 Driver profile data
-If you or a league administrator creates a driver profile, we store information associated with that profile, which may include the driver's name, team, class, region, season assignments, and an optional **driver photo** that you upload.
+
+If you or a league administrator creates a driver profile, we store information associated with that profile. This may include a driver’s name, team, class, region, season assignments, and an optional uploaded driver photo.
 
 ### 2.4 League, event, and results data
-Data you or your league's staff enter to operate a league, including but not limited to: championships, seasons, tracks, events and race weekends, qualifying results, race results (finishing positions, gaps, lap times, penalties, DNS/DNF/DSQ status, pole position, fastest lap), and standings computed from that data. This data is generally visible to other members of the same league, consistent with each member's role (Owner, Admin, Marshal, Driver, Viewer).
 
-### 2.5 Telemetry capture summaries (optional)
-The App includes an optional **Capture** feature that can parse telemetry from supported sources (for example, Gran Turismo 7 on PlayStation 5) that you point the App at on your local network. Raw telemetry artifacts are processed and retained **locally on your device**. Only minimal, derived **summary data** (such as classified lap information) may be synced to our backend to support results and analytics — we do not upload raw telemetry captures.
+We store data that you and your league staff enter to operate a league, including championships, seasons, tracks, events, race weekends, qualifying and race results, lap times, penalties, DNS/DNF/DSQ status, pole position, fastest lap, and standings computed from that data. This information is generally visible to members of the same league according to their assigned role and the league’s settings.
 
-### 2.6 Predictions / AI-assisted features
-The App may offer AI-assisted predictions or forecasts derived from league data. Where an AI feature is used, the App presents a **consent gate** before the feature is enabled, and the underlying computation for the core prediction engine is deterministic and based on data already present in your league (not on content scraped from outside the App). Any prediction runs or evaluations initiated by authorized staff may be stored to support the feature.
+### 2.5 Telemetry capture summaries
 
-### 2.7 Invitations
-When a league Owner or Admin invites someone to join a league, we process the invited **email address** and generate a securely hashed invitation token to deliver and validate that invite. Invitation emails are sent via a third-party transactional email provider (see Section 5).
+The optional Capture feature can parse telemetry from supported sources that you connect to on your local network. Raw telemetry artifacts are processed and retained locally on your device. Only minimal derived summaries, such as classified lap information, may be synced to our backend to support results and analytics. We do not upload raw telemetry captures.
 
-### 2.8 Consent records
-Where the App requires your consent for a given feature (for example, AI-assisted predictions, or data-sharing within a league), we record that consent decision, including when it was given or withdrawn, so we can honor your choices.
+### 2.6 Predictions and assisted features
+
+The Service may provide predictions or forecasts derived from league data. When a feature requires consent, the Service presents a consent prompt before it is enabled. Prediction runs or evaluations initiated by authorized league staff may be stored to provide and improve the feature.
+
+### 2.7 Invitations and consent records
+
+When a league Owner or Admin invites someone, we process the invited email address and a securely hashed invitation token to deliver and validate the invitation. When the Service asks for consent, we record the decision and when it was given or withdrawn so we can honor that choice.
+
+### 2.8 Subscription and purchase records
+
+Apple processes payments for VRC Ops Pro and VRC League Plus. We may receive and store limited purchase records needed to verify and provide access, such as product and transaction identifiers, purchase and expiration dates, renewal state, environment, and subscription status. We do not receive or store your full payment-card details.
 
 ### 2.9 Diagnostic and technical information
-Standard technical information generated by app operation (such as error logs) may be processed for the purpose of maintaining service reliability. We do not use third-party advertising trackers.
 
-## 3. How we use your information
+We may process basic error, security, and technical records needed to operate and protect the Service. We do not use third-party advertising trackers and do not sell personal information.
 
-We use the information described above to:
+## 3. How we use information
 
-- Create and secure your account, and authenticate you;
-- Operate core league-management functionality (rosters, events, results, standings);
-- Deliver league invitations by email;
-- Provide optional features you've opted into, such as telemetry Capture and AI-assisted predictions;
-- Maintain the security, integrity, and reliability of the App;
-- Respond to support requests you send us directly;
-- Comply with legal obligations.
+We use information to:
 
-We do **not** sell your personal information.
+- create, secure, and authenticate accounts;
+- operate league-management features, including rosters, events, results, standings, and invitations;
+- provide features you choose to use, including Capture, predictions, and subscription benefits;
+- maintain the security, integrity, and reliability of the Service;
+- respond to support and privacy requests; and
+- comply with legal obligations.
 
-## 4. Legal basis for processing
+## 4. Legal bases for processing
 
-Where required (for example, under the EU/UK GDPR), we rely on the following legal bases:
+Where laws such as the EU or UK GDPR apply, we rely on:
 
-- **Contract** — processing necessary to provide the App's core functionality to you as a user;
-- **Consent** — for optional features that are explicitly gated behind an in-app consent prompt, such as AI-assisted predictions and certain data-sharing within a league;
-- **Legitimate interests** — for security, fraud prevention, and service reliability;
-- **Legal obligation** — where we must retain or disclose information to comply with law.
+- **Contract:** processing needed to provide the Service you request;
+- **Consent:** processing for optional features that ask for consent;
+- **Legitimate interests:** security, fraud prevention, service reliability, and improvement; and
+- **Legal obligation:** processing required to comply with applicable law.
 
-You may withdraw consent for consent-based features at any time within the App; this does not affect processing already carried out based on consent prior to withdrawal.
+You may withdraw consent for consent-based features at any time. Withdrawal does not affect processing that already occurred while consent was valid.
 
-## 5. Where your data is stored and who processes it
+## 5. Service providers
 
-- **Supabase** — our backend infrastructure provider. Supabase hosts our Postgres database (protected with row-level security policies scoping data access to your league and role), authentication, file storage (e.g., driver photos), and edge/scheduled functions.
-- **Resend** — a third-party transactional email provider used to deliver league invitation emails.
+We use service providers to operate VRC Ops:
 
-These providers act as data processors on our behalf and are contractually/technically limited to processing data as needed to provide their service to us. We do not share your data with third parties for their own marketing purposes, and we do not sell personal information.
+- **Supabase** provides authentication, database hosting, file storage, and backend functions.
+- **Resend** delivers transactional emails such as league invitations.
+- **Apple** distributes the Apple-platform apps and processes App Store purchases and subscriptions.
 
-## 6. Data sharing within a league
+These providers process information under their own terms and privacy commitments and only as needed to provide their services. We do not share personal information with third parties for their own advertising.
 
-Because VRC is a multi-user league-management tool, information you or others enter (driver profiles, results, standings, etc.) is generally visible to other members of the same league, subject to each member's role. Viewers, for example, may see published standings and results but not administrative data. League Owners and Admins control membership and role assignments for their league.
+## 6. Sharing within a league
+
+VRC Ops is a multi-user league-management service. Information entered by you or other league members—such as driver profiles, schedules, results, and standings—is generally visible to other members of that league according to their roles and the league’s configuration. League Owners and Admins control membership and role assignments.
 
 ## 7. Security
 
-We use reasonable technical and organizational measures to protect your information, including:
+We use reasonable technical and organizational safeguards, including encrypted transport, access controls, hashed invitation tokens, and database row-level security designed to limit access by league and role. No transmission or storage method is completely secure, so we cannot guarantee absolute security.
 
-- **Row-level security (RLS)** on our database so users can only access data their role and league membership entitle them to;
-- **Hashed invitation tokens** rather than storing invite tokens in plain text;
-- Encrypted transport (HTTPS/TLS) between the App and our backend;
-- Access controls limiting who can access production systems.
+## 8. Retention
 
-No method of transmission or storage is 100% secure, and we cannot guarantee absolute security.
-
-## 8. Data retention
-
-We retain personal information for as long as your account and league membership are active, or as needed to provide the App's functionality. Raw telemetry capture artifacts are retained locally on your device under your control and are not held by us. If you delete your account (see Section 9), we delete or anonymize associated data as described below.
+We retain personal information while your account or league membership is active and as needed to provide the Service, resolve disputes, enforce agreements, and comply with law. Raw telemetry artifacts remain on your device. Retention periods can vary based on the type of record and why it is needed.
 
 ## 9. Account deletion
 
-The App provides an **in-app account deletion flow**. When you delete your account:
+The Service provides an in-app account deletion flow. When deletion is completed:
 
-- Your authentication credentials are removed;
-- Personal identifiers associated with your account are anonymized or deleted from our systems;
-- If you are the **sole Owner** of a league, you will be guided through resolving league ownership (for example, transferring ownership or the league itself being wound down) before deletion completes, so that other league members' data isn't orphaned;
-- Historical league data you contributed to (such as results tied to a race that already occurred) may be retained in anonymized form so the historical record and other members' standings remain intact, without identifying you personally;
-- Storage objects (such as photos) tied solely to your account are removed subject to the constraints of our storage and authentication systems.
+- authentication credentials are removed;
+- personal identifiers associated with the account are deleted or anonymized where reasonably possible;
+- storage objects tied only to the account are removed;
+- a sole league Owner must resolve league ownership before deletion can finish; and
+- historical league records may be retained in anonymized form when needed to preserve completed results and other members’ standings.
 
-To request deletion, use the account deletion option in the App's settings, or contact us at `CONTACT_EMAIL` for assistance.
+You can start deletion in the account settings or email [povchaos@gmail.com](mailto:povchaos@gmail.com) for help.
 
-## 10. Children's privacy
+## 10. Children’s privacy
 
-The App is not directed to children under the age of 13 (or the minimum age required by your local law, if higher), and we do not knowingly collect personal information from children under that age. If you believe a child has provided us with personal information, please contact us at `CONTACT_EMAIL` so we can take appropriate action.
+The Service is not directed to children under 13, or the higher minimum age required by local law. We do not knowingly collect personal information from children below the applicable minimum age. Contact us if you believe a child has provided personal information so we can investigate and take appropriate action.
 
 ## 11. Your rights
 
-Depending on your location, you may have rights to:
+Depending on where you live, you may have rights to access, correct, delete, or receive a copy of personal information; restrict or object to certain processing; and withdraw consent. Email [povchaos@gmail.com](mailto:povchaos@gmail.com) to make a request. We may need to verify your identity before fulfilling it.
 
-- **Access** the personal information we hold about you;
-- **Correct** inaccurate information;
-- **Delete** your personal information (see Section 9);
-- **Restrict or object to** certain processing;
-- **Data portability**, where applicable;
-- **Withdraw consent** for consent-based features at any time.
+You may also have the right to complain to your local data-protection authority.
 
-To exercise these rights, contact us at `CONTACT_EMAIL`. We may need to verify your identity before fulfilling a request.
+## 12. International transfers
 
-## 12. International data transfers
-
-Our infrastructure providers may process and store data in countries other than your own. Where personal information is transferred internationally, we rely on appropriate safeguards required by applicable law (for example, standard contractual clauses, where applicable). **[This section should be reviewed and finalized based on where your infrastructure providers actually host data and your users' locations — PLACEHOLDER.]**
+VRC Ops and its providers may process information in the United States and other countries. Where applicable law requires safeguards for an international transfer, we rely on the provider’s applicable contractual and legal transfer mechanisms.
 
 ## 13. Changes to this policy
 
-We may update this Privacy Policy from time to time. When we do, we will update the "Last updated" date above. Material changes may be communicated to you within the App. Continued use of the App after changes take effect constitutes acceptance of the revised policy.
+We may update this Privacy Policy as the Service changes. We will revise the “Last updated” date and may provide an in-app notice when a change is material. Your continued use after an update takes effect is subject to the updated policy.
 
-## 14. Contact us
+## 14. Contact
 
-If you have questions, concerns, or requests regarding this Privacy Policy or your personal information, contact us at:
+For privacy questions or requests, contact:
 
-**`CONTACT_EMAIL`** *(placeholder — replace with a real, monitored support address, e.g. `privacy@[YOUR_DOMAIN].com`)*
-
----
-
-*This document is a draft template. Company name, legal entity/jurisdiction, contact email, domain, and international-transfer specifics are placeholders and must be completed and reviewed by legal counsel before this policy is published or relied upon.*
+**Chase DeBard**<br>
+Pennsylvania, United States<br>
+[povchaos@gmail.com](mailto:povchaos@gmail.com)

@@ -1,7 +1,8 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { useMfaGate } from '@/hooks/useMfaGate'
+import { authPathWithRedirect } from '@/services/authRedirects'
 import { Layout } from '@/components/Layout'
 import { LoadingState } from '@/components/States'
 import { Card } from '@/components/Card'
@@ -19,6 +20,7 @@ import MfaChallengePage from '@/pages/auth/MfaChallengePage'
  */
 export function ProtectedLayout() {
   const { state, loading: authLoading, signOut } = useAuth()
+  const location = useLocation()
   const { loading: sessionLoading, profileCompleted, legalAccepted, leagues } = useLeagueSession()
   const { status: mfaStatus, factorId, refresh: refreshMfa } = useMfaGate()
 
@@ -30,7 +32,14 @@ export function ProtectedLayout() {
     )
   }
 
-  if (state.kind === 'signedOut') return <Navigate to="/login" replace />
+  if (state.kind === 'signedOut') {
+    return (
+      <Navigate
+        to={authPathWithRedirect('/login', `${location.pathname}${location.search}${location.hash}`)}
+        replace
+      />
+    )
+  }
 
   if (state.kind === 'recoveringPassword') return <Navigate to="/reset-password/update" replace />
 

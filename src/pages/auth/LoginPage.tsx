@@ -1,10 +1,16 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { signIn } from '@/services/auth'
+import {
+  authPathWithRedirect,
+  getPostAuthRedirectPath,
+  getRedirectPathFromUrl,
+} from '@/services/authRedirects'
 import { useAuth } from '@/hooks/useAuth'
 import { Field } from '@/components/Field'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import { LegalLinks } from '@/components/LegalLinks'
 
 export default function LoginPage() {
   const { refresh } = useAuth()
@@ -13,15 +19,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const redirectPath = getRedirectPathFromUrl(window.location.href)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
     setBusy(true)
     try {
-      await signIn(email, password)
+      const state = await signIn(email, password)
       await refresh()
-      navigate('/dashboard')
+      navigate(state.kind === 'authenticated' ? getPostAuthRedirectPath(window.location.href) : '/dashboard')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign in failed.')
     } finally {
@@ -60,13 +67,22 @@ export default function LoginPage() {
           </Button>
         </form>
         <div className="mt-4 flex justify-between text-sm">
-          <Link to="/reset-password" className="underline" style={{ color: 'var(--color-text-muted)' }}>
+          <Link
+            to={authPathWithRedirect('/reset-password', redirectPath)}
+            className="underline"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
             Forgot password?
           </Link>
-          <Link to="/signup" className="underline" style={{ color: 'var(--color-accent)' }}>
+          <Link
+            to={authPathWithRedirect('/signup', redirectPath)}
+            className="underline"
+            style={{ color: 'var(--color-accent)' }}
+          >
             Create account
           </Link>
         </div>
+        <LegalLinks className="mt-5 justify-center border-t pt-4" />
       </Card>
     </div>
   )

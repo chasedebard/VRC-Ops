@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { handleAuthCallback } from '@/services/auth'
+import {
+  authPathWithRedirect,
+  getPostAuthRedirectPath,
+  getRequestedPostAuthRedirectPath,
+} from '@/services/authRedirects'
 import { useAuth } from '@/hooks/useAuth'
 import { LoadingState, ErrorState } from '@/components/States'
 
@@ -13,9 +18,12 @@ export default function AuthCallbackPage() {
     handleAuthCallback(window.location.href)
       .then(async (state) => {
         await refresh()
-        navigate(state.kind === 'recoveringPassword' ? '/reset-password/update' : '/dashboard', {
-          replace: true,
-        })
+        const requestedRedirectPath = getRequestedPostAuthRedirectPath(window.location.href)
+        const redirectPath =
+          state.kind === 'recoveringPassword'
+            ? authPathWithRedirect('/reset-password/update', requestedRedirectPath)
+            : getPostAuthRedirectPath(window.location.href)
+        navigate(redirectPath, { replace: true })
       })
       .catch((err) => setError(err instanceof Error ? err.message : 'Verification link failed.'))
   }, [refresh, navigate])

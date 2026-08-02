@@ -16,10 +16,10 @@ GitHub Desktop workflow for day-to-day changes.
   on a deep route like `/drivers/123` would 404 without help. `public/404.html` is a copy of
   `index.html` that lets the app's router take over after GitHub Pages serves it as the 404
   fallback (the standard `spa-github-pages` pattern).
-- **Environment:** only `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (both public-safe, see
-  `docs/WEB_LIMITATIONS.md`) are baked into the build via the workflow's `env:` block, sourced
-  from repository **Settings → Secrets and variables → Actions**. Nothing else is required at
-  build time.
+- **Environment:** `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and the canonical
+  `VITE_APP_BASE_URL=https://vrc-ops.org` are baked into the build via the workflow's `env:`
+  block. The Supabase values are sourced from repository **Settings → Secrets and variables →
+  Actions**; the site URL is intentionally fixed to the production custom domain.
 
 ## One-time GitHub Pages setup
 
@@ -29,7 +29,8 @@ GitHub Desktop workflow for day-to-day changes.
    `gh api` shortcut below, this single dropdown is the only manual step.)
 3. Add two **Actions secrets** (Settings → Secrets and variables → Actions → New repository
    secret): `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (the same values as your local
-   `.env` — the anon key, never the service-role key).
+   `.env` — the anon key, never the service-role key). The workflow sets
+   `VITE_APP_BASE_URL=https://vrc-ops.org` directly.
 4. In **Settings → Pages → Custom domain**, enter `vrc-ops.org` and enable **Enforce HTTPS**
    once the certificate provisions (can take up to ~24h after DNS propagates).
 
@@ -71,6 +72,24 @@ npm install
 cp .env.example .env   # fill in your Supabase URL + anon key
 npm run dev
 ```
+
+## Supabase Auth URL configuration
+
+In Supabase Dashboard → Authentication → URL Configuration:
+
+- Set **Site URL** to `https://vrc-ops.org`.
+- Add these production redirect URLs:
+  - `https://vrc-ops.org`
+  - `https://vrc-ops.org/auth/callback`
+  - `https://www.vrc-ops.org`
+  - `https://www.vrc-ops.org/auth/callback`
+- Keep localhost entries only for explicit local development, such as
+  `http://localhost:5173/**` and `http://127.0.0.1:5173/**`. Do not use localhost as the
+  production Site URL or default email confirmation destination.
+
+The app uses non-www `https://vrc-ops.org` as canonical and client-redirects
+`https://www.vrc-ops.org` traffic back to it. Signup and password recovery emails build their
+callback URLs from `VITE_APP_BASE_URL`, which is fixed to `https://vrc-ops.org` in production.
 
 ## Pre-deploy validation
 

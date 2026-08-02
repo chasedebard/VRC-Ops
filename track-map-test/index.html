@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kyoto Driving Park - Yamagiwa + Miyabi | Track Map Test</title>
+    <link rel="stylesheet" href="./track-map.css">
+    <script src="./track-map.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="page-header" aria-labelledby="track-title">
+        <div>
+          <p class="subtitle">Interactive Track Map Test</p>
+          <h1 id="track-title">Kyoto Driving Park &ndash; Yamagiwa + Miyabi</h1>
+        </div>
+        <dl class="stats" aria-label="Track stats">
+          <div>
+            <dt>Length</dt>
+            <dd>6.846 km</dd>
+          </div>
+          <div>
+            <dt>Turns</dt>
+            <dd>19</dd>
+          </div>
+          <div>
+            <dt>Elevation</dt>
+            <dd>38.6 m</dd>
+          </div>
+        </dl>
+      </header>
+
+      <main class="workspace">
+        <section class="map-card" aria-label="Interactive circuit map">
+          <div class="toolbar" aria-label="Map controls">
+            <div class="button-group" aria-label="Zoom controls">
+              <button class="icon-button" id="zoom-out" type="button" aria-label="Zoom out">-</button>
+              <button class="icon-button" id="zoom-in" type="button" aria-label="Zoom in">+</button>
+              <button class="text-button" id="reset-view" type="button">Reset</button>
+              <button class="text-button" id="fit-view" type="button">Fit</button>
+              <button class="text-button subdued" id="clear-selection" type="button">Clear</button>
+            </div>
+
+            <fieldset class="overlay-controls">
+              <legend>Overlays</legend>
+              <label><input type="checkbox" data-overlay="turns" checked> Turns</label>
+              <label><input type="checkbox" data-overlay="sectors" checked> Sectors</label>
+              <label><input type="checkbox" data-overlay="elevation" checked> Elevation</label>
+              <label><input type="checkbox" data-overlay="braking" checked> Braking</label>
+              <label><input type="checkbox" data-overlay="start" checked> Start/finish</label>
+            </fieldset>
+          </div>
+
+          <div class="map-stage" id="track-map-mount" aria-live="polite">
+            <div class="loading-state">Loading track map...</div>
+          </div>
+        </section>
+
+        <aside class="detail-card" aria-labelledby="detail-title">
+          <div class="detail-heading">
+            <p class="subtitle">Selected Region</p>
+            <h2 id="detail-title">No region selected</h2>
+          </div>
+
+          <dl class="detail-list" id="detail-list">
+            <div>
+              <dt>Region type</dt>
+              <dd>Tap a marker, sector, zone, or turn label.</dd>
+            </div>
+            <div>
+              <dt>Selected region id</dt>
+              <dd>none</dd>
+            </div>
+          </dl>
+        </aside>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,13 +1,19 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { createAccount } from '@/services/auth'
+import {
+  getPostAuthRedirectPath,
+  getRequestedPostAuthRedirectPath,
+} from '@/services/authRedirects'
 import { useAuth } from '@/hooks/useAuth'
 import { Field } from '@/components/Field'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import { LegalLinks } from '@/components/LegalLinks'
 
 export default function SignupPage() {
   const { refresh } = useAuth()
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmation, setConfirmation] = useState('')
@@ -20,11 +26,17 @@ export default function SignupPage() {
     setError(null)
     setBusy(true)
     try {
-      const result = await createAccount(email, password, confirmation)
+      const result = await createAccount(
+        email,
+        password,
+        confirmation,
+        getRequestedPostAuthRedirectPath(window.location.href),
+      )
       if (result.kind === 'awaitingVerification') {
         setAwaitingVerification(true)
       } else {
         await refresh()
+        navigate(getPostAuthRedirectPath(window.location.href))
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not create account.')
@@ -40,11 +52,12 @@ export default function SignupPage() {
           <h1 className="mb-2 text-xl font-bold">Check your email</h1>
           <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
             We sent a verification link to <strong>{email}</strong>. Follow it to finish creating
-            your account, then come back and sign in.
+            your account.
           </p>
           <Link to="/login" className="mt-4 inline-block text-sm underline" style={{ color: 'var(--color-accent)' }}>
             Back to sign in
           </Link>
+          <LegalLinks className="mt-5 justify-center border-t pt-4" />
         </Card>
       </div>
     )
@@ -93,6 +106,7 @@ export default function SignupPage() {
             Already have an account? Sign in
           </Link>
         </div>
+        <LegalLinks className="mt-5 justify-center border-t pt-4" />
       </Card>
     </div>
   )

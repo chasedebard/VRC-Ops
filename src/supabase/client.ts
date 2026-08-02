@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { getAppBaseUrl } from '@/utils/siteUrl'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -21,4 +22,4 @@ export const supabase = createClient(url, anonKey, {
   },
 })
 
-export const appBaseUrl = import.meta.env.VITE_APP_BASE_URL || window.location.origin
+export const appBaseUrl = getAppBaseUrl()

@@ -59,7 +59,7 @@ Only the **anon/publishable** Supabase key belongs in this app (see `.env.exampl
 | -------------------------- | --------------------------------------------------------------- |
 | `VITE_SUPABASE_URL`        | Supabase project URL                                            |
 | `VITE_SUPABASE_ANON_KEY`   | Supabase anon/publishable key                                   |
-| `VITE_APP_BASE_URL`        | This deployment's base URL, used to build invite/reset links    |
+| `VITE_APP_BASE_URL`        | Canonical site URL for auth callbacks; production uses `https://vrc-ops.org` |
 
 ## Website: deployment
 
@@ -67,7 +67,10 @@ Deployed to GitHub Pages at the custom domain **vrc-ops.org**. See [docs/DEPLOYM
 
 ## More documentation
 
+- [Legal & Support](https://vrc-ops.org/legal) — the public website hub for the EULA, privacy, terms, and support.
+- [End User License Agreement](EULA.md) — how Apple’s Standard EULA applies to VRC Ops.
 - [Privacy Policy](PRIVACY_POLICY.md) — what data VRC collects, how it's used, and your rights.
+- [Terms of Use](TERMS_OF_USE.md) — terms for accounts, leagues, content, and subscriptions.
 - [Support](SUPPORT.md) — getting started, tips for common workflows, and troubleshooting.
 - [docs/XCODE_SOURCE_ANALYSIS.md](docs/XCODE_SOURCE_ANALYSIS.md) — how the native app's screens, roles, data model, and business logic were mapped onto this website.
 - [docs/WEB_LIMITATIONS.md](docs/WEB_LIMITATIONS.md) — what can't (or doesn't yet) run on GitHub Pages, and why.

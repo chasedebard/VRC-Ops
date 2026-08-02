@@ -1,0 +1,339 @@
+<svg id="kyoto-map-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" role="img" aria-labelledby="kyoto-map-title kyoto-map-desc">
+  <title id="kyoto-map-title">Kyoto Driving Park Yamagiwa plus Miyabi circuit map</title>
+  <desc id="kyoto-map-desc">Clean vector circuit map with interactive sectors, turns, braking zones, elevation zones, speed zones, and start finish marker.</desc>
+  <style>
+    #kyoto-map-svg {
+      --map: #f5f7f4;
+      --track: #101217;
+      --muted: #7d8792;
+      --selected: #ff7a1a;
+      --sector-1: #2dd4bf;
+      --sector-2: #8b5cf6;
+      --sector-3: #22c55e;
+      --brake: #ef4444;
+      --elevation: #0ea5e9;
+      background: var(--map);
+    }
+
+    .track-shadow {
+      fill: none;
+      stroke: rgba(15, 23, 42, 0.16);
+      stroke-width: 36;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .track-line {
+      fill: none;
+      stroke: var(--track);
+      stroke-width: 22;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .track-inner {
+      fill: none;
+      stroke: #fefefe;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.16;
+    }
+
+    .track-hit {
+      fill: none;
+      stroke: transparent;
+      stroke-width: 72;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: stroke;
+    }
+
+    .sector-path {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.68;
+      pointer-events: stroke;
+    }
+
+    .sector-one {
+      stroke: var(--sector-1);
+    }
+
+    .sector-two {
+      stroke: var(--sector-2);
+    }
+
+    .sector-three {
+      stroke: var(--sector-3);
+    }
+
+    .zone-region {
+      opacity: 0.72;
+      pointer-events: stroke;
+    }
+
+    .zone-line {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .braking-zone .zone-line {
+      stroke: var(--brake);
+      stroke-width: 10;
+      stroke-dasharray: 2 22;
+    }
+
+    .elevation-zone .zone-line {
+      stroke: var(--elevation);
+      stroke-width: 12;
+      stroke-dasharray: 18 14;
+    }
+
+    .speed-zone .zone-line {
+      stroke: var(--sector-1);
+      stroke-width: 7;
+      opacity: 0.82;
+    }
+
+    .turn-dot,
+    .marker-core {
+      fill: #ffffff;
+      stroke: var(--track);
+      stroke-width: 3;
+    }
+
+    .turn-text,
+    .marker-text,
+    .sector-text {
+      fill: var(--track);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 800;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+    }
+
+    .turn-text {
+      font-size: 20px;
+    }
+
+    .marker-text {
+      font-size: 18px;
+    }
+
+    .sector-pill {
+      fill: rgba(255, 255, 255, 0.86);
+      stroke: rgba(17, 24, 39, 0.18);
+      stroke-width: 1.5;
+    }
+
+    .sector-text {
+      font-size: 18px;
+    }
+
+    .apex {
+      fill: #ffffff;
+      stroke: var(--selected);
+      stroke-width: 3;
+      opacity: 0.88;
+    }
+
+    .sf-line {
+      stroke: #ffffff;
+      stroke-width: 24;
+      stroke-linecap: round;
+    }
+
+    .sf-line-dark {
+      stroke: var(--track);
+      stroke-width: 5;
+      stroke-linecap: round;
+    }
+  </style>
+  <rect x="12" y="12" width="976" height="776" rx="28" fill="var(--map)"/>
+
+  <g id="elevation-overlay">
+    <g id="elevation-zone-1" class="zone-region elevation-zone" data-region-id="elevation-zone-1">
+      <path class="zone-line" d="M 770 136 C 712 134 652 126 590 111"/>
+    </g>
+    <g id="elevation-zone-2" class="zone-region elevation-zone" data-region-id="elevation-zone-2">
+      <path class="zone-line" d="M 125 233 C 182 283 247 365 309 475"/>
+    </g>
+    <g id="elevation-zone-3" class="zone-region elevation-zone" data-region-id="elevation-zone-3">
+      <path class="zone-line" d="M 260 608 C 298 662 346 690 405 642"/>
+    </g>
+    <g id="elevation-zone-4" class="zone-region elevation-zone" data-region-id="elevation-zone-4">
+      <path class="zone-line" d="M 595 576 C 662 613 668 676 628 717"/>
+    </g>
+    <g id="elevation-zone-5" class="zone-region elevation-zone" data-region-id="elevation-zone-5">
+      <path class="zone-line" d="M 667 267 C 675 312 705 356 793 380"/>
+    </g>
+  </g>
+
+  <g id="sector-overlay">
+    <g id="sector-1" class="sector-region" data-region-id="sector-1">
+      <path class="sector-path sector-one" d="M 850 120 C 790 125 720 124 650 124 C 616 124 596 117 586 105 C 574 90 548 91 535 108 C 520 128 498 131 470 118 C 440 105 402 105 360 112 C 300 120 205 100 135 115 C 75 128 48 178 70 220 C 88 255 140 275 185 315 C 235 360 275 430 318 493"/>
+    </g>
+    <g id="sector-2" class="sector-region" data-region-id="sector-2">
+      <path class="sector-path sector-two" d="M 318 493 C 335 518 317 540 290 522 C 267 506 246 505 232 523 C 216 544 228 574 253 612 C 280 653 305 682 340 674 C 365 668 377 626 410 642 C 450 662 474 712 518 748 C 555 778 615 748 635 700 C 660 639 613 594 558 562"/>
+    </g>
+    <g id="sector-3" class="sector-region" data-region-id="sector-3">
+      <path class="sector-path sector-three" d="M 558 562 L 440 494 C 415 480 417 450 445 440 C 470 431 488 460 520 460 C 560 460 590 430 635 412 C 685 393 745 407 805 422 C 845 432 868 435 872 415 C 875 398 850 392 808 383 C 748 370 710 355 690 330 C 672 308 674 279 656 268 C 645 262 605 265 565 265 L 420 262 C 370 260 350 237 358 208 C 366 181 395 176 440 178 L 810 180 C 866 180 903 165 914 133 C 927 95 895 82 850 120"/>
+    </g>
+  </g>
+
+  <g id="track-base">
+    <path id="track-hit-area" class="track-hit" d="M 850 120 C 790 125 720 124 650 124 C 616 124 596 117 586 105 C 574 90 548 91 535 108 C 520 128 498 131 470 118 C 440 105 402 105 360 112 C 300 120 205 100 135 115 C 75 128 48 178 70 220 C 88 255 140 275 185 315 C 235 360 275 430 318 493 C 335 518 317 540 290 522 C 267 506 246 505 232 523 C 216 544 228 574 253 612 C 280 653 305 682 340 674 C 365 668 377 626 410 642 C 450 662 474 712 518 748 C 555 778 615 748 635 700 C 660 639 613 594 558 562 L 440 494 C 415 480 417 450 445 440 C 470 431 488 460 520 460 C 560 460 590 430 635 412 C 685 393 745 407 805 422 C 845 432 868 435 872 415 C 875 398 850 392 808 383 C 748 370 710 355 690 330 C 672 308 674 279 656 268 C 645 262 605 265 565 265 L 420 262 C 370 260 350 237 358 208 C 366 181 395 176 440 178 L 810 180 C 866 180 903 165 914 133 C 927 95 895 82 850 120 Z"/>
+    <path class="track-shadow" d="M 850 120 C 790 125 720 124 650 124 C 616 124 596 117 586 105 C 574 90 548 91 535 108 C 520 128 498 131 470 118 C 440 105 402 105 360 112 C 300 120 205 100 135 115 C 75 128 48 178 70 220 C 88 255 140 275 185 315 C 235 360 275 430 318 493 C 335 518 317 540 290 522 C 267 506 246 505 232 523 C 216 544 228 574 253 612 C 280 653 305 682 340 674 C 365 668 377 626 410 642 C 450 662 474 712 518 748 C 555 778 615 748 635 700 C 660 639 613 594 558 562 L 440 494 C 415 480 417 450 445 440 C 470 431 488 460 520 460 C 560 460 590 430 635 412 C 685 393 745 407 805 422 C 845 432 868 435 872 415 C 875 398 850 392 808 383 C 748 370 710 355 690 330 C 672 308 674 279 656 268 C 645 262 605 265 565 265 L 420 262 C 370 260 350 237 358 208 C 366 181 395 176 440 178 L 810 180 C 866 180 903 165 914 133 C 927 95 895 82 850 120 Z"/>
+    <path id="track-visible" class="track-line" d="M 850 120 C 790 125 720 124 650 124 C 616 124 596 117 586 105 C 574 90 548 91 535 108 C 520 128 498 131 470 118 C 440 105 402 105 360 112 C 300 120 205 100 135 115 C 75 128 48 178 70 220 C 88 255 140 275 185 315 C 235 360 275 430 318 493 C 335 518 317 540 290 522 C 267 506 246 505 232 523 C 216 544 228 574 253 612 C 280 653 305 682 340 674 C 365 668 377 626 410 642 C 450 662 474 712 518 748 C 555 778 615 748 635 700 C 660 639 613 594 558 562 L 440 494 C 415 480 417 450 445 440 C 470 431 488 460 520 460 C 560 460 590 430 635 412 C 685 393 745 407 805 422 C 845 432 868 435 872 415 C 875 398 850 392 808 383 C 748 370 710 355 690 330 C 672 308 674 279 656 268 C 645 262 605 265 565 265 L 420 262 C 370 260 350 237 358 208 C 366 181 395 176 440 178 L 810 180 C 866 180 903 165 914 133 C 927 95 895 82 850 120 Z"/>
+    <path class="track-inner" d="M 850 120 C 790 125 720 124 650 124 C 616 124 596 117 586 105 C 574 90 548 91 535 108 C 520 128 498 131 470 118 C 440 105 402 105 360 112 C 300 120 205 100 135 115 C 75 128 48 178 70 220 C 88 255 140 275 185 315 C 235 360 275 430 318 493 C 335 518 317 540 290 522 C 267 506 246 505 232 523 C 216 544 228 574 253 612 C 280 653 305 682 340 674 C 365 668 377 626 410 642 C 450 662 474 712 518 748 C 555 778 615 748 635 700 C 660 639 613 594 558 562 L 440 494 C 415 480 417 450 445 440 C 470 431 488 460 520 460 C 560 460 590 430 635 412 C 685 393 745 407 805 422 C 845 432 868 435 872 415 C 875 398 850 392 808 383 C 748 370 710 355 690 330 C 672 308 674 279 656 268 C 645 262 605 265 565 265 L 420 262 C 370 260 350 237 358 208 C 366 181 395 176 440 178 L 810 180 C 866 180 903 165 914 133 C 927 95 895 82 850 120 Z"/>
+  </g>
+
+  <g id="braking-overlay">
+    <g id="braking-zone-1" class="zone-region braking-zone" data-region-id="braking-zone-1">
+      <path class="zone-line" d="M 575 179 L 805 180"/>
+    </g>
+    <g id="braking-zone-2" class="zone-region braking-zone" data-region-id="braking-zone-2">
+      <path class="zone-line" d="M 260 396 C 280 430 299 462 318 493"/>
+    </g>
+    <g id="braking-zone-3" class="zone-region braking-zone" data-region-id="braking-zone-3">
+      <path class="zone-line" d="M 605 598 C 642 637 651 673 635 700"/>
+    </g>
+    <g id="braking-zone-4" class="zone-region braking-zone" data-region-id="braking-zone-4">
+      <path class="zone-line" d="M 805 422 C 845 432 868 435 872 415"/>
+    </g>
+    <g id="braking-zone-5" class="zone-region braking-zone" data-region-id="braking-zone-5">
+      <path class="zone-line" d="M 505 264 L 430 262"/>
+    </g>
+  </g>
+
+  <g id="speed-overlay">
+    <g id="speed-zone-1" class="zone-region speed-zone" data-region-id="speed-zone-1">
+      <path class="zone-line" d="M 420 178 L 570 179"/>
+    </g>
+    <g id="speed-zone-2" class="zone-region speed-zone" data-region-id="speed-zone-2">
+      <path class="zone-line" d="M 410 642 C 457 671 485 724 528 750"/>
+    </g>
+    <g id="speed-zone-3" class="zone-region speed-zone" data-region-id="speed-zone-3">
+      <path class="zone-line" d="M 420 262 C 520 265 608 266 656 268"/>
+    </g>
+  </g>
+
+  <g id="start-finish" class="start-finish-marker" data-region-id="start-finish">
+    <line class="sf-line" x1="625" y1="154" x2="625" y2="204"/>
+    <line class="sf-line-dark" x1="625" y1="154" x2="625" y2="204"/>
+    <circle class="marker-core" cx="625" cy="132" r="24"/>
+    <text class="marker-text" x="625" y="132">S/F</text>
+  </g>
+
+  <g id="apex-markers" aria-hidden="true">
+    <circle class="apex" cx="914" cy="137" r="6"/>
+    <circle class="apex" cx="535" cy="108" r="6"/>
+    <circle class="apex" cx="72" cy="216" r="6"/>
+    <circle class="apex" cx="315" cy="503" r="6"/>
+    <circle class="apex" cx="236" cy="529" r="6"/>
+    <circle class="apex" cx="339" cy="675" r="6"/>
+    <circle class="apex" cx="633" cy="704" r="6"/>
+    <circle class="apex" cx="451" cy="440" r="6"/>
+    <circle class="apex" cx="872" cy="414" r="6"/>
+    <circle class="apex" cx="359" cy="210" r="6"/>
+  </g>
+
+  <g id="sector-labels">
+    <g>
+      <rect class="sector-pill" x="175" y="72" width="92" height="34" rx="17"/>
+      <text class="sector-text" x="221" y="89">Sector 1</text>
+    </g>
+    <g>
+      <rect class="sector-pill" x="386" y="683" width="92" height="34" rx="17"/>
+      <text class="sector-text" x="432" y="700">Sector 2</text>
+    </g>
+    <g>
+      <rect class="sector-pill" x="682" y="226" width="92" height="34" rx="17"/>
+      <text class="sector-text" x="728" y="243">Sector 3</text>
+    </g>
+  </g>
+
+  <g id="turn-labels">
+    <g id="turn-1" class="turn-label" data-region-id="turn-1" transform="translate(862 198)">
+      <circle class="turn-dot" r="20"/>
+      <text class="turn-text" y="1">1</text>
+    </g>
+    <g id="turn-2" class="turn-label" data-region-id="turn-2" transform="translate(925 128)">
+      <circle class="turn-dot" r="20"/>
+      <text class="turn-text" y="1">2</text>
+    </g>
+    <g id="turn-3" class="turn-label" data-region-id="turn-3" transform="translate(586 78)">
+      <circle class="turn-dot" r="20"/>
+      <text class="turn-text" y="1">3</text>
+    </g>
+    <g id="turn-4" class="turn-label" data-region-id="turn-4" transform="translate(518 145)">
+      <circle class="turn-dot" r="20"/>
+      <text class="turn-text" y="1">4</text>
+    </g>
+    <g id="turn-5" class="turn-label" data-region-id="turn-5" transform="translate(334 88)">
+      <circle class="turn-dot" r="20"/>
+      <text class="turn-text" y="1">5</text>
+    </g>
+    <g id="turn-6" class="turn-label" data-region-id="turn-6" transform="translate(78 162)">
+      <circle class="turn-dot" r="20"/>
+      <text class="turn-text" y="1">6</text>
+    </g>
+    <g id="turn-7" class="turn-label" data-region-id="turn-7" transform="translate(144 283)">
+      <circle class="turn-dot" r="20"/>
+      <text class="turn-text" y="1">7</text>
+    </g>
+    <g id="turn-8" class="turn-label" data-region-id="turn-8" transform="translate(276 424)">
+      <circle class="turn-dot" r="20"/>
+      <text class="turn-text" y="1">8</text>
+    </g>
+    <g id="turn-9" class="turn-label" data-region-id="turn-9" transform="translate(330 525)">
+      <circle class="turn-dot" r="20"/>
+      <text class="turn-text" y="1">9</text>
+    </g>
+    <g id="turn-10" class="turn-label" data-region-id="turn-10" transform="translate(226 506)">
+      <circle class="turn-dot" r="22"/>
+      <text class="turn-text" y="1">10</text>
+    </g>
+    <g id="turn-11" class="turn-label" data-region-id="turn-11" transform="translate(257 630)">
+      <circle class="turn-dot" r="22"/>
+      <text class="turn-text" y="1">11</text>
+    </g>
+    <g id="turn-12" class="turn-label" data-region-id="turn-12" transform="translate(390 614)">
+      <circle class="turn-dot" r="22"/>
+      <text class="turn-text" y="1">12</text>
+    </g>
+    <g id="turn-13" class="turn-label" data-region-id="turn-13" transform="translate(625 734)">
+      <circle class="turn-dot" r="22"/>
+      <text class="turn-text" y="1">13</text>
+    </g>
+    <g id="turn-14" class="turn-label" data-region-id="turn-14" transform="translate(577 590)">
+      <circle class="turn-dot" r="22"/>
+      <text class="turn-text" y="1">14</text>
+    </g>
+    <g id="turn-15" class="turn-label" data-region-id="turn-15" transform="translate(438 462)">
+      <circle class="turn-dot" r="22"/>
+      <text class="turn-text" y="1">15</text>
+    </g>
+    <g id="turn-16" class="turn-label" data-region-id="turn-16" transform="translate(637 388)">
+      <circle class="turn-dot" r="22"/>
+      <text class="turn-text" y="1">16</text>
+    </g>
+    <g id="turn-17" class="turn-label" data-region-id="turn-17" transform="translate(858 388)">
+      <circle class="turn-dot" r="22"/>
+      <text class="turn-text" y="1">17</text>
+    </g>
+    <g id="turn-18" class="turn-label" data-region-id="turn-18" transform="translate(681 294)">
+      <circle class="turn-dot" r="22"/>
+      <text class="turn-text" y="1">18</text>
+    </g>
+    <g id="turn-19" class="turn-label" data-region-id="turn-19" transform="translate(368 235)">
+      <circle class="turn-dot" r="22"/>
+      <text class="turn-text" y="1">19</text>
+    </g>
+  </g>
+</svg>
