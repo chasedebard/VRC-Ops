@@ -104,15 +104,27 @@ stale write — the same optimistic-concurrency behavior the native app relies o
 
 ## Universal Links / associated domains
 
-The native app's `Config/Production.xcconfig` documents a plan to switch from the `vrc://`
-custom scheme to HTTPS Universal Links once a production domain is live, requiring a hosted
-`/.well-known/apple-app-site-association` file naming the app's Team ID + Bundle ID. That file
-would be a fully static asset in this repo's `public/` directory, but **was not added in this
-pass** because it requires the Apple Team ID and Bundle ID, which weren't available from the
-read-only web-build context. Follow-up: once those identifiers are confirmed, add
-`public/.well-known/apple-app-site-association` and update `Config/Production.xcconfig`
-(**in the Xcode repo, by whoever owns that repo** — this website repo must not modify it) to
-point `VRC_AUTH_REDIRECT_URL` at the HTTPS host.
+`public/.well-known/apple-app-site-association` is now added (2026-09-15), naming the native
+app's Team ID + Bundle ID (`2U4X4CV994.info.rfs.VRC`), scoped to `/invite/*` only — the same
+narrow scope the native app's own `Config/Base.xcconfig` (`RFS_UNIVERSAL_LINK_HOST =
+vrc-ops.org`) and `RFSRaceControl.entitlements` (`applinks:$(RFS_UNIVERSAL_LINK_HOST)`) declare on
+the Xcode side. Once a native build carrying that entitlement is installed/updated on a device,
+tapping `https://vrc-ops.org/invite/<token>` should open the native app directly instead of this
+website — this page (`InviteAcceptancePage.tsx`) remains the correct, fully-functional fallback
+for anyone without the app, or before that association has propagated to a given device.
+
+**Caveat, not yet verified**: GitHub Pages cannot set a custom `Content-Type` response header.
+Apple's documented requirement is `application/json`; an extensionless file served by GitHub
+Pages may instead come back as `text/plain`. Various publicly-documented GitHub-Pages-hosted AASA
+setups report this working in practice (Apple's on-device fetcher is commonly described as
+tolerant of this specific case), but this has not been confirmed for this domain — verify with
+`curl -I https://vrc-ops.org/.well-known/apple-app-site-association` after deploy, and ideally
+Apple's own AASA validation (e.g. via a real device's Associated Domains diagnostics) before
+relying on it for anything user-facing.
+
+The Xcode-side config was updated in the `vrc-platform` repo separately, along with a fix to
+`send-league-invite` so invite emails default to `https://vrc-ops.org/invite/<token>` instead of
+the bare `vrc://` scheme — this website's `/invite/:token` page is that link's real destination.
 
 ## Two-factor authentication is web-only, enforced client-side
 
