@@ -122,3 +122,20 @@ export async function activateSeason(seasonId: string): Promise<void> {
   const { error } = await supabase.rpc('vrc_activate_season', { p_season: seasonId })
   if (error) throw error
 }
+
+/** Live-updates the read-only Scoring card / Bonus Points form when another admin (or another
+ *  device/tab) changes this season's row — same subscribe/cleanup convention as
+ *  src/services/raceControl.ts's subscribeToEventSession. */
+export function subscribeToSeason(seasonId: string, onChange: (season: SeasonRow) => void): () => void {
+  const channel = supabase
+    .channel(`season:${seasonId}`)
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'seasons', filter: `id=eq.${seasonId}` },
+      (payload) => onChange(payload.new as SeasonRow),
+    )
+    .subscribe()
+  return () => {
+    void supabase.removeChannel(channel)
+  }
+}

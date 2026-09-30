@@ -1,4 +1,4 @@
-import type { RaceResultRow, ScoringOutputRow } from '@/types/database'
+import type { RaceResultRow, ScoringOutputRow, SeasonRow } from '@/types/database'
 
 /**
  * Ports the points/tiebreak/clinch math from StandingsEngine.swift /
@@ -19,8 +19,66 @@ export const DEFAULT_SCORING_RULE: ScoringRule = {
   fastestLapBonus: 1,
 }
 
+export const SEASON_BONUS_POINTS_MIN = 1
+export const SEASON_BONUS_POINTS_MAX = 3
+export const SEASON_BONUS_POINTS_DEFAULT = 1
+
+export function isValidSeasonBonusPoints(value: number): boolean {
+  return Number.isInteger(value) && value >= SEASON_BONUS_POINTS_MIN && value <= SEASON_BONUS_POINTS_MAX
+}
+
+/** Rounds/clamps into the valid 1-3 range, falling back to the default for null/NaN input
+ *  (e.g. an older cached season row that predates these columns). */
+export function clampSeasonBonusPoints(value: number | null | undefined): number {
+  if (value == null || !Number.isFinite(value)) return SEASON_BONUS_POINTS_DEFAULT
+  return Math.min(SEASON_BONUS_POINTS_MAX, Math.max(SEASON_BONUS_POINTS_MIN, Math.round(value)))
+}
+
+export type SeasonBonusConfig = Pick<
+  SeasonRow,
+  'pole_bonus_enabled' | 'pole_bonus_points' | 'fastest_lap_bonus_enabled' | 'fastest_lap_bonus_points'
+>
+
+/**
+ * The one authoritative place that turns a season's bonus settings into the `ScoringRule` bonus
+ * values. Every scoring call site (result entry, recompute, dashboard/predictions max-points)
+ * must derive from this instead of a hardcoded default, so the enabled flag and the retained
+ * point value are always interpreted the same way everywhere:
+ * `poleBonus = pole_bonus_enabled ? pole_bonus_points : 0`, same for fastest lap. Falls back to
+ * safe defaults (disabled / 1) when the season is missing or predates these columns.
+ */
+export function buildSeasonScoringRule(
+  season: Partial<SeasonBonusConfig> | null | undefined,
+  positionPoints: number[] = DEFAULT_SCORING_RULE.positionPoints,
+): ScoringRule {
+  return {
+    positionPoints,
+    poleBonus: season?.pole_bonus_enabled ? clampSeasonBonusPoints(season.pole_bonus_points) : 0,
+    fastestLapBonus: season?.fastest_lap_bonus_enabled
+      ? clampSeasonBonusPoints(season.fastest_lap_bonus_points)
+      : 0,
+  }
+}
+
+/** Compares *effective* config (not raw fields), so e.g. changing a disabled bonus's stored
+ *  point value never triggers a pointless recompute. */
+export function hasEffectiveScoringConfigChanged(
+  before: Partial<SeasonBonusConfig> | null | undefined,
+  after: Partial<SeasonBonusConfig> | null | undefined,
+): boolean {
+  const a = buildSeasonScoringRule(before)
+  const b = buildSeasonScoringRule(after)
+  return a.poleBonus !== b.poleBonus || a.fastestLapBonus !== b.fastestLapBonus
+}
+
+/** Eligible statuses for base + bonus points: 'fin' and 'classified' are both valid finishes
+ *  (matching the DB's own finalize-trigger rules); dns/dnf/dsq/nc always score zero. */
+function isScorableStatus(status: RaceResultRow['status']): boolean {
+  return status === 'fin' || status === 'classified'
+}
+
 export function pointsForResult(result: RaceResultRow, rule: ScoringRule): number {
-  if (result.status !== 'fin' || !result.finish_position || result.finish_position <= 0) return 0
+  if (!isScorableStatus(result.status) || !result.finish_position || result.finish_position <= 0) return 0
   const idx = result.finish_position - 1
   const base = idx < rule.positionPoints.length ? rule.positionPoints[idx] : 0
   const pole = result.earned_pole ? rule.poleBonus : 0
@@ -192,4 +250,105 @@ export function buildSeasonStandingsRows(
       eliminated: clinchByDriver.get(row.driverId)?.eliminated ?? false,
     }
   })
+}
+
+export interface TeamStandingsRow {
+  team_id: string
+  position: number
+  points: number
+  wins: number
+  seconds: number
+  thirds: number
+  podiums: number
+  poles: number
+  fastest_laps: number
+  starts: number
+  average_finish: number | null
+  clinched: boolean
+  eliminated: boolean
+}
+
+/**
+ * Aggregates already-scored driver standings rows into team totals for the *current* season
+ * roster's team assignments. Each driver row's `points` already includes position + pole +
+ * fastest-lap bonuses exactly once, so summing it here never double-counts a bonus. Drivers with
+ * no team assignment are excluded from every team's total (they still appear in Driver
+ * standings elsewhere). Tiebreak mirrors `compareStandings`: points, wins, seconds, thirds,
+ * poles, fastest laps, then team name as the deterministic final fallback.
+ */
+export function buildTeamStandingsRows(
+  driverRows: SeasonStandingsRow[],
+  teamIdByDriver: Map<string, string>,
+  teamNameById: Map<string, string>,
+): TeamStandingsRow[] {
+  interface TeamAccumulator {
+    teamId: string
+    points: number
+    wins: number
+    seconds: number
+    thirds: number
+    poles: number
+    fastestLaps: number
+    starts: number
+    finishWeightedSum: number
+    finishWeightedCount: number
+  }
+
+  const byTeam = new Map<string, TeamAccumulator>()
+  for (const row of driverRows) {
+    const teamId = teamIdByDriver.get(row.driver_id)
+    if (!teamId) continue
+    const acc: TeamAccumulator = byTeam.get(teamId) ?? {
+      teamId,
+      points: 0,
+      wins: 0,
+      seconds: 0,
+      thirds: 0,
+      poles: 0,
+      fastestLaps: 0,
+      starts: 0,
+      finishWeightedSum: 0,
+      finishWeightedCount: 0,
+    }
+    acc.points += row.points
+    acc.wins += row.wins
+    acc.seconds += row.seconds
+    acc.thirds += row.thirds
+    acc.poles += row.poles
+    acc.fastestLaps += row.fastest_laps
+    acc.starts += row.starts
+    if (row.average_finish != null && row.starts > 0) {
+      acc.finishWeightedSum += row.average_finish * row.starts
+      acc.finishWeightedCount += row.starts
+    }
+    byTeam.set(teamId, acc)
+  }
+
+  const teamName = (id: string) => teamNameById.get(id) ?? id
+  const sorted = Array.from(byTeam.values()).sort(
+    (a, b) =>
+      b.points - a.points ||
+      b.wins - a.wins ||
+      b.seconds - a.seconds ||
+      b.thirds - a.thirds ||
+      b.poles - a.poles ||
+      b.fastestLaps - a.fastestLaps ||
+      teamName(a.teamId).localeCompare(teamName(b.teamId)),
+  )
+
+  return sorted.map((acc, index) => ({
+    team_id: acc.teamId,
+    position: index + 1,
+    points: acc.points,
+    wins: acc.wins,
+    seconds: acc.seconds,
+    thirds: acc.thirds,
+    podiums: acc.wins + acc.seconds + acc.thirds,
+    poles: acc.poles,
+    fastest_laps: acc.fastestLaps,
+    starts: acc.starts,
+    average_finish: acc.finishWeightedCount > 0 ? acc.finishWeightedSum / acc.finishWeightedCount : null,
+    clinched: false,
+    eliminated: false,
+  }))
 }

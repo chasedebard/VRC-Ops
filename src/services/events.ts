@@ -126,6 +126,23 @@ export function resolveUpcomingEvent(events: EventRow[]): EventRow | null {
 }
 
 /**
+ * Orders events by *actual schedule position*, not by when a result happened to be saved:
+ * `event_date` ascending first (undated events sort last), `round` ascending as the tiebreak for
+ * same-day events, and `id` as a final deterministic tiebreak. Deliberately never considers
+ * `result_sets.finalized_at` — re-saving an earlier round's results must not change its position
+ * here, which is exactly the bug this ordering exists to prevent (see resolveLastCompletedEvent).
+ */
+function compareEventScheduleOrder(a: EventRow, b: EventRow): number {
+  if (a.event_date && b.event_date && a.event_date !== b.event_date) {
+    return a.event_date < b.event_date ? -1 : 1
+  }
+  if (a.event_date && !b.event_date) return -1
+  if (!a.event_date && b.event_date) return 1
+  if (a.round !== b.round) return a.round - b.round
+  return a.id < b.id ? -1 : a.id > b.id ? 1 : 0
+}
+
+/**
  * Most recent event whose race actually has official results — for a
  * dashboard "last race" summary and season-progress counts.
  *
@@ -137,22 +154,26 @@ export function resolveUpcomingEvent(events: EventRow[]): EventRow | null {
  * event ids derived from season driver history
  * (`new Set(history.filter(h => h.result_kind === 'race').map(h => h.event_id))`).
  * Falls back to the `status`/date heuristic only if that set is omitted or empty.
+ *
+ * "Most recent" is resolved by schedule position (`compareEventScheduleOrder`), never by when a
+ * result was last saved — correcting an earlier round's results after a later round has already
+ * finalized must not make the earlier round the Last Race.
  */
 export function resolveLastCompletedEvent(
   events: EventRow[],
   completedEventIds?: Set<string>,
 ): EventRow | null {
   if (completedEventIds && completedEventIds.size > 0) {
-    const withResults = events.filter((e) => completedEventIds.has(e.id)).sort((a, b) => b.round - a.round)
-    if (withResults.length > 0) return withResults[0]
+    const withResults = events.filter((e) => completedEventIds.has(e.id)).sort(compareEventScheduleOrder)
+    if (withResults.length > 0) return withResults[withResults.length - 1]
   }
 
-  const completed = events.filter((e) => e.status === 'completed').sort((a, b) => b.round - a.round)
-  if (completed.length > 0) return completed[0]
+  const completed = events.filter((e) => e.status === 'completed').sort(compareEventScheduleOrder)
+  if (completed.length > 0) return completed[completed.length - 1]
 
   const todayKey = new Date().toISOString().slice(0, 10)
   const past = events
     .filter((e) => e.event_date && e.event_date < todayKey && e.status !== 'cancelled')
-    .sort((a, b) => b.round - a.round)
-  return past[0] ?? null
+    .sort(compareEventScheduleOrder)
+  return past[past.length - 1] ?? null
 }

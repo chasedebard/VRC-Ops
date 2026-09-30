@@ -8,7 +8,7 @@ import { getDrivers } from '@/services/drivers'
 import { getLatestStandings, getAvailableStandingsGroups } from '@/services/standings'
 import { classesService, regionsService } from '@/services/catalog'
 import { savePredictionRun } from '@/services/predictions'
-import { DEFAULT_SCORING_RULE } from '@/utils/scoring'
+import { buildSeasonScoringRule } from '@/utils/scoring'
 import {
   buildChampionshipForecast,
   buildFactorInputs,
@@ -36,9 +36,6 @@ interface MarketRow {
   displayName: string
   probability: number
 }
-
-const MAX_POINTS_PER_ROUND =
-  DEFAULT_SCORING_RULE.positionPoints[0] + DEFAULT_SCORING_RULE.poleBonus + DEFAULT_SCORING_RULE.fastestLapBonus
 
 export default function PredictionsPage() {
   const { selectedLeague, permissions } = useLeagueSession()
@@ -172,8 +169,10 @@ export default function PredictionsPage() {
         }))
         const leagueAvgPace = leagueAveragePacePerRound(history)
         const paceByDriver = new Map(driverIds.map((id) => [id, computePace(history, id, leagueAvgPace)]))
+        const rule = buildSeasonScoringRule(context!.season)
+        const maxPointsPerRound = rule.positionPoints[0] + rule.poleBonus + rule.fastestLapBonus
         setForecast(
-          buildChampionshipForecast(standingsInput, paceByDriver, completedRaces, totalRounds, MAX_POINTS_PER_ROUND),
+          buildChampionshipForecast(standingsInput, paceByDriver, completedRaces, totalRounds, maxPointsPerRound),
         )
       } catch {
         setForecast(null)

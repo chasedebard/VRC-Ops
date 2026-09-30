@@ -15,6 +15,7 @@ import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Field } from '@/components/Field'
 import { Button } from '@/components/Button'
 import { MfaEnrollForm } from '@/components/MfaEnrollForm'
+import { SubscriptionStatusCard } from '@/components/SubscriptionStatusCard'
 import { ROLE_LABEL } from '@/permissions/resolver'
 import { formatDate } from '@/utils/format'
 
@@ -151,6 +152,13 @@ export default function AccountPage() {
             You're not a member of any league yet.
           </p>
         )}
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Subscription</CardTitle>
+        </CardHeader>
+        <SubscriptionStatusCard />
       </Card>
 
       <Card>

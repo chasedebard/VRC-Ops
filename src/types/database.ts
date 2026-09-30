@@ -198,6 +198,14 @@ export interface SeasonRow {
   scoring_config: Record<string, unknown> | null
   drop_rounds: number
   tiebreak_config: Record<string, unknown> | null
+  /** Season-scoped teams gate — authoritative over the legacy `championships.teams_enabled`. */
+  teams_enabled: boolean
+  pole_bonus_enabled: boolean
+  /** Valid range 1-3; retained even while `pole_bonus_enabled` is false. */
+  pole_bonus_points: number
+  fastest_lap_bonus_enabled: boolean
+  /** Valid range 1-3; retained even while `fastest_lap_bonus_enabled` is false. */
+  fastest_lap_bonus_points: number
   created_at: string
   updated_at: string
 }
@@ -234,6 +242,13 @@ export interface TeamRow {
   logo_url: string | null
   color: string | null
   is_active: boolean
+  /** Season-scoped team fields (shared schema, also used by iOS/Android). */
+  season_id: string | null
+  championship_id: string | null
+  display_order: number | null
+  created_by: string | null
+  updated_by: string | null
+  archived_at: string | null
   created_at: string
   updated_at: string
 }
@@ -716,4 +731,44 @@ export interface PredictionEvaluationRow {
   actual_driver_ids: string[] | null
   evaluated_at: string | null
   created_at: string
+}
+
+/** Personal ("VRC Ops Pro") status; league-wide status also uses this enum plus 'pending_verification'. */
+export type SubscriptionStatus = 'active' | 'grace_period' | 'billing_retry' | 'expired' | 'revoked'
+export type LeagueSubscriptionStatus = SubscriptionStatus | 'pending_verification'
+export type SubscriptionEnvironment = 'Sandbox' | 'Production' | 'Xcode' | 'LocalTesting'
+
+/** Individual "VRC Ops Pro" entitlement, written only by the verify-subscription/apple-notifications Edge Functions. */
+export interface SubscriptionRow {
+  id: string
+  user_id: string
+  product_id: string
+  original_transaction_id: string
+  latest_transaction_id: string | null
+  status: SubscriptionStatus
+  expires_at: string | null
+  purchased_at: string | null
+  renewal_state: string | null
+  environment: SubscriptionEnvironment
+  last_verified_at: string
+  created_at: string
+  updated_at: string
+}
+
+/** League-wide "VRC League Plus" entitlement; inherited by every active member regardless of role. */
+export interface LeagueSubscriptionRow {
+  id: string
+  league_id: string
+  purchaser_user_id: string
+  product_id: string
+  original_transaction_id: string
+  latest_transaction_id: string | null
+  status: LeagueSubscriptionStatus
+  expires_at: string | null
+  purchased_at: string | null
+  renewal_state: string | null
+  environment: SubscriptionEnvironment
+  last_verified_at: string
+  created_at: string
+  updated_at: string
 }

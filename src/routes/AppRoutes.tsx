@@ -13,6 +13,7 @@ import AccountPage from '@/pages/AccountPage'
 import ChampionshipsPage from '@/pages/championships/ChampionshipsPage'
 import ChampionshipDetailPage from '@/pages/championships/ChampionshipDetailPage'
 import SeasonDetailPage from '@/pages/championships/SeasonDetailPage'
+import SeasonTeamsPage from '@/pages/championships/SeasonTeamsPage'
 import DriversPage from '@/pages/drivers/DriversPage'
 import DriverProfilePage from '@/pages/drivers/DriverProfilePage'
 import TracksPage from '@/pages/catalog/TracksPage'
@@ -27,6 +28,7 @@ import ResultsAuditLogPage from '@/pages/raceWeekend/ResultsAuditLogPage'
 import StandingsPage from '@/pages/standings/StandingsPage'
 import PredictionsPage from '@/pages/predictions/PredictionsPage'
 import AdminPage from '@/pages/admin/AdminPage'
+import { ProGate } from '@/components/ProGate'
 import LegalSupportPage from '@/pages/LegalSupportPage'
 
 function RootRedirect() {
@@ -60,6 +62,7 @@ export function AppRoutes() {
         <Route path="/championships" element={<ChampionshipsPage />} />
         <Route path="/championships/:id" element={<ChampionshipDetailPage />} />
         <Route path="/seasons/:id" element={<SeasonDetailPage />} />
+        <Route path="/seasons/:id/teams" element={<SeasonTeamsPage />} />
 
         <Route path="/drivers" element={<DriversPage />} />
         <Route path="/drivers/:id" element={<DriverProfilePage />} />
@@ -76,7 +79,17 @@ export function AppRoutes() {
         <Route path="/results/:eventId/audit" element={<ResultsAuditLogPage />} />
 
         <Route path="/standings" element={<StandingsPage />} />
-        <Route path="/predictions" element={<PredictionsPage />} />
+        <Route
+          path="/predictions"
+          element={
+            <ProGate
+              title="Predictions require VRC Ops Pro"
+              description="Race forecasts, championship outlook, and incident-risk markets are part of VRC Ops Pro."
+            >
+              <PredictionsPage />
+            </ProGate>
+          }
+        />
 
         <Route path="/admin/*" element={<AdminPage />} />
       </Route>

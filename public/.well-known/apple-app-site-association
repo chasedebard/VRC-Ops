@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["2U4X4CV994.info.rfs.VRC"],
+        "components": [
+          { "/": "/invite/*", "comment": "League invitation links only" }
+        ]
+      }
+    ]
+  }
+}
