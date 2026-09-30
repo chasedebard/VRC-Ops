@@ -757,7 +757,17 @@ export interface PredictionEvaluationRow {
 /** Personal ("VRC Ops Pro") status; league-wide status also uses this enum plus 'pending_verification'. */
 export type SubscriptionStatus = 'active' | 'grace_period' | 'billing_retry' | 'expired' | 'revoked'
 export type LeagueSubscriptionStatus = SubscriptionStatus | 'pending_verification'
-export type SubscriptionEnvironment = 'Sandbox' | 'Production' | 'Xcode' | 'LocalTesting'
+/**
+ * `ChampionGrant` (World Champion quarterly reward) and `AndroidPlatformGrant` are backend-issued complimentary grants
+ * with no Apple transaction behind them — there is nothing to manage in the App Store for either.
+ */
+export type SubscriptionEnvironment =
+  | 'Sandbox'
+  | 'Production'
+  | 'Xcode'
+  | 'LocalTesting'
+  | 'ChampionGrant'
+  | 'AndroidPlatformGrant'
 
 /** Individual "VRC Ops Pro" entitlement, written only by the verify-subscription/apple-notifications Edge Functions. */
 export interface SubscriptionRow {

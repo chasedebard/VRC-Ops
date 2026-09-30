@@ -105,3 +105,9 @@ export async function transferLeagueOwnership(
   })
   if (error) throw error
 }
+
+/** Leave a league. The server blocks it when it would orphan the league's sole Owner. */
+export async function leaveLeague(membershipId: string): Promise<void> {
+  const { error } = await supabase.rpc('vrc_leave_league', { p_membership: membershipId })
+  if (error) throw error
+}

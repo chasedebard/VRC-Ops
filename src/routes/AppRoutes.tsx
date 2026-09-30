@@ -8,6 +8,11 @@ import UpdatePasswordPage from '@/pages/auth/UpdatePasswordPage'
 import AuthCallbackPage from '@/pages/auth/AuthCallbackPage'
 import InviteAcceptancePage from '@/pages/InviteAcceptancePage'
 import JoinPage from '@/pages/JoinPage'
+import GlobalRatingPage from '@/pages/account/GlobalRatingPage'
+import SubscriptionPage from '@/pages/account/SubscriptionPage'
+import LegalPrivacyPage from '@/pages/account/LegalPrivacyPage'
+import LeaguesPage from '@/pages/account/LeaguesPage'
+import LeaguePlusPage from '@/pages/admin/LeaguePlusPage'
 import DashboardPage from '@/pages/DashboardPage'
 import AccountPage from '@/pages/AccountPage'
 import ChampionshipsPage from '@/pages/championships/ChampionshipsPage'
@@ -48,7 +53,6 @@ export function AppRoutes() {
       <Route path="/reset-password/update" element={<UpdatePasswordPage />} />
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
       <Route path="/invite/:token" element={<InviteAcceptancePage />} />
-      <Route path="/join" element={<JoinPage />} />
       <Route path="/legal" element={<LegalSupportPage />} />
       <Route path="/eula" element={<Navigate to="/legal#eula" replace />} />
       <Route path="/privacy" element={<Navigate to="/legal#privacy" replace />} />
@@ -58,6 +62,11 @@ export function AppRoutes() {
       <Route element={<ProtectedLayout />}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/account/global-rating" element={<GlobalRatingPage />} />
+        <Route path="/account/subscription" element={<SubscriptionPage />} />
+        <Route path="/account/legal" element={<LegalPrivacyPage />} />
+        <Route path="/account/leagues" element={<LeaguesPage />} />
+        <Route path="/join" element={<JoinPage />} />
 
         <Route path="/championships" element={<ChampionshipsPage />} />
         <Route path="/championships/:id" element={<ChampionshipDetailPage />} />
@@ -91,6 +100,7 @@ export function AppRoutes() {
           }
         />
 
+        <Route path="/admin/league-plus" element={<LeaguePlusPage />} />
         <Route path="/admin/*" element={<AdminPage />} />
       </Route>
 

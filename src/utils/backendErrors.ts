@@ -105,6 +105,12 @@ const TOKENS: [string, string][] = [
   ['GT7_GROUP_SELECTION_REQUIRED', 'Select at least one GT7 group.'],
   ['GT7_GROUP_SELECTION_TOO_LARGE', 'A GT7 league can use at most all six groups.'],
 
+  // Champion award (apple-champion-offer)
+  [
+    'APPLE_OFFER_NOT_CONFIGURED',
+    "The App Store offer isn't available yet. Your Premium membership is active for the quarter — try the redemption again later.",
+  ],
+
   // Global MMR participation
   ['mfa_required', 'Confirm a fresh two-factor code to change your Global Rating participation.'],
   ['account_mfa_required', 'Turn on two-factor authentication for your account before changing Global Rating participation.'],

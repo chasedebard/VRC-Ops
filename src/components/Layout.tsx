@@ -5,6 +5,7 @@ import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { useTheme } from '@/hooks/useTheme'
 import { ROLE_LABEL } from '@/permissions/resolver'
 import { SiteFooter } from '@/components/LegalLinks'
+import { ChampionAwardHost } from '@/components/ChampionAwardHost'
 
 interface NavItem {
   to: string
@@ -128,6 +129,7 @@ export function Layout() {
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
         <Outlet />
       </main>
+      <ChampionAwardHost />
       <SiteFooter />
     </div>
   )

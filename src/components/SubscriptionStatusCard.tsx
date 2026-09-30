@@ -4,9 +4,11 @@ import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { Badge } from './Badge'
 import { Button } from './Button'
 import { formatDate, formatDateTime } from '@/utils/format'
+import { APP_STORE_URL } from '@/config/links'
+import { isComplimentaryGrant } from '@/utils/subscriptionModel'
 import type { LeagueSubscriptionStatus, SubscriptionStatus } from '@/types/database'
 
-const APP_STORE_URL = 'https://apps.apple.com/us/app/vrc-ops/id6780654622'
+
 
 const STATUS_LABEL: Record<SubscriptionStatus | LeagueSubscriptionStatus, string> = {
   active: 'Active',
@@ -75,7 +77,10 @@ export function SubscriptionStatusCard() {
           </div>
           {record?.expires_at && (
             <p style={{ color: 'var(--color-text-muted)' }}>
-              {record.status === 'grace_period' ? 'Access until' : 'Renews'} {formatDate(record.expires_at)}
+              {record.status === 'grace_period' || ('environment' in record && isComplimentaryGrant(record))
+                ? 'Access until'
+                : 'Renews'}{' '}
+              {formatDate(record.expires_at)}
             </p>
           )}
         </div>
