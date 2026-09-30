@@ -18,9 +18,15 @@ export function parseLapTime(input: string): number | null {
   return Math.round((minutes * 60 + seconds) * 1000)
 }
 
+/** A bare `yyyy-MM-dd` (events.event_date) is a calendar day, not an instant: parse it in local time so it never shifts a day in negative-offset zones. */
+export function parseDateValue(value: string): Date {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
+  return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : new Date(value)
+}
+
 export function formatDate(value: string | null | undefined): string {
   if (!value) return '—'
-  return new Date(value).toLocaleDateString(undefined, {
+  return parseDateValue(value).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

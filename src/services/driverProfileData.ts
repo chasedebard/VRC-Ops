@@ -79,7 +79,7 @@ async function getLeagueSeasons(leagueId: string): Promise<SeasonRow[]> {
   return data ?? []
 }
 
-async function getDriverHistory(driverId: string): Promise<DriverHistoryRow[]> {
+export async function getDriverHistory(driverId: string): Promise<DriverHistoryRow[]> {
   const { data, error } = await supabase.from('driver_history').select('*').eq('driver_id', driverId).returns<DriverHistoryRow[]>()
   if (error) throw error
   return data ?? []
@@ -122,6 +122,19 @@ async function getRatingHistory(driverId: string): Promise<RatingPoint[]> {
     .returns<RatingPoint[]>()
   if (error) throw error
   return data ?? []
+}
+
+/** The newest stored rating snapshot for a driver (written by the apps after result saves), or null. */
+export async function getLatestRating(driverId: string): Promise<RatingPoint | null> {
+  const { data, error } = await supabase
+    .from('driver_rating_records')
+    .select('rating_value, race_craft, consistency, qualifying, confidence, calculated_at, season_id')
+    .eq('driver_id', driverId)
+    .order('calculated_at', { ascending: false })
+    .limit(1)
+    .returns<RatingPoint[]>()
+  if (error) throw error
+  return data?.[0] ?? null
 }
 
 /** A `scoring_outputs` row as a history row — for events scored but not yet committed to `driver_history` (keeps the profile in sync with Results). */
