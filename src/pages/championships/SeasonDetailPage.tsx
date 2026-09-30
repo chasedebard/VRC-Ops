@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { activateSeason, getChampionship, getLeagueSeasons, getSeason, subscribeToSeason, updateSeason } from '@/services/championships'
-import { createEvent, deleteEvent, getSeasonEvents, updateEvent } from '@/services/events'
+import { createEvent, deleteEvent, getEventClasses, getSeasonEvents, setEventClasses, updateEvent } from '@/services/events'
 import { getTracks } from '@/services/tracks'
 import { getSeasonClassIds, getSeasonRegionIds, gt7SelectedGroupPickerItems, listLeagueClasses, listLeagueRegions, setSeasonClasses, setSeasonRegions } from '@/services/setup'
 import { useEntitlement } from '@/hooks/useEntitlement'
 import { ACTIVE_SEASON_LIMIT_MESSAGE, canCreateAdditionalActiveSeason, featureDefinition } from '@/config/featureRegistry'
 import { EventEditor } from '@/components/EventEditor'
 import { SeasonActivationCard, SeasonSettingsCard, SeasonStructureCard, type ActiveSeasonBlock } from '@/pages/championships/SeasonSetupCards'
-import { eventFormFromRow, emptyEventForm, nextSuggestedRound, EVENT_STATUS_LABEL, type EventPayload } from '@/utils/eventForm'
+import { eventFormFromRow, emptyEventForm, nextSuggestedRound, plannedEventClassSync, EVENT_STATUS_LABEL, type EventPayload } from '@/utils/eventForm'
 import { missingActivationRequirements } from '@/utils/seasonValidation'
 import { backendErrorMessage } from '@/utils/backendErrors'
 import { eventDisplayTitle } from '@/utils/currentRace'
@@ -121,10 +121,18 @@ export default function SeasonDetailPage() {
   async function saveEvent(payload: EventPayload): Promise<string | null> {
     if (!season || !selectedLeague || editor === null) return 'Select a season first.'
     try {
+      let eventId: string
       if (editor === 'new') {
-        await createEvent({ ...payload, league_id: selectedLeague.league.id, championship_id: season.championship_id, season_id: season.id })
+        const created = await createEvent({ ...payload, league_id: selectedLeague.league.id, championship_id: season.championship_id, season_id: season.id })
+        eventId = created.id
       } else {
         await updateEvent(editor.id, payload)
+        eventId = editor.id
+      }
+      // Results are saved against `event_classes`, which the database does not derive from `events.class_id`.
+      if (payload.class_id) {
+        const sync = plannedEventClassSync((await getEventClasses(eventId)).map((row) => row.class_id), payload.class_id)
+        if (sync) await setEventClasses(eventId, selectedLeague.league.id, sync)
       }
       setEditor(null)
       await refreshAfterWrite()

@@ -190,3 +190,15 @@ export function selectableStatuses(current: EventStatus): EventStatus[] {
 export function nextSuggestedRound(rounds: number[]): number {
   return rounds.length === 0 ? 1 : Math.max(...rounds) + 1
 }
+
+/**
+ * `vrc_save_results` reads the event's classes from `event_classes` (it does NOT fall back to `events.class_id`), so the race's class has to
+ * be mirrored there. Returns the class set to write, or null when nothing should change: a multi-class event (more than one row) that still
+ * includes the chosen class is left alone, and an event whose single row already matches needs no write.
+ */
+export function plannedEventClassSync(existingClassIds: string[], chosenClassId: string | null): string[] | null {
+  if (!chosenClassId) return null
+  if (existingClassIds.length === 0) return [chosenClassId]
+  if (existingClassIds.length === 1) return existingClassIds[0] === chosenClassId ? null : [chosenClassId]
+  return existingClassIds.includes(chosenClassId) ? null : [chosenClassId]
+}

@@ -132,7 +132,7 @@ Plus 15 seats) are the same constants.
 
 ## Backend contract notes
 
-- **Results**: `vrc_save_results` (unified official save), `vrc_unlock_results`, `vrc_set_event_dns`, `vrc_sync_race_grid_from_qualifying`; the event needs a region and ≥ 1 class.
+- **Results**: `vrc_save_results` (unified official save), `vrc_unlock_results`, `vrc_set_event_dns`, `vrc_sync_race_grid_from_qualifying`; the event needs a region and ≥ 1 row in `event_classes` (the function does **not** fall back to `events.class_id`, and no trigger mirrors it). The web therefore writes `event_classes` whenever it creates or edits a race with a class. A championship with classes switched off has no class to attach, so neither platform can save results for it — keep classes on for any league that enters results.
 - **Standings**: computed client-side from `scoring_outputs`; `vrc_sync_series_awards` (Owner/Admin) reconciles `standing_awards`.
 - **Predictions**: `prediction_runs` / `prediction_evaluations` (RLS needs current AI consent); `predictions-worker` writes them.
 - **MMR**: `vrc_get_my_global_rating`, `vrc_get_my_mmr_participation`, `vrc_update_my_mmr_participation` (fresh MFA), `vrc_get_league_driver_mmr_display`, `vrc_get_result_mmr_impact`, champion award RPCs + `apple-champion-offer`.

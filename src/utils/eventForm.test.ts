@@ -5,6 +5,7 @@ import {
   eventPayload,
   generatedEventTitle,
   nextSuggestedRound,
+  plannedEventClassSync,
   selectableStatuses,
   validateEventForm,
   type EventFormContext,
@@ -96,5 +97,19 @@ describe('form helpers', () => {
   it('suggests the next round', () => {
     expect(nextSuggestedRound([])).toBe(1)
     expect(nextSuggestedRound([1, 2, 5])).toBe(6)
+  })
+})
+
+describe('plannedEventClassSync', () => {
+  it('mirrors the chosen class into event_classes only when needed', () => {
+    expect(plannedEventClassSync([], 'k1')).toEqual(['k1'])
+    expect(plannedEventClassSync(['k1'], 'k1')).toBeNull()
+    expect(plannedEventClassSync(['k1'], 'k2')).toEqual(['k2'])
+    expect(plannedEventClassSync([], null)).toBeNull()
+  })
+
+  it('leaves a multi-class event alone while it still contains the chosen class', () => {
+    expect(plannedEventClassSync(['k1', 'k2'], 'k2')).toBeNull()
+    expect(plannedEventClassSync(['k1', 'k2'], 'k3')).toEqual(['k3'])
   })
 })

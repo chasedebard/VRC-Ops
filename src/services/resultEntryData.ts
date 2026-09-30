@@ -115,6 +115,6 @@ export function eventSetupIssue(event: Pick<EventRow, 'region_id'>, eventClassId
   if (!event.region_id) {
     return 'This event is missing region data. Edit the race and re-save it, or contact support if the problem persists.'
   }
-  if (eventClassIds.length === 0) return 'Add at least one class to the event before entering results or qualifying.'
+  if (eventClassIds.length === 0) return 'This race has no class attached. Edit the race on its season page and save it with a class before entering results or qualifying.'
   return null
 }

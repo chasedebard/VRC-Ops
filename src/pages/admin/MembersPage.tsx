@@ -147,8 +147,11 @@ function Members() {
                       onChange={(e) => {
                         const nextDriver = e.target.value
                         if (nextDriver) {
-                          // Assigning moves this account onto the chosen driver (the RPC enforces one account per driver).
-                          void run(() => assignDriverAccount(nextDriver, m.userId), 'Driver profile linked.')
+                          // One account per driver (and per league): release the account's current driver first, then link the new one.
+                          void run(async () => {
+                            if (account?.assigned_driver_id && account.assigned_driver_id !== nextDriver) await assignDriverAccount(account.assigned_driver_id, null)
+                            await assignDriverAccount(nextDriver, m.userId)
+                          }, 'Driver profile linked.')
                         } else if (account?.assigned_driver_id) {
                           void run(() => assignDriverAccount(account.assigned_driver_id as string, null), 'Driver profile cleared.')
                         }
