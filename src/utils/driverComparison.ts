@@ -4,7 +4,7 @@ import type { DriverRow, StandingsSnapshotRowRow } from '@/types/database'
 export interface DriverComparisonStats {
   driverId: string
   displayName: string
-  driverNumber: number | null
+  driverNumber: string | null
   classLabel: string | null
   regionLabel: string | null
   championshipPosition: number | null

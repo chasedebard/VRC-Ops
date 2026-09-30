@@ -280,7 +280,8 @@ export interface DriverRow {
   display_name: string
   first_name: string | null
   last_name: string | null
-  driver_number: number | null
+  /** Text in the live schema (`drivers.driver_number text`). */
+  driver_number: string | null
   image_url: string | null
   bio: string | null
   platform_id: string | null
@@ -302,7 +303,7 @@ export interface SeasonDriverRow {
   team_id: string | null
   class_id: string | null
   region_id: string | null
-  number_override: number | null
+  number_override: string | null
   is_active: boolean
   joined_round: number | null
   left_round: number | null
