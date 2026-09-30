@@ -7,6 +7,13 @@ import type { VrcRole } from '@/types/database'
  */
 export interface LeaguePermissions {
   roles: Set<VrcRole>
+  /** Owner only (VRCPermissionResolver.canManageLeague): league-wide settings such as League Plus and ownership transfer. */
+  canManageLeague: boolean
+  /** Owner + Admin: create/edit championships, seasons, drivers, teams, classes, regions, tracks, events. */
+  canManageSetup: boolean
+  /** Owner + Admin: authorised overrides and cancel/postpone of a live event. */
+  canOverrideSession: boolean
+  canManageContent: boolean
   canManageMembers: boolean
   canSendInvitations: boolean
   canManageRoles: boolean
@@ -42,6 +49,10 @@ export function resolvePermissions(roles: VrcRole[] | Set<VrcRole>): LeaguePermi
 
   return {
     roles: roleSet,
+    canManageLeague: isOwner,
+    canManageSetup: isManager,
+    canOverrideSession: isManager,
+    canManageContent: isManager,
     canManageMembers: isManager,
     canSendInvitations: isManager,
     canManageRoles: isManager,

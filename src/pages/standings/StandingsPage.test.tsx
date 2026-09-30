@@ -58,6 +58,11 @@ function championship(): ChampionshipRow {
     practice_capture_enabled: false,
     ai_enabled: false,
     replay_enabled: false,
+    primary_color_hex: null,
+    secondary_color_hex: null,
+    accent_color_hex: null,
+    is_active: true,
+    logo_storage_path: null,
     created_at: '',
     updated_at: '',
   }

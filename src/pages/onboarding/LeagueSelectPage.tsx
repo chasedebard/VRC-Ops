@@ -1,13 +1,33 @@
 import { useState } from 'react'
 import { createLeague } from '@/services/leagues'
-import { acceptInvitationCode, acceptViewerCode } from '@/services/invitations'
+import { acceptInvitationCode } from '@/services/invitations'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
+import { useEntitlement } from '@/hooks/useEntitlement'
 import { Field } from '@/components/Field'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import { Badge } from '@/components/Badge'
+import { APP_STORE_URL } from '@/config/links'
+import {
+  OWNED_LEAGUE_LIMIT_MESSAGE,
+  PRO_OWNED_LEAGUE_LIMIT,
+  canCreateAdditionalLeague,
+  featureDefinition,
+  isFeatureActive,
+} from '@/config/featureRegistry'
+import { backendErrorMessage } from '@/utils/backendErrors'
 
+/**
+ * Join a league with an invitation code, or create one. League creation is account-scoped: the first owned
+ * league is free; additional leagues (up to the Pro ceiling) key off the user's OWN VRC Ops Pro subscription —
+ * League Plus inherited from another league never unlocks it (mirrors `VRCLeagueCreationEntry`).
+ */
 export default function LeagueSelectPage({ onDone }: { onDone?: () => void }) {
-  const { refresh, selectLeague } = useLeagueSession()
+  const { refresh, selectLeague, leagues } = useLeagueSession()
+  const { source } = useEntitlement()
+  const hasIndividualPro = source === 'individual_pro'
+  const ownedLeagueCount = leagues.filter((l) => l.roles.includes('owner')).length
+  const canCreate = canCreateAdditionalLeague(ownedLeagueCount, hasIndividualPro)
 
   const [name, setName] = useState('')
   const [abbreviation, setAbbreviation] = useState('')
@@ -23,12 +43,12 @@ export default function LeagueSelectPage({ onDone }: { onDone?: () => void }) {
     setCreateError(null)
     setCreating(true)
     try {
-      const leagueId = await createLeague(name, abbreviation)
+      const leagueId = await createLeague(name.trim(), abbreviation.trim())
       await refresh()
       selectLeague(leagueId)
       onDone?.()
     } catch (err) {
-      setCreateError(err instanceof Error ? err.message : 'Could not create league.')
+      setCreateError(backendErrorMessage(err, 'Could not create league.'))
     } finally {
       setCreating(false)
     }
@@ -39,14 +59,12 @@ export default function LeagueSelectPage({ onDone }: { onDone?: () => void }) {
     setJoinError(null)
     setJoining(true)
     try {
-      const trimmed = code.trim()
-      const leagueId =
-        trimmed.length === 6 ? await acceptViewerCode(trimmed) : await acceptInvitationCode(trimmed)
+      const leagueId = await acceptInvitationCode(code.trim())
       await refresh()
       selectLeague(leagueId)
       onDone?.()
     } catch (err) {
-      setJoinError(err instanceof Error ? err.message : 'That code is invalid or expired.')
+      setJoinError(backendErrorMessage(err, 'That code is invalid or expired.'))
     } finally {
       setJoining(false)
     }
@@ -56,29 +74,27 @@ export default function LeagueSelectPage({ onDone }: { onDone?: () => void }) {
     <div className="flex min-h-screen items-center justify-center px-4 py-8">
       <div className="w-full max-w-sm space-y-4">
         <div>
-          <h1 className="text-xl font-bold">Get started</h1>
+          <h1 className="text-xl font-bold">{leagues.length === 0 ? 'Get started' : 'Join or create a league'}</h1>
           <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            Create a league to run, or join one you've been invited to.
+            Join a league with an invitation code, or create your own.
           </p>
         </div>
 
         <Card>
           <h2 className="mb-1 text-base font-semibold">Have an invite code?</h2>
           <p className="mb-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            Didn't get the invite email, or the link in it isn't working? Enter your code here
-            instead — it works exactly the same way.
+            Didn&apos;t get the invite email, or the link in it isn&apos;t working? Enter your code here instead — it works
+            exactly the same way. Sent to you by an Owner or Admin.
           </p>
           <form onSubmit={handleJoin} className="space-y-3">
-            <Field
-              label="Invite or viewer code"
-              required
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              hint="A 6-digit code joins as a viewer; a longer invite code joins with the roles you were assigned."
-            />
-            {joinError && <p className="text-sm" style={{ color: 'var(--color-danger)' }}>{joinError}</p>}
+            <Field label="Invitation code" required value={code} onChange={(e) => setCode(e.target.value)} autoComplete="off" />
+            {joinError && (
+              <p role="alert" className="text-sm" style={{ color: 'var(--color-danger)' }}>
+                {joinError}
+              </p>
+            )}
             <Button type="submit" disabled={joining || !code.trim()} className="w-full">
-              {joining ? 'Joining…' : 'Join league'}
+              {joining ? 'Joining…' : 'Accept invitation'}
             </Button>
           </form>
         </Card>
@@ -91,19 +107,59 @@ export default function LeagueSelectPage({ onDone }: { onDone?: () => void }) {
 
         <Card>
           <h2 className="mb-3 text-base font-semibold">Start a new league</h2>
-          <form onSubmit={handleCreate} className="space-y-3">
-            <Field label="League name" required value={name} onChange={(e) => setName(e.target.value)} />
-            <Field
-              label="Abbreviation"
-              placeholder="e.g. RFS"
-              value={abbreviation}
-              onChange={(e) => setAbbreviation(e.target.value)}
-            />
-            {createError && <p className="text-sm" style={{ color: 'var(--color-danger)' }}>{createError}</p>}
-            <Button type="submit" disabled={creating || !name.trim()} className="w-full">
-              {creating ? 'Creating…' : 'Create league'}
-            </Button>
-          </form>
+          {canCreate ? (
+            <form onSubmit={handleCreate} className="space-y-3">
+              <Field label="League name" required value={name} onChange={(e) => setName(e.target.value)} />
+              <Field
+                label="Abbreviation (optional)"
+                placeholder="e.g. RFS"
+                value={abbreviation}
+                onChange={(e) => setAbbreviation(e.target.value)}
+              />
+              <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                You become the Owner. Next you&apos;ll set up your first championship and season.
+              </p>
+              {createError && (
+                <p role="alert" className="text-sm" style={{ color: 'var(--color-danger)' }}>
+                  {createError}
+                </p>
+              )}
+              <Button type="submit" disabled={creating || !name.trim()} className="w-full">
+                {creating ? 'Creating…' : 'Create league'}
+              </Button>
+            </form>
+          ) : hasIndividualPro ? (
+            <div className="space-y-2 text-sm">
+              <p className="font-medium">{OWNED_LEAGUE_LIMIT_MESSAGE}</p>
+              <p style={{ color: 'var(--color-text-muted)' }}>
+                To start another league, transfer or leave one you own first.
+              </p>
+            </div>
+          ) : isFeatureActive('multipleLeagues') ? (
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2">
+                <p className="font-medium">Create another league</p>
+                <Badge tone="warning">PRO</Badge>
+              </div>
+              <p style={{ color: 'var(--color-text-muted)' }}>
+                {featureDefinition('multipleLeagues').message} Own up to {PRO_OWNED_LEAGUE_LIMIT} leagues with VRC Ops
+                Pro. Subscriptions are purchased in the iPhone and iPad app; your access appears here automatically.
+              </p>
+              <a
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block font-semibold underline"
+                style={{ color: 'var(--color-accent)' }}
+              >
+                Open the App Store
+              </a>
+            </div>
+          ) : (
+            <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              Creating another league is coming soon.
+            </p>
+          )}
         </Card>
       </div>
     </div>

@@ -11,11 +11,9 @@ import {
 } from '@/services/leagues'
 import {
   createInvitationCode,
-  createViewerCode,
   getLeagueInvitations,
   resendInvitationEmail,
   revokeInvitation,
-  revokeViewerCode,
   sendInvitationEmail,
 } from '@/services/invitations'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
@@ -46,7 +44,6 @@ function AdminContent() {
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteRoles, setInviteRoles] = useState<VrcRole[]>(['driver'])
   const [inviteResult, setInviteResult] = useState<string | null>(null)
-  const [viewerCode, setViewerCode] = useState<string | null>(null)
 
   async function load() {
     if (!selectedLeague) return
@@ -91,29 +88,6 @@ function AdminContent() {
       await load()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not send invite.')
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  async function handleCreateViewerCode() {
-    if (!selectedLeague) return
-    setBusy(true)
-    try {
-      setViewerCode(await createViewerCode(selectedLeague.league.id))
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not create viewer code.')
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  async function handleRevokeViewerCode() {
-    if (!selectedLeague) return
-    setBusy(true)
-    try {
-      await revokeViewerCode(selectedLeague.league.id)
-      setViewerCode(null)
     } finally {
       setBusy(false)
     }
@@ -208,24 +182,6 @@ function AdminContent() {
           </Button>
           {inviteResult && <p className="text-sm" style={{ color: 'var(--color-success)' }}>{inviteResult}</p>}
         </form>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Viewer broadcast code</CardTitle>
-        </CardHeader>
-        <p className="mb-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-          A reusable 6-digit code anyone can use to follow the league as a viewer.
-        </p>
-        <div className="flex items-center gap-2">
-          <Button onClick={handleCreateViewerCode} disabled={busy}>
-            Generate new code
-          </Button>
-          <Button variant="secondary" onClick={handleRevokeViewerCode} disabled={busy}>
-            Revoke active code
-          </Button>
-        </div>
-        {viewerCode && <p className="mt-2 text-lg font-mono font-bold">{viewerCode}</p>}
       </Card>
 
       <Card>

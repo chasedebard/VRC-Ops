@@ -79,20 +79,3 @@ export async function acceptInvitationToken(token: string): Promise<string> {
   if (error) throw error
   return data as string
 }
-
-export async function createViewerCode(leagueId: string): Promise<string> {
-  const { data, error } = await supabase.rpc('vrc_create_viewer_code', { p_league: leagueId })
-  if (error) throw error
-  return data as string
-}
-
-export async function revokeViewerCode(leagueId: string): Promise<void> {
-  const { error } = await supabase.rpc('vrc_revoke_viewer_code', { p_league: leagueId })
-  if (error) throw error
-}
-
-export async function acceptViewerCode(code: string): Promise<string> {
-  const { data, error } = await supabase.rpc('vrc_accept_viewer_code', { p_code: code })
-  if (error) throw error
-  return data as string
-}

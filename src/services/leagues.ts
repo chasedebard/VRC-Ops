@@ -17,7 +17,11 @@ export interface MyLeagueMembership {
 export async function getMyLeagues(userId: string): Promise<MyLeagueMembership[]> {
   const { data: memberships, error } = await supabase
     .from('memberships')
-    .select('id, league_id, status, leagues(*), membership_roles(role)')
+    .select(
+      // Explicit FK hint (same as iOS' VRCMembershipRepository.membershipColumns): league_plus_seats has FKs to
+      // both tables, so a bare `leagues(*)` embed is one schema change away from PGRST201 ambiguity.
+      'id, league_id, status, leagues:leagues!memberships_league_id_fkey(*), membership_roles(role)',
+    )
     .eq('status', 'active')
     .eq('user_id', userId)
     .returns<
