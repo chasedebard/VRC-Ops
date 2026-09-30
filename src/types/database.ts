@@ -429,6 +429,7 @@ export interface EventSessionRow {
   state: SessionState
   version: number
   override_active: boolean
+  practice_started_at: string | null
   qualifying_started_at: string | null
   qualifying_ended_at: string | null
   race_started_at: string | null
