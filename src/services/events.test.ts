@@ -7,7 +7,7 @@ function event(overrides: Partial<EventRow> & Pick<EventRow, 'id' | 'round'>): E
     league_id: 'league1',
     championship_id: 'champ1',
     season_id: 'season1',
-    title: null,
+    title: 'Round',
     custom_title: null,
     track_id: null,
     track_layout: null,

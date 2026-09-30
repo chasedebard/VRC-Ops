@@ -379,7 +379,8 @@ export interface EventRow {
   championship_id: string
   season_id: string
   round: number
-  title: string | null
+  /** NOT NULL in the live schema (track-generated title). */
+  title: string
   custom_title: string | null
   track_id: string | null
   track_layout: string | null
