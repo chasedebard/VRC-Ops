@@ -291,6 +291,9 @@ export interface DriverRow {
   region_id: string | null
   is_active: boolean
   profile_image_path: string | null
+  /** Self-service number request (alphanumeric, ≤ 4 chars); an Owner/Admin approves or rejects it. */
+  requested_driver_number: string | null
+  driver_number_request_status: 'pending' | 'approved' | 'rejected' | null
   created_at: string
   updated_at: string
 }

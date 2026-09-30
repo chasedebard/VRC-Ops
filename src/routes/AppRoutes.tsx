@@ -21,6 +21,7 @@ import SeasonDetailPage from '@/pages/championships/SeasonDetailPage'
 import SeasonTeamsPage from '@/pages/championships/SeasonTeamsPage'
 import DriversPage from '@/pages/drivers/DriversPage'
 import DriverProfilePage from '@/pages/drivers/DriverProfilePage'
+import MyDriverPage from '@/pages/drivers/MyDriverPage'
 import TracksPage from '@/pages/catalog/TracksPage'
 import ClassesPage from '@/pages/catalog/ClassesPage'
 import RegionsPage from '@/pages/catalog/RegionsPage'
@@ -76,6 +77,7 @@ export function AppRoutes() {
         <Route path="/seasons/:id/teams" element={<SeasonTeamsPage />} />
 
         <Route path="/drivers" element={<DriversPage />} />
+        <Route path="/drivers/me" element={<MyDriverPage />} />
         <Route path="/drivers/:id" element={<DriverProfilePage />} />
 
         <Route path="/tracks" element={<TracksPage />} />
