@@ -3,6 +3,8 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { useTheme } from '@/hooks/useTheme'
+import { setChampionshipAccent, useAppearance } from '@/hooks/useAppearance'
+import { getChampionships } from '@/services/championships'
 import { ROLE_LABEL } from '@/permissions/resolver'
 import { SiteFooter } from '@/components/LegalLinks'
 import { ChampionAwardHost } from '@/components/ChampionAwardHost'
@@ -13,6 +15,7 @@ export function Layout() {
   const { signOut } = useAuth()
   const { leagues, selectedLeague, selectLeague, permissions } = useLeagueSession()
   const { isDark, toggle: toggleTheme } = useTheme()
+  const { settings: appearance } = useAppearance()
   const [menuOpen, setMenuOpen] = useState(false)
 
   const { hasAccess } = useEntitlement()
@@ -20,6 +23,26 @@ export function Layout() {
   const navItems = mainNavigation(permissions)
   const activeItem = navItems.find((item) => isItemActive(item, pathname)) ?? null
   const subItems = activeItem ? subNavigation(activeItem.key, permissions) : []
+
+  // "Championship Colors" follows the active championship of the selected league (fetched only when that source is chosen).
+  const leagueId = selectedLeague?.league.id ?? null
+  useEffect(() => {
+    if (appearance.source !== 'championshipColors' || !leagueId) {
+      setChampionshipAccent(null)
+      return
+    }
+    let cancelled = false
+    getChampionships(leagueId)
+      .then((list) => {
+        if (cancelled) return
+        const active = list.find((c) => c.is_active) ?? list.find((c) => c.status === 'active') ?? null
+        setChampionshipAccent(active?.accent_color_hex ?? active?.primary_color_hex ?? null)
+      })
+      .catch(() => !cancelled && setChampionshipAccent(null))
+    return () => {
+      cancelled = true
+    }
+  }, [appearance.source, leagueId])
 
   // Close the mobile menu whenever the route changes.
   useEffect(() => setMenuOpen(false), [pathname])

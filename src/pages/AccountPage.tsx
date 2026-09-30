@@ -1,23 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
-import {
-  deleteAccount,
-  getBlockingLeagues,
-  purgeLocalSessionData,
-  reauthenticate,
-  type BlockingLeague,
-} from '@/services/account'
-import { getLeagueMembers, transferLeagueOwnership } from '@/services/leagues'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
-import { Field } from '@/components/Field'
 import { Button } from '@/components/Button'
 import { SubscriptionStatusCard } from '@/components/SubscriptionStatusCard'
 import { ProfileCard } from '@/pages/account/ProfileCard'
 import { ChangePasswordCard, TwoFactorCard } from '@/pages/account/SecurityCards'
 import { ROLE_LABEL } from '@/permissions/resolver'
-import { backendErrorMessage } from '@/utils/backendErrors'
+import { DeleteAccountCard } from '@/pages/account/DeleteAccountCard'
+import { AppearanceCard } from '@/pages/account/AppearanceCard'
+import { GAME_LABEL } from '@/config/featureRegistry'
 
 function NavRow({ to, title, subtitle }: { to: string; title: string; subtitle: string }) {
   return (
@@ -43,13 +36,6 @@ export default function AccountPage() {
   const { selectedLeague, leagues } = useLeagueSession()
   const location = useLocation()
 
-  const [showDelete, setShowDelete] = useState(false)
-  const [blockingLeagues, setBlockingLeagues] = useState<BlockingLeague[] | null>(null)
-  const [password, setPassword] = useState('')
-  const [deleteError, setDeleteError] = useState<string | null>(null)
-  const [deleting, setDeleting] = useState(false)
-  const [deleted, setDeleted] = useState(false)
-
   // Deep link from Legal & privacy ▸ Delete account.
   useEffect(() => {
     if (location.hash === '#delete-account') {
@@ -58,48 +44,6 @@ export default function AccountPage() {
   }, [location.hash])
 
   if (state.kind !== 'authenticated') return null
-  const user = state.user
-
-  async function startDeletion() {
-    setShowDelete(true)
-    try {
-      setBlockingLeagues(await getBlockingLeagues())
-    } catch (err) {
-      setDeleteError(backendErrorMessage(err, 'Could not check your leagues.'))
-    }
-  }
-
-  async function transferAndRecheck(leagueId: string) {
-    setDeleteError(null)
-    try {
-      const members = await getLeagueMembers(leagueId)
-      const candidate = members.find((m) => m.userId !== user.id && m.status === 'active')
-      if (!candidate) {
-        setDeleteError('No other active member to transfer ownership to.')
-        return
-      }
-      await transferLeagueOwnership(leagueId, candidate.userId)
-      setBlockingLeagues(await getBlockingLeagues())
-    } catch (err) {
-      setDeleteError(backendErrorMessage(err, 'Could not transfer ownership.'))
-    }
-  }
-
-  async function confirmDelete() {
-    setDeleteError(null)
-    setDeleting(true)
-    try {
-      await reauthenticate(user.email ?? '', password)
-      await deleteAccount()
-      purgeLocalSessionData()
-      setDeleted(true)
-      await signOut()
-    } catch (err) {
-      setDeleteError(err instanceof Error ? err.message : 'Could not delete account.')
-    } finally {
-      setDeleting(false)
-    }
-  }
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -156,6 +100,22 @@ export default function AccountPage() {
       <TwoFactorCard />
       <ChangePasswordCard />
 
+      <AppearanceCard />
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Context</CardTitle>
+        </CardHeader>
+        <dl className="space-y-1 text-sm">
+          <div className="flex justify-between gap-3"><dt style={{ color: 'var(--color-text-muted)' }}>League</dt><dd className="font-medium">{selectedLeague?.league.name ?? 'None'}</dd></div>
+          <div className="flex justify-between gap-3"><dt style={{ color: 'var(--color-text-muted)' }}>Role</dt><dd className="font-medium">{selectedLeague?.roles.map((r) => ROLE_LABEL[r]).join(' · ') ?? 'None'}</dd></div>
+          <div className="flex justify-between gap-3"><dt style={{ color: 'var(--color-text-muted)' }}>Game</dt><dd className="font-medium">{GAME_LABEL.gran_turismo_7}</dd></div>
+        </dl>
+        <p className="mt-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          The active league scopes every page. Switch leagues from the header or under Leagues above.
+        </p>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle>About</CardTitle>
@@ -174,66 +134,7 @@ export default function AccountPage() {
         </Button>
       </Card>
 
-      <Card id="delete-account" style={{ borderColor: 'var(--color-danger)' }}>
-        <CardHeader>
-          <CardTitle style={{ color: 'var(--color-danger)' }}>Delete account</CardTitle>
-        </CardHeader>
-        {deleted ? (
-          <p className="text-sm">Your account has been deleted.</p>
-        ) : !showDelete ? (
-          <div>
-            <p className="mb-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-              This permanently deletes your account. Championship history, published results, and standings you&apos;re not the
-              sole owner of are preserved for the league.
-            </p>
-            <Button variant="danger" onClick={startDeletion}>
-              Delete my account
-            </Button>
-          </div>
-        ) : blockingLeagues === null ? (
-          <p className="text-sm">Checking your leagues…</p>
-        ) : blockingLeagues.length > 0 ? (
-          <div className="space-y-3">
-            <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
-              You own leagues with other members. Transfer ownership before deleting your account.
-            </p>
-            {blockingLeagues.map((bl) => (
-              <div
-                key={bl.leagueId}
-                className="flex items-center justify-between rounded-lg border p-2 text-sm"
-                style={{ borderColor: 'var(--color-border)' }}
-              >
-                <span>
-                  {bl.leagueName} · {bl.otherMemberCount} other member(s)
-                </span>
-                <Button variant="secondary" onClick={() => transferAndRecheck(bl.leagueId)}>
-                  Transfer ownership
-                </Button>
-              </div>
-            ))}
-            {deleteError && (
-              <p role="alert" className="text-sm" style={{ color: 'var(--color-danger)' }}>
-                {deleteError}
-              </p>
-            )}
-          </div>
-        ) : (
-          <div className="space-y-3">
-            <p className="text-sm" style={{ color: 'var(--color-danger)' }}>
-              This cannot be undone. Confirm your password to continue.
-            </p>
-            <Field label="Password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            {deleteError && (
-              <p role="alert" className="text-sm" style={{ color: 'var(--color-danger)' }}>
-                {deleteError}
-              </p>
-            )}
-            <Button variant="danger" onClick={confirmDelete} disabled={deleting || !password}>
-              {deleting ? 'Deleting…' : 'Permanently delete my account'}
-            </Button>
-          </div>
-        )}
-      </Card>
+      <DeleteAccountCard />
     </div>
   )
 }

@@ -1,32 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useAppearance } from '@/hooks/useAppearance'
 
-const STORAGE_KEY = 'vrc-theme'
-
-function systemPrefersDark(): boolean {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-}
-
+/** Light/dark toggle (header and public legal page). The full appearance controls live in Settings ▸ Appearance. */
 export function useTheme() {
-  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'))
-
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) return
-    const media = window.matchMedia('(prefers-color-scheme: dark)')
-    const listener = () => {
-      document.documentElement.classList.toggle('dark', systemPrefersDark())
-      setIsDark(systemPrefersDark())
-    }
-    media.addEventListener('change', listener)
-    return () => media.removeEventListener('change', listener)
-  }, [])
-
-  function toggle() {
-    const next = !isDark
-    document.documentElement.classList.toggle('dark', next)
-    localStorage.setItem(STORAGE_KEY, next ? 'dark' : 'light')
-    setIsDark(next)
-  }
-
-  return { isDark, toggle }
+  const { settings, update } = useAppearance()
+  const systemDark = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const isDark = settings.mode === 'dark' || (settings.mode === 'system' && systemDark)
+  return { isDark, toggle: () => update({ mode: isDark ? 'light' : 'dark' }) }
 }

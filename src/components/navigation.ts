@@ -24,7 +24,7 @@ export function mainNavigation(permissions: LeaguePermissions): NavItem[] {
   const isDriverOrOps = permissions.roles.has('driver') || permissions.canOperateRaceControl
   const items: NavItem[] = [
     { key: 'home', to: '/dashboard', label: 'Home', match: ['/dashboard'] },
-    { key: 'championship', to: '/championships', label: 'Championship', match: ['/championships', '/seasons', '/tracks', '/classes', '/regions'] },
+    { key: 'championship', to: '/championships', label: 'Championship', match: ['/championships', '/seasons', '/schedule', '/teams', '/tracks', '/classes', '/regions'] },
   ]
   if (isDriverOrOps) {
     items.push({ key: 'raceWeekend', to: '/race-weekend', label: 'Race Weekend', match: ['/race-weekend', '/race-prep', '/qualifying'] })
@@ -53,9 +53,11 @@ export function subNavigation(itemKey: string, permissions: LeaguePermissions): 
     case 'championship':
       return [
         { to: '/championships', label: 'Championships & seasons' },
+        { to: '/schedule', label: 'Schedule' },
         ...(permissions.canManageSetup
           ? [
               { to: '/tracks', label: 'Tracks' },
+              { to: '/teams', label: 'Teams' },
               { to: '/classes', label: 'Classes' },
               { to: '/regions', label: 'Regions' },
             ]

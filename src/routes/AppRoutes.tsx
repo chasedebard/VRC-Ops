@@ -19,6 +19,7 @@ import ChampionshipsPage from '@/pages/championships/ChampionshipsPage'
 import ChampionshipDetailPage from '@/pages/championships/ChampionshipDetailPage'
 import SeasonDetailPage from '@/pages/championships/SeasonDetailPage'
 import SeasonTeamsPage from '@/pages/championships/SeasonTeamsPage'
+import SchedulePage, { TeamsRedirect } from '@/pages/championships/SchedulePage'
 import DriversPage from '@/pages/drivers/DriversPage'
 import DriverProfilePage from '@/pages/drivers/DriverProfilePage'
 import MyDriverPage from '@/pages/drivers/MyDriverPage'
@@ -78,6 +79,8 @@ export function AppRoutes() {
         <Route path="/championships/:id" element={<ChampionshipDetailPage />} />
         <Route path="/seasons/:id" element={<SeasonDetailPage />} />
         <Route path="/seasons/:id/teams" element={<SeasonTeamsPage />} />
+        <Route path="/schedule" element={<SchedulePage />} />
+        <Route path="/teams" element={<TeamsRedirect />} />
 
         <Route path="/drivers" element={<DriversPage />} />
         <Route path="/drivers/me" element={<MyDriverPage />} />
