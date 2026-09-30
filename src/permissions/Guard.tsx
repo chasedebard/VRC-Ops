@@ -6,6 +6,8 @@ import { EmptyState } from '@/components/States'
 interface RequirePermissionProps {
   permission: keyof Pick<
     LeaguePermissions,
+    | 'canManageLeague'
+    | 'canManageSetup'
     | 'canManageMembers'
     | 'canSendInvitations'
     | 'canManageRoles'

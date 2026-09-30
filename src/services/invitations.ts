@@ -1,13 +1,15 @@
 import { supabase } from '@/supabase/client'
 import type { InvitationRow, VrcRole } from '@/types/database'
 
-export async function getLeagueInvitations(leagueId: string): Promise<InvitationRow[]> {
+export type InvitationWithRoles = InvitationRow & { invitation_roles: { role: VrcRole }[] }
+
+export async function getLeagueInvitations(leagueId: string): Promise<InvitationWithRoles[]> {
   const { data, error } = await supabase
     .from('invitations')
     .select('*, invitation_roles(role)')
     .eq('league_id', leagueId)
     .order('created_at', { ascending: false })
-    .returns<(InvitationRow & { invitation_roles: { role: VrcRole }[] })[]>()
+    .returns<InvitationWithRoles[]>()
   if (error) throw error
   return data ?? []
 }
@@ -76,23 +78,6 @@ export async function acceptInvitationCode(code: string): Promise<string> {
 /** HTTPS invite-link flow (/invite/:token) — token is single-use, never shown to the user. */
 export async function acceptInvitationToken(token: string): Promise<string> {
   const { data, error } = await supabase.rpc('vrc_accept_invitation_by_token', { p_token: token })
-  if (error) throw error
-  return data as string
-}
-
-export async function createViewerCode(leagueId: string): Promise<string> {
-  const { data, error } = await supabase.rpc('vrc_create_viewer_code', { p_league: leagueId })
-  if (error) throw error
-  return data as string
-}
-
-export async function revokeViewerCode(leagueId: string): Promise<void> {
-  const { error } = await supabase.rpc('vrc_revoke_viewer_code', { p_league: leagueId })
-  if (error) throw error
-}
-
-export async function acceptViewerCode(code: string): Promise<string> {
-  const { data, error } = await supabase.rpc('vrc_accept_viewer_code', { p_code: code })
   if (error) throw error
   return data as string
 }

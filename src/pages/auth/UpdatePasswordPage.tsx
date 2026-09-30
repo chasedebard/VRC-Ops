@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { updateRecoveredPassword } from '@/services/auth'
+import { getPostAuthRedirectPath } from '@/services/authRedirects'
 import { useAuth } from '@/hooks/useAuth'
 import { Field } from '@/components/Field'
 import { Button } from '@/components/Button'
@@ -21,7 +22,7 @@ export default function UpdatePasswordPage() {
     try {
       await updateRecoveredPassword(password, confirmation)
       await refresh()
-      navigate('/dashboard')
+      navigate(getPostAuthRedirectPath(window.location.href))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not update password.')
     } finally {

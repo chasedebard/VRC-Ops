@@ -3,12 +3,15 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { acceptInvitationToken } from '@/services/invitations'
+import {
+  authPathWithRedirect,
+  clearPendingInviteToken,
+  setPendingInviteToken,
+} from '@/services/authRedirects'
 import { getMyLeagues } from '@/services/leagues'
 import { Card } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { LoadingState } from '@/components/States'
-
-const PENDING_INVITE_KEY = 'vrc-pending-invite-token'
 
 /**
  * HTTPS invite link target: https://vrc-ops.org/invite/:token, matching what
@@ -26,12 +29,13 @@ export default function InviteAcceptancePage() {
   const [leagueName, setLeagueName] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const userId = state.kind === 'authenticated' ? state.user.id : null
+  const invitePath = token ? `/invite/${encodeURIComponent(token)}` : null
 
   useEffect(() => {
     if (!token) return
 
     if (!userId) {
-      window.localStorage.setItem(PENDING_INVITE_KEY, token)
+      setPendingInviteToken(token)
       return
     }
 
@@ -39,7 +43,7 @@ export default function InviteAcceptancePage() {
     acceptInvitationToken(token)
       .then(async (leagueId) => {
         if (cancelled) return
-        window.localStorage.removeItem(PENDING_INVITE_KEY)
+        clearPendingInviteToken()
         await refresh()
         const leagues = await getMyLeagues(userId)
         const league = leagues.find((l) => l.league.id === leagueId)
@@ -66,10 +70,10 @@ export default function InviteAcceptancePage() {
             We'll finish joining the league as soon as you sign in or create an account.
           </p>
           <div className="flex justify-center gap-2">
-            <Link to="/login">
+            <Link to={authPathWithRedirect('/login', invitePath)}>
               <Button>Sign in</Button>
             </Link>
-            <Link to="/signup">
+            <Link to={authPathWithRedirect('/signup', invitePath)}>
               <Button variant="secondary">Create account</Button>
             </Link>
           </div>

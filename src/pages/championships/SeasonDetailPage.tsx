@@ -1,9 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
-import { getChampionship, getSeason, subscribeToSeason, updateSeason } from '@/services/championships'
-import { createEvent, getSeasonEvents } from '@/services/events'
+import { activateSeason, getChampionship, getLeagueSeasons, getSeason, subscribeToSeason, updateSeason } from '@/services/championships'
+import { createEvent, deleteEvent, getEventClasses, getSeasonEvents, setEventClasses, updateEvent } from '@/services/events'
 import { getTracks } from '@/services/tracks'
+import { getSeasonClassIds, getSeasonRegionIds, gt7SelectedGroupPickerItems, listLeagueClasses, listLeagueRegions, setSeasonClasses, setSeasonRegions } from '@/services/setup'
+import { useEntitlement } from '@/hooks/useEntitlement'
+import { ACTIVE_SEASON_LIMIT_MESSAGE, canCreateAdditionalActiveSeason, featureDefinition } from '@/config/featureRegistry'
+import { EventEditor } from '@/components/EventEditor'
+import { SeasonActivationCard, SeasonSettingsCard, SeasonStructureCard, type ActiveSeasonBlock } from '@/pages/championships/SeasonSetupCards'
+import { eventFormFromRow, emptyEventForm, nextSuggestedRound, plannedEventClassSync, EVENT_STATUS_LABEL, type EventPayload } from '@/utils/eventForm'
+import { missingActivationRequirements } from '@/utils/seasonValidation'
+import { backendErrorMessage } from '@/utils/backendErrors'
+import { eventDisplayTitle } from '@/utils/currentRace'
 import {
   SeasonRecomputeError,
   runSeasonScoringRecompute,
@@ -13,11 +22,10 @@ import { hasEffectiveScoringConfigChanged, isValidSeasonBonusPoints } from '@/ut
 import { bonusFormFromSeason, type BonusFormState } from '@/pages/championships/seasonBonusForm'
 import { Card, CardHeader, CardTitle } from '@/components/Card'
 import { Button } from '@/components/Button'
-import { Field } from '@/components/Field'
 import { Badge } from '@/components/Badge'
 import { EmptyState, ErrorState, LoadingState } from '@/components/States'
 import { formatBonusPoints, formatDate } from '@/utils/format'
-import type { ChampionshipRow, EventRow, SeasonRow, TrackRow } from '@/types/database'
+import type { ChampionshipRow, ClassRow, EventRow, RegionRow, SeasonRow, TrackRow } from '@/types/database'
 
 const EVENT_STATUS_TONE: Record<string, 'neutral' | 'success' | 'warning' | 'danger'> = {
   draft: 'neutral',
@@ -37,11 +45,14 @@ export default function SeasonDetailPage() {
   const [events, setEvents] = useState<EventRow[] | null>(null)
   const [tracks, setTracks] = useState<TrackRow[]>([])
   const [error, setError] = useState<string | null>(null)
-  const [showCreate, setShowCreate] = useState(false)
-  const [round, setRound] = useState(1)
-  const [trackId, setTrackId] = useState('')
-  const [eventDate, setEventDate] = useState('')
-  const [busy, setBusy] = useState(false)
+  const { hasAccess } = useEntitlement()
+  const [classes, setClasses] = useState<ClassRow[]>([])
+  const [regions, setRegions] = useState<RegionRow[]>([])
+  const [seasonClassIds, setSeasonClassIds] = useState<string[]>([])
+  const [seasonRegionIds, setSeasonRegionIds] = useState<string[]>([])
+  const [otherActiveSeasons, setOtherActiveSeasons] = useState(0)
+  // `null` = closed, `'new'` = creating, otherwise the event being edited.
+  const [editor, setEditor] = useState<'new' | EventRow | null>(null)
 
   const [bonusForm, setBonusForm] = useState<BonusFormState | null>(null)
   const [bonusError, setBonusError] = useState<string | null>(null)
@@ -61,7 +72,22 @@ export default function SeasonDetailPage() {
         const [c, ev] = await Promise.all([getChampionship(s.championship_id), getSeasonEvents(id)])
         setChampionship(c)
         setEvents(ev)
-        if (c) setTracks(await getTracks(c.game_id, selectedLeague.league.id))
+        const leagueId = selectedLeague.league.id
+        const [trackRows, classRows, regionRows, classIds, regionIds, leagueSeasons] = await Promise.all([
+          c ? getTracks(c.game_id, leagueId).catch(() => []) : Promise.resolve([]),
+          listLeagueClasses(leagueId).catch(() => []),
+          listLeagueRegions(leagueId).catch(() => []),
+          getSeasonClassIds(s.id).catch(() => []),
+          getSeasonRegionIds(s.id).catch(() => []),
+          getLeagueSeasons(leagueId).catch(() => []),
+        ])
+        setTracks(trackRows)
+        setClasses(classRows)
+        setRegions(regionRows)
+        setSeasonClassIds(classIds)
+        setSeasonRegionIds(regionIds)
+        // Only genuinely active seasons in OTHER championships count: activating within a championship is a swap.
+        setOtherActiveSeasons(leagueSeasons.filter((x) => (x.is_active || x.status === 'active') && x.championship_id !== s.championship_id).length)
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not load season.')
@@ -84,29 +110,90 @@ export default function SeasonDetailPage() {
     })
   }, [id])
 
-  async function handleCreateEvent(e: React.FormEvent) {
-    e.preventDefault()
-    if (!season || !selectedLeague) return
-    setBusy(true)
+  async function refreshAfterWrite() {
+    if (!id) return
+    const [updated, ev] = await Promise.all([getSeason(id), getSeasonEvents(id)])
+    if (updated) setSeason(updated)
+    setEvents(ev)
+  }
+
+  /** Returns an error message to show in the editor, or null on success. */
+  async function saveEvent(payload: EventPayload): Promise<string | null> {
+    if (!season || !selectedLeague || editor === null) return 'Select a season first.'
     try {
-      await createEvent({
-        league_id: selectedLeague.league.id,
-        championship_id: season.championship_id,
-        season_id: season.id,
-        round,
-        track_id: trackId || null,
-        event_date: eventDate || null,
-        status: 'scheduled',
-      })
-      setShowCreate(false)
-      setRound((r) => r + 1)
-      setTrackId('')
-      setEventDate('')
-      await load()
+      let eventId: string
+      if (editor === 'new') {
+        const created = await createEvent({ ...payload, league_id: selectedLeague.league.id, championship_id: season.championship_id, season_id: season.id })
+        eventId = created.id
+      } else {
+        await updateEvent(editor.id, payload)
+        eventId = editor.id
+      }
+      // Results are saved against `event_classes`, which the database does not derive from `events.class_id`.
+      if (payload.class_id) {
+        const sync = plannedEventClassSync((await getEventClasses(eventId)).map((row) => row.class_id), payload.class_id)
+        if (sync) await setEventClasses(eventId, selectedLeague.league.id, sync)
+      }
+      setEditor(null)
+      await refreshAfterWrite()
+      return null
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not create event.')
-    } finally {
-      setBusy(false)
+      return backendErrorMessage(err, 'Could not save the event.')
+    }
+  }
+
+  async function removeEvent(): Promise<string | null> {
+    if (editor === null || editor === 'new') return null
+    try {
+      await deleteEvent(editor.id)
+      setEditor(null)
+      await refreshAfterWrite()
+      return null
+    } catch (err) {
+      return backendErrorMessage(err, 'Could not delete the event.')
+    }
+  }
+
+  async function saveSeasonSettings(patch: Partial<SeasonRow>): Promise<string | null> {
+    if (!season) return 'Season not loaded.'
+    try {
+      // Setting Active by hand must respect the same plan limit as the activation button (server re-checks).
+      if (patch.status === 'active' && !(season.is_active || season.status === 'active')) {
+        await activateSeason(season.id)
+        const { status: _status, ...rest } = patch
+        void _status
+        if (Object.keys(rest).length > 0) await updateSeason(season.id, rest)
+      } else {
+        await updateSeason(season.id, patch)
+      }
+      await refreshAfterWrite()
+      return null
+    } catch (err) {
+      return backendErrorMessage(err, 'Could not save the season.')
+    }
+  }
+
+  async function saveStructure(classIds: string[] | null, regionIds: string[] | null): Promise<string | null> {
+    if (!season || !selectedLeague) return 'Season not loaded.'
+    try {
+      if (classIds) await setSeasonClasses(season.id, selectedLeague.league.id, classIds)
+      if (regionIds) await setSeasonRegions(season.id, selectedLeague.league.id, regionIds)
+      if (classIds) setSeasonClassIds(classIds)
+      if (regionIds) setSeasonRegionIds(regionIds)
+      return null
+    } catch (err) {
+      return backendErrorMessage(err, 'Could not save the structure.')
+    }
+  }
+
+  async function activate(): Promise<string | null> {
+    if (!season) return 'Season not loaded.'
+    try {
+      await activateSeason(season.id)
+      await refreshAfterWrite()
+      return null
+    } catch (err) {
+      return backendErrorMessage(err, 'Could not activate the season.')
     }
   }
 
@@ -205,8 +292,18 @@ export default function SeasonDetailPage() {
   if (error) return <ErrorState message={error} onRetry={load} />
   if (season === null || events === null) return <LoadingState />
 
-  const canManage = permissions.canManageMembers
+  const canManage = permissions.canManageSetup
   const busyForm = savingBonus || recomputing
+  const activeBlock: ActiveSeasonBlock = canCreateAdditionalActiveSeason(otherActiveSeasons, hasAccess)
+    ? null
+    : hasAccess
+      ? { reason: 'limitReached', message: ACTIVE_SEASON_LIMIT_MESSAGE }
+      : { reason: 'requiresPro', message: featureDefinition('multipleActiveSeasons').message }
+  const gt7 = championship?.game_id === 'gran_turismo_7'
+  const classItems = gt7 ? gt7SelectedGroupPickerItems(classes) : classes.map((c) => ({ id: c.id, label: c.name }))
+  // A season with no linked classes/regions still offers every league one (mirrors iOS) so required fields are never unreachable.
+  const eventClasses = seasonClassIds.length > 0 ? classes.filter((c) => seasonClassIds.includes(c.id)) : classes
+  const eventRegions = seasonRegionIds.length > 0 ? regions.filter((r) => seasonRegionIds.includes(r.id)) : regions
 
   return (
     <div className="space-y-6">
@@ -220,6 +317,24 @@ export default function SeasonDetailPage() {
           </Link>
         )}
       </div>
+
+      {canManage && (
+        <SeasonSettingsCard key={`${season.id}-${season.updated_at}`} season={season} disabled={false} activeBlock={activeBlock} onSave={saveSeasonSettings} />
+      )}
+
+      {canManage && championship && (
+        <SeasonStructureCard
+          key={`structure-${season.id}-${seasonClassIds.join()}-${seasonRegionIds.join()}`}
+          classesEnabled={championship.classes_enabled}
+          regionsEnabled={championship.regions_enabled}
+          classItems={classItems}
+          regionItems={regions.map((r) => ({ id: r.id, label: r.name }))}
+          selectedClassIds={seasonClassIds}
+          selectedRegionIds={seasonRegionIds}
+          disabled={false}
+          onSave={saveStructure}
+        />
+      )}
 
       <Card>
         <CardHeader>
@@ -246,7 +361,7 @@ export default function SeasonDetailPage() {
           <CardHeader>
             <CardTitle>Bonus Points</CardTitle>
           </CardHeader>
-          <form onSubmit={handleSaveBonusSettings} className="space-y-4">
+          <form onSubmit={handleSaveBonusSettings} className="space-y-4" aria-label="Bonus points">
             <BonusPointsControl
               label="Pole position bonus"
               enabled={bonusForm.poleBonusEnabled}
@@ -308,46 +423,8 @@ export default function SeasonDetailPage() {
       <Card>
         <CardHeader>
           <CardTitle>Race calendar</CardTitle>
-          {canManage && (
-            <Button onClick={() => setShowCreate((v) => !v)}>{showCreate ? 'Cancel' : 'New event'}</Button>
-          )}
+          {canManage && <Button onClick={() => setEditor('new')}>New race</Button>}
         </CardHeader>
-
-        {showCreate && (
-          <form onSubmit={handleCreateEvent} className="mb-4 grid gap-3 sm:grid-cols-4 sm:items-end">
-            <Field
-              label="Round"
-              type="number"
-              value={round}
-              onChange={(e) => setRound(Number(e.target.value))}
-            />
-            <label className="block text-sm">
-              <span className="mb-1 block font-medium">Track</span>
-              <select
-                className="w-full rounded-lg border px-3 py-2 text-sm"
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}
-                value={trackId}
-                onChange={(e) => setTrackId(e.target.value)}
-              >
-                <option value="">Select a track…</option>
-                {tracks.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name} {t.layout ? `– ${t.layout}` : ''}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <Field
-              label="Date"
-              type="date"
-              value={eventDate}
-              onChange={(e) => setEventDate(e.target.value)}
-            />
-            <Button type="submit" disabled={busy || !round}>
-              {busy ? 'Creating…' : 'Create'}
-            </Button>
-          </form>
-        )}
 
         {events.length === 0 ? (
           <EmptyState title="No events scheduled" description="Add your first race weekend to this season." />
@@ -357,22 +434,61 @@ export default function SeasonDetailPage() {
               .slice()
               .sort((a, b) => a.round - b.round)
               .map((event) => (
-                <li key={event.id} className="flex items-center justify-between gap-3 py-2.5">
+                <li key={event.id} className="flex flex-wrap items-center justify-between gap-3 py-2.5">
                   <div>
                     <Link to={`/race-weekend/${event.id}`} className="font-medium hover:underline">
-                      Round {event.round}
-                      {event.custom_title ? ` — ${event.custom_title}` : ''}
+                      Round {event.round} — {eventDisplayTitle(event)}
                     </Link>
                     <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                      {formatDate(event.event_date)}
+                      {[formatDate(event.event_date), event.start_time ? event.start_time.slice(0, 5) : null, event.race_value ? `${event.race_value} ${event.race_distance_type === 'endurance' ? 'min' : event.race_value === 1 ? 'lap' : 'laps'}` : null]
+                        .filter((x) => x && x !== '—')
+                        .join(' · ') || 'Date to be announced'}
                     </p>
                   </div>
-                  <Badge tone={EVENT_STATUS_TONE[event.status]}>{event.status}</Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge tone={EVENT_STATUS_TONE[event.status]}>{EVENT_STATUS_LABEL[event.status]}</Badge>
+                    {canManage && (
+                      <Button variant="secondary" onClick={() => setEditor(event)} aria-label={`Edit round ${event.round}`}>
+                        Edit
+                      </Button>
+                    )}
+                  </div>
                 </li>
               ))}
           </ul>
         )}
       </Card>
+
+      {canManage && (
+        <SeasonActivationCard
+          key={`activate-${season.id}-${season.status}-${events.length}-${season.year}`}
+          season={season}
+          missing={missingActivationRequirements(season.year, events.length)}
+          activeBlock={activeBlock}
+          disabled={false}
+          onActivate={activate}
+        />
+      )}
+
+      {editor !== null && championship && (
+        <EventEditor
+          title={editor === 'new' ? 'New race' : `Edit round ${editor.round}`}
+          initial={editor === 'new' ? emptyEventForm(nextSuggestedRound(events.map((e) => e.round))) : eventFormFromRow(editor)}
+          tracks={tracks}
+          classes={eventClasses}
+          regions={eventRegions}
+          context={{
+            classesEnabled: championship.classes_enabled,
+            regionsEnabled: championship.regions_enabled,
+            game: championship.game_id,
+            existingRounds: new Set(events.map((e) => e.round)),
+          }}
+          editing={editor === 'new' ? undefined : editor}
+          onSave={saveEvent}
+          onDelete={editor === 'new' ? undefined : removeEvent}
+          onClose={() => setEditor(null)}
+        />
+      )}
     </div>
   )
 }

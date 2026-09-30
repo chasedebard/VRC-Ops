@@ -61,16 +61,22 @@ export async function setChampionshipGame(
   if (error) throw error
 }
 
+/**
+ * Deletes a championship, its seasons and its logo through the trusted `process-championship-deletion` Edge Function (Owner only — it
+ * re-verifies `is_championship_owner` and needs a server-side credential to purge Storage). The old `vrc_delete_championship_with_seasons`
+ * RPC is no longer callable by signed-in users. Idempotent: an already-removed championship reports `success: false`.
+ */
 export async function deleteChampionshipWithSeasons(championshipId: string): Promise<{
   success: boolean
   seasonsDeleted: number
 }> {
-  const { data, error } = await supabase.rpc('vrc_delete_championship_with_seasons', {
-    p_championship_id: championshipId,
+  const { data, error } = await supabase.functions.invoke('process-championship-deletion', {
+    body: { championship_id: championshipId.toLowerCase() },
   })
   if (error) throw error
-  const row = (data as { success: boolean; seasons_deleted: number }[])[0]
-  return { success: row.success, seasonsDeleted: row.seasons_deleted }
+  const result = data as { success?: boolean; seasons_deleted?: number; error?: string } | null
+  if (result?.error) throw new Error(result.error)
+  return { success: result?.success === true, seasonsDeleted: result?.seasons_deleted ?? 0 }
 }
 
 export async function getSeasons(championshipId: string): Promise<SeasonRow[]> {
@@ -80,6 +86,13 @@ export async function getSeasons(championshipId: string): Promise<SeasonRow[]> {
     .eq('championship_id', championshipId)
     .order('year', { ascending: false })
     .returns<SeasonRow[]>()
+  if (error) throw error
+  return data ?? []
+}
+
+/** Every season in a league (across championships) — the active-season limit counts across championships. */
+export async function getLeagueSeasons(leagueId: string): Promise<SeasonRow[]> {
+  const { data, error } = await supabase.from('seasons').select('*').eq('league_id', leagueId).returns<SeasonRow[]>()
   if (error) throw error
   return data ?? []
 }

@@ -1,47 +1,73 @@
-import { useState } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { useTheme } from '@/hooks/useTheme'
+import { setChampionshipAccent, useAppearance } from '@/hooks/useAppearance'
+import { getChampionships } from '@/services/championships'
 import { ROLE_LABEL } from '@/permissions/resolver'
 import { SiteFooter } from '@/components/LegalLinks'
-
-interface NavItem {
-  to: string
-  label: string
-  show: boolean
-}
+import { ChampionAwardHost } from '@/components/ChampionAwardHost'
+import { useEntitlement } from '@/hooks/useEntitlement'
+import { isItemActive, mainNavigation, subNavigation } from '@/components/navigation'
 
 export function Layout() {
   const { signOut } = useAuth()
   const { leagues, selectedLeague, selectLeague, permissions } = useLeagueSession()
   const { isDark, toggle: toggleTheme } = useTheme()
+  const { settings: appearance } = useAppearance()
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const navItems: NavItem[] = [
-    { to: '/dashboard', label: 'Home', show: true },
-    { to: '/championships', label: 'Championship', show: true },
-    { to: '/race-weekend', label: 'Race Weekend', show: true },
-    { to: '/standings', label: 'Standings', show: true },
-    { to: '/predictions', label: 'Predictions', show: true },
-    { to: '/drivers', label: 'Drivers', show: true },
-    { to: '/tracks', label: 'Tracks', show: true },
-    { to: '/admin', label: 'Administration', show: permissions.usesAdminShell },
-    { to: '/account', label: 'Settings', show: true },
-  ]
+  const { hasAccess } = useEntitlement()
+  const { pathname } = useLocation()
+  const navItems = mainNavigation(permissions)
+  const activeItem = navItems.find((item) => isItemActive(item, pathname)) ?? null
+  const subItems = activeItem ? subNavigation(activeItem.key, permissions) : []
+
+  // "Championship Colors" follows the active championship of the selected league (fetched only when that source is chosen).
+  const leagueId = selectedLeague?.league.id ?? null
+  useEffect(() => {
+    if (appearance.source !== 'championshipColors' || !leagueId) {
+      setChampionshipAccent(null)
+      return
+    }
+    let cancelled = false
+    getChampionships(leagueId)
+      .then((list) => {
+        if (cancelled) return
+        const active = list.find((c) => c.is_active) ?? list.find((c) => c.status === 'active') ?? null
+        setChampionshipAccent(active?.accent_color_hex ?? active?.primary_color_hex ?? null)
+      })
+      .catch(() => !cancelled && setChampionshipAccent(null))
+    return () => {
+      cancelled = true
+    }
+  }, [appearance.source, leagueId])
+
+  // Close the mobile menu whenever the route changes.
+  useEffect(() => setMenuOpen(false), [pathname])
 
   return (
     <div className="flex min-h-screen flex-col">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded-lg focus:px-3 focus:py-2"
+        style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-accent-contrast)' }}
+      >
+        Skip to content
+      </a>
       <header
         className="sticky top-0 z-20 border-b backdrop-blur"
         style={{ borderColor: 'var(--color-border)', backgroundColor: 'color-mix(in srgb, var(--color-surface) 92%, transparent)' }}
       >
         <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3">
           <button
-            className="rounded-lg border px-2.5 py-1.5 text-sm md:hidden"
+            className="rounded-lg border px-2.5 py-1.5 text-sm xl:hidden"
             style={{ borderColor: 'var(--color-border)' }}
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
           >
             ☰
           </button>
@@ -62,27 +88,28 @@ export function Layout() {
             </select>
           )}
 
-          <nav className="ml-auto hidden items-center gap-1 md:flex">
-            {navItems
-              .filter((item) => item.show)
-              .map((item) => (
-                <NavLink
-                  key={item.to}
+          <nav aria-label="Main" className="ml-auto hidden items-center gap-0.5 xl:flex">
+            {navItems.map((item) => {
+              const active = isItemActive(item, pathname)
+              return (
+                <Link
+                  key={item.key}
                   to={item.to}
-                  className={({ isActive }) =>
-                    `rounded-lg px-3 py-1.5 text-sm font-medium ${isActive ? '' : 'opacity-70 hover:opacity-100'}`
-                  }
-                  style={({ isActive }) => ({
-                    backgroundColor: isActive ? 'var(--color-accent)' : 'transparent',
-                    color: isActive ? 'var(--color-accent-contrast)' : 'var(--color-text)',
-                  })}
+                  aria-current={active ? 'page' : undefined}
+                  className={`flex items-center gap-1 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm font-medium ${active ? '' : 'opacity-70 hover:opacity-100'}`}
+                  style={{
+                    backgroundColor: active ? 'var(--color-accent)' : 'transparent',
+                    color: active ? 'var(--color-accent-contrast)' : 'var(--color-text)',
+                  }}
                 >
                   {item.label}
-                </NavLink>
-              ))}
+                  {item.premium && !hasAccess && <span className="rounded bg-[var(--color-warning)] px-1 text-[10px] font-bold text-black">PRO</span>}
+                </Link>
+              )
+            })}
           </nav>
 
-          <div className="ml-auto flex items-center gap-2 md:ml-0">
+          <div className="ml-auto flex items-center gap-2 xl:ml-0">
             {selectedLeague && (
               <span className="hidden text-xs sm:inline" style={{ color: 'var(--color-text-muted)' }}>
                 {selectedLeague.roles.map((r) => ROLE_LABEL[r]).join(' · ')}
@@ -108,26 +135,53 @@ export function Layout() {
         </div>
 
         {menuOpen && (
-          <nav className="flex flex-col gap-1 border-t px-4 py-2 md:hidden" style={{ borderColor: 'var(--color-border)' }}>
-            {navItems
-              .filter((item) => item.show)
-              .map((item) => (
-                <NavLink
-                  key={item.to}
+          <nav id="mobile-navigation" aria-label="Main" className="flex flex-col gap-1 border-t px-4 py-2 xl:hidden" style={{ borderColor: 'var(--color-border)' }}>
+            {navItems.map((item) => {
+              const active = isItemActive(item, pathname)
+              return (
+                <Link
+                  key={item.key}
                   to={item.to}
-                  onClick={() => setMenuOpen(false)}
-                  className="rounded-lg px-3 py-2 text-sm font-medium"
+                  aria-current={active ? 'page' : undefined}
+                  className="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium"
+                  style={{
+                    backgroundColor: active ? 'var(--color-accent)' : 'transparent',
+                    color: active ? 'var(--color-accent-contrast)' : 'var(--color-text)',
+                  }}
                 >
                   {item.label}
-                </NavLink>
-              ))}
+                  {item.premium && !hasAccess && <span className="rounded bg-[var(--color-warning)] px-1 text-[10px] font-bold text-black">PRO</span>}
+                </Link>
+              )
+            })}
+          </nav>
+        )}
+
+        {subItems.length > 1 && (
+          <nav aria-label={`${activeItem?.label} sections`} className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 pb-2">
+            {subItems.map((sub) => (
+              <NavLink
+                key={sub.to}
+                to={sub.to}
+                end
+                className="whitespace-nowrap rounded-full border px-3 py-1 text-xs font-medium"
+                style={({ isActive }) => ({
+                  borderColor: isActive ? 'var(--color-accent)' : 'var(--color-border)',
+                  backgroundColor: isActive ? 'var(--color-accent)' : 'transparent',
+                  color: isActive ? 'var(--color-accent-contrast)' : 'var(--color-text)',
+                })}
+              >
+                {sub.label}
+              </NavLink>
+            ))}
           </nav>
         )}
       </header>
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
+      <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
         <Outlet />
       </main>
+      <ChampionAwardHost />
       <SiteFooter />
     </div>
   )

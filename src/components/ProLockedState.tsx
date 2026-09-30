@@ -4,8 +4,8 @@ import { Badge } from './Badge'
 import { Button } from './Button'
 import { useEntitlement } from '@/hooks/useEntitlement'
 import { formatDateTime } from '@/utils/format'
+import { APP_STORE_URL } from '@/config/links'
 
-const APP_STORE_URL = 'https://apps.apple.com/us/app/vrc-ops/id6780654622'
 
 interface ProLockedStateProps {
   title?: string

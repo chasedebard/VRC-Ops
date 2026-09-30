@@ -1,9 +1,8 @@
 /**
- * Row shapes for the VRC Supabase schema, hand-derived from the migration SQL in
- * /Users/chasedebard/RFSRaceControl/supabase/migrations (read-only reference —
- * see docs/XCODE_SOURCE_ANALYSIS.md for the full analysis). Not generated via
- * `supabase gen types`; regenerate from the CLI if project access is available,
- * since hand-written types can drift from the live schema.
+ * Row shapes for the VRC Supabase schema. Hand-maintained (not `supabase gen types`), but reconciled
+ * against the LIVE project schema (information_schema + pg_policies + pg_proc) and the vrc-platform
+ * migrations through `20260930130000_standing_awards` — see docs/IOS_PARITY.md for the audit date and
+ * the contract notes. Regenerate and diff when the backend changes.
  */
 
 export type VrcRole = 'owner' | 'admin' | 'marshal' | 'driver' | 'viewer'
@@ -67,10 +66,14 @@ export interface ProfileRow {
   first_name: string | null
   last_name: string | null
   avatar_url: string | null
+  /** Versioned account-avatar Storage path (migration 20260826130000_user_avatar_versioned_path). */
+  avatar_storage_path: string | null
   profile_completed: boolean
   created_at: string
   updated_at: string
 }
+
+export type LeagueSetupState = 'pending_setup' | 'complete'
 
 export interface LeagueRow {
   id: string
@@ -79,6 +82,8 @@ export interface LeagueRow {
   logo_url: string | null
   owner_id: string
   status: LeagueStatus
+  /** `pending_setup` until the owner finishes the guided championship + first-season flow. */
+  setup_state: LeagueSetupState
   created_at: string
   updated_at: string
 }
@@ -180,6 +185,12 @@ export interface ChampionshipRow {
   practice_capture_enabled: boolean
   ai_enabled: boolean
   replay_enabled: boolean
+  primary_color_hex: string | null
+  secondary_color_hex: string | null
+  accent_color_hex: string | null
+  /** True for the championship the league currently runs as its active context. */
+  is_active: boolean
+  logo_storage_path: string | null
   created_at: string
   updated_at: string
 }
@@ -218,6 +229,12 @@ export interface ClassRow {
   description: string | null
   display_order: number
   is_active: boolean
+  /** GT7 leagues: the canonical group (Gr.B/4/3/2/1/X) this class maps to. */
+  system_key: string | null
+  /** True for a system-owned canonical GT7 group row (managed only by `vrc_set_gt7_league_groups`). */
+  is_system: boolean
+  /** Whether the league currently races this mapped group. */
+  system_selected: boolean
   created_at: string
   updated_at: string
 }
@@ -230,6 +247,9 @@ export interface RegionRow {
   description: string | null
   display_order: number
   is_active: boolean
+  /** Canonical system regions are read-only for clients (RLS requires is_system = false to write). */
+  is_system: boolean
+  system_key: string | null
   created_at: string
   updated_at: string
 }
@@ -260,7 +280,8 @@ export interface DriverRow {
   display_name: string
   first_name: string | null
   last_name: string | null
-  driver_number: number | null
+  /** Text in the live schema (`drivers.driver_number text`). */
+  driver_number: string | null
   image_url: string | null
   bio: string | null
   platform_id: string | null
@@ -270,6 +291,9 @@ export interface DriverRow {
   region_id: string | null
   is_active: boolean
   profile_image_path: string | null
+  /** Self-service number request (alphanumeric, ≤ 4 chars); an Owner/Admin approves or rejects it. */
+  requested_driver_number: string | null
+  driver_number_request_status: 'pending' | 'approved' | 'rejected' | null
   created_at: string
   updated_at: string
 }
@@ -282,7 +306,7 @@ export interface SeasonDriverRow {
   team_id: string | null
   class_id: string | null
   region_id: string | null
-  number_override: number | null
+  number_override: string | null
   is_active: boolean
   joined_round: number | null
   left_round: number | null
@@ -359,7 +383,8 @@ export interface EventRow {
   championship_id: string
   season_id: string
   round: number
-  title: string | null
+  /** NOT NULL in the live schema (track-generated title). */
+  title: string
   custom_title: string | null
   track_id: string | null
   track_layout: string | null
@@ -407,6 +432,7 @@ export interface EventSessionRow {
   state: SessionState
   version: number
   override_active: boolean
+  practice_started_at: string | null
   qualifying_started_at: string | null
   qualifying_ended_at: string | null
   race_started_at: string | null
@@ -498,6 +524,14 @@ export interface RaceResultRow {
   fastest_lap: boolean
   earned_pole: boolean
   pole_manually_overridden: boolean
+  /** How a non-winner's deficit to the class leader is recorded: elapsed time or whole laps down. */
+  gap_type: 'time' | 'laps' | null
+  /** Milliseconds for `time`, whole laps (≥ 1) for `laps`. */
+  gap_value: number | null
+  gap_laps: number | null
+  /** True for a server-seeded grid row from finalized qualifying — it must be completed before the race can be saved. */
+  is_grid_seed: boolean
+  start_position_manually_overridden: boolean
   status: RaceResultStatus
   bonus_points: number
   penalty_points: number
@@ -719,7 +753,7 @@ export interface PredictionRunRow {
 export interface PredictionEvaluationRow {
   id: string
   league_id: string
-  prediction_run_id: string
+  prediction_run_id: string | null
   season_id: string | null
   event_id: string | null
   category: string
@@ -736,7 +770,17 @@ export interface PredictionEvaluationRow {
 /** Personal ("VRC Ops Pro") status; league-wide status also uses this enum plus 'pending_verification'. */
 export type SubscriptionStatus = 'active' | 'grace_period' | 'billing_retry' | 'expired' | 'revoked'
 export type LeagueSubscriptionStatus = SubscriptionStatus | 'pending_verification'
-export type SubscriptionEnvironment = 'Sandbox' | 'Production' | 'Xcode' | 'LocalTesting'
+/**
+ * `ChampionGrant` (World Champion quarterly reward) and `AndroidPlatformGrant` are backend-issued complimentary grants
+ * with no Apple transaction behind them — there is nothing to manage in the App Store for either.
+ */
+export type SubscriptionEnvironment =
+  | 'Sandbox'
+  | 'Production'
+  | 'Xcode'
+  | 'LocalTesting'
+  | 'ChampionGrant'
+  | 'AndroidPlatformGrant'
 
 /** Individual "VRC Ops Pro" entitlement, written only by the verify-subscription/apple-notifications Edge Functions. */
 export interface SubscriptionRow {
@@ -769,6 +813,124 @@ export interface LeagueSubscriptionRow {
   renewal_state: string | null
   environment: SubscriptionEnvironment
   last_verified_at: string
+  created_at: string
+  updated_at: string
+}
+
+
+// ---- Newer backend tables (live schema, post-2026-07) -------------------------------------------------
+
+export type StandingAwardScope = 'overall' | 'class' | 'region' | 'team' | string
+export type StandingAwardStatus = 'clinched' | 'champion' | 'ended' | 'revoked' | string
+
+/** Series trophy/clinch ledger written through `vrc_sync_series_awards`; readable by every league member. */
+export interface StandingAwardRow {
+  id: string
+  league_id: string
+  championship_id: string
+  season_id: string
+  driver_id: string
+  scope: StandingAwardScope
+  scope_id: string | null
+  status: StandingAwardStatus
+  points: number
+  clinched_round: number | null
+  clinched_event_id: string | null
+  final_round: number | null
+  result_set_id: string | null
+  result_revision: number | null
+  awarded_at: string
+  finalized_at: string | null
+  ended_at: string | null
+  end_reason: string | null
+  created_at: string
+  updated_at: string
+}
+
+/** Authoritative season rival relationship (migration 20260906193000_season_driver_rivals_v1). */
+export interface SeasonDriverRivalRow {
+  id: string
+  league_id: string
+  championship_id: string
+  season_id: string
+  driver_id: string
+  rival_driver_id: string | null
+  algorithm_version: string
+  strength: number | null
+  closeness: number | null
+  contested: number | null
+  consistency: number | null
+  title_gap: number | null
+  shared_races: number
+  subject_ahead: number
+  rival_since_round: number | null
+  previous_rival_driver_id: string | null
+  as_of_round: number
+  computed_at: string
+}
+
+export interface LeagueAnnouncementRow {
+  id: string
+  league_id: string
+  author_membership_id: string
+  title: string
+  body: string
+  created_at: string
+  updated_at: string
+}
+
+export interface LeaguePlusSeatRow {
+  id: string
+  league_id: string
+  membership_id: string
+  granted_by: string
+  granted_at: string
+}
+
+export interface PredictionJobRow {
+  id: string
+  championship_id: string
+  season_id: string
+  event_id: string | null
+  reason: string
+  status: 'pending' | 'running' | 'completed' | 'failed' | string
+  attempts: number
+  created_at: string
+  started_at: string | null
+  completed_at: string | null
+  updated_at: string
+  error: string | null
+}
+
+export interface DriverRatingRecordRow {
+  id: string
+  league_id: string
+  championship_id: string | null
+  season_id: string | null
+  driver_id: string | null
+  driver_name: string
+  rating_value: number
+  race_craft: number
+  consistency: number
+  qualifying: number | null
+  confidence: string
+  component_summary: string
+  model_version: string
+  source_signature: string
+  source_data_cutoff: string | null
+  previous_rating_value: number | null
+  change_from_previous: number
+  calculated_at: string
+  created_at: string
+}
+
+export interface EventDriverDnsRow {
+  id: string
+  event_id: string
+  driver_id: string
+  league_id: string
+  is_dns: boolean
+  marked_by: string | null
   created_at: string
   updated_at: string
 }

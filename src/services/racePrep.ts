@@ -100,3 +100,18 @@ export function buildRacePrepLeaderboard(
     return a.displayName.localeCompare(b.displayName)
   })
 }
+
+/**
+ * Telemetry-derived qualifying candidates (`rw_qualifying_candidates`) — the fastest representative lap per driver from
+ * uploaded capture summaries. They only PREFILL empty best laps in an editable draft; saved/official times are never overwritten
+ * and missing telemetry never blocks manual entry.
+ */
+export async function getQualifyingCandidates(eventId: string): Promise<{ driver_id: string; fastest_ms: number }[]> {
+  const { data, error } = await supabase
+    .from('rw_qualifying_candidates')
+    .select('driver_id, fastest_ms')
+    .eq('event_id', eventId)
+  if (error) throw error
+  return ((data ?? []) as { driver_id: string; fastest_ms: number | null }[])
+    .filter((r): r is { driver_id: string; fastest_ms: number } => r.fastest_ms != null)
+}

@@ -1,5 +1,5 @@
 import { supabase } from '@/supabase/client'
-import type { EventSessionNoteRow, EventSessionRow, SessionState } from '@/types/database'
+import type { EventSessionAuditRow, EventSessionNoteRow, EventSessionRow, SessionState } from '@/types/database'
 
 export async function getEventSession(eventId: string): Promise<EventSessionRow | null> {
   const { data, error } = await supabase
@@ -74,4 +74,17 @@ export async function addSessionNote(
     .from('event_session_notes')
     .insert({ event_id: eventId, league_id: leagueId, note })
   if (error) throw error
+}
+
+/** Owner/Admin/Marshal only (RLS): every state transition, including authorized overrides with their reason. */
+export async function getSessionAudit(eventId: string): Promise<EventSessionAuditRow[]> {
+  const { data, error } = await supabase
+    .from('event_session_audit')
+    .select('*')
+    .eq('event_id', eventId)
+    .order('created_at', { ascending: false })
+    .limit(50)
+    .returns<EventSessionAuditRow[]>()
+  if (error) throw error
+  return data ?? []
 }

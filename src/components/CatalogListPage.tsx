@@ -12,6 +12,8 @@ interface CatalogRow {
   name: string
   abbreviation: string | null
   is_active: boolean
+  /** System-owned rows (canonical regions) are read-only; the backend rejects edits to them. */
+  is_system?: boolean
 }
 
 interface CatalogService<T extends CatalogRow> {
@@ -83,7 +85,7 @@ export function CatalogListPage<T extends CatalogRow>({
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">{title}</h1>
 
-      {permissions.canManageMembers && (
+      {permissions.canManageSetup && (
         <Card>
           <form onSubmit={handleCreate} className="grid gap-3 sm:grid-cols-3 sm:items-end">
             <Field label="Name" required value={name} onChange={(e) => setName(e.target.value)} />
@@ -115,8 +117,9 @@ export function CatalogListPage<T extends CatalogRow>({
                   {item.name} {item.abbreviation ? `(${item.abbreviation})` : ''}
                 </span>
                 <div className="flex items-center gap-2">
+                  {item.is_system && <Badge tone="neutral">System</Badge>}
                   {!item.is_active && <Badge tone="warning">Inactive</Badge>}
-                  {permissions.canManageMembers && (
+                  {permissions.canManageSetup && !item.is_system && (
                     <Button variant="secondary" onClick={() => toggle(item)} disabled={busy}>
                       {item.is_active ? 'Set inactive' : 'Set active'}
                     </Button>

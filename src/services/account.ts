@@ -47,3 +47,21 @@ export function purgeLocalSessionData(): void {
   supabase.removeAllChannels()
   window.localStorage.removeItem('vrc-pending-invite')
 }
+
+/**
+ * Authenticated password change, two steps (mirrors iOS `VRCChangePasswordStore`): request an emailed verification
+ * code (`auth.reauthenticate`), then submit the new password with that code as the nonce. Neither step re-derives the
+ * session's authentication assurance level, so this is safe while the session is MFA-elevated.
+ */
+export async function requestPasswordChangeCode(): Promise<void> {
+  const { error } = await supabase.auth.reauthenticate()
+  if (error) throw error
+}
+
+export async function changePassword(newPassword: string, confirmation: string, nonce: string): Promise<void> {
+  if (newPassword.length < 8) throw new Error('Password must be at least 8 characters.')
+  if (newPassword !== confirmation) throw new Error('Passwords do not match.')
+  if (!nonce.trim()) throw new Error('Enter the verification code we emailed you.')
+  const { error } = await supabase.auth.updateUser({ password: newPassword, nonce: nonce.trim() })
+  if (error) throw error
+}

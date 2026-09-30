@@ -1,4 +1,5 @@
 import { supabase } from '@/supabase/client'
+import { pickRelevantSubscription } from '@/utils/subscriptionModel'
 import type { LeagueSubscriptionRow, SubscriptionRow } from '@/types/database'
 
 /**
@@ -20,21 +21,18 @@ export async function getLeaguePremiumAccess(leagueId: string): Promise<boolean>
 }
 
 /**
- * A user can have more than one historical `subscriptions` row (a new
- * original_transaction_id per re-subscribe); the most relevant one to display
- * is whichever expires latest, matching iOS's `max(by: expirationDate)` pick
- * among entitled snapshots.
+ * A user can have more than one historical `subscriptions` row (a new original_transaction_id per re-subscribe, plus
+ * backend-issued grants); the relevant one to display is an entitled row if any, else whichever expires last —
+ * matching iOS's pick among entitled snapshots.
  */
 export async function getMySubscription(userId: string): Promise<SubscriptionRow | null> {
   const { data, error } = await supabase
     .from('subscriptions')
     .select('*')
     .eq('user_id', userId)
-    .order('expires_at', { ascending: false, nullsFirst: false })
-    .limit(1)
-    .maybeSingle()
+    .returns<SubscriptionRow[]>()
   if (error) throw error
-  return data
+  return pickRelevantSubscription(data ?? [])
 }
 
 export async function getLeagueSubscription(leagueId: string): Promise<LeagueSubscriptionRow | null> {
@@ -42,9 +40,7 @@ export async function getLeagueSubscription(leagueId: string): Promise<LeagueSub
     .from('league_subscriptions')
     .select('*')
     .eq('league_id', leagueId)
-    .order('expires_at', { ascending: false, nullsFirst: false })
-    .limit(1)
-    .maybeSingle()
+    .returns<LeagueSubscriptionRow[]>()
   if (error) throw error
-  return data
+  return pickRelevantSubscription(data ?? [])
 }
