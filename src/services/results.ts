@@ -7,6 +7,7 @@ import type {
   ResultAuditRow,
   ResultKind,
   ResultSetRow,
+  ScoreAdjustmentRow,
 } from '@/types/database'
 
 export async function getResultSet(
@@ -166,6 +167,30 @@ export async function issuePenalty(
     .single()
   if (error) throw error
   return data
+}
+
+export async function getScoreAdjustments(eventId: string): Promise<ScoreAdjustmentRow[]> {
+  const { data, error } = await supabase
+    .from('score_adjustments')
+    .select('*')
+    .eq('event_id', eventId)
+    .order('created_at', { ascending: false })
+    .returns<ScoreAdjustmentRow[]>()
+  if (error) throw error
+  return data ?? []
+}
+
+/** Manual per-driver point adjustments stay separate from earned points and always carry a recorded reason. */
+export async function addScoreAdjustment(draft: {
+  event_id: string
+  league_id: string
+  driver_id: string
+  points_delta: number
+  reason: string
+  acting_user: string
+}): Promise<void> {
+  const { error } = await supabase.from('score_adjustments').insert(draft)
+  if (error) throw error
 }
 
 export async function getResultAudit(eventId: string): Promise<ResultAuditRow[]> {

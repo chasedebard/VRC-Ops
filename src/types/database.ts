@@ -520,6 +520,14 @@ export interface RaceResultRow {
   fastest_lap: boolean
   earned_pole: boolean
   pole_manually_overridden: boolean
+  /** How a non-winner's deficit to the class leader is recorded: elapsed time or whole laps down. */
+  gap_type: 'time' | 'laps' | null
+  /** Milliseconds for `time`, whole laps (≥ 1) for `laps`. */
+  gap_value: number | null
+  gap_laps: number | null
+  /** True for a server-seeded grid row from finalized qualifying — it must be completed before the race can be saved. */
+  is_grid_seed: boolean
+  start_position_manually_overridden: boolean
   status: RaceResultStatus
   bonus_points: number
   penalty_points: number
