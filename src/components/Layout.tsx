@@ -62,7 +62,7 @@ export function Layout() {
       >
         <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3">
           <button
-            className="rounded-lg border px-2.5 py-1.5 text-sm lg:hidden"
+            className="rounded-lg border px-2.5 py-1.5 text-sm xl:hidden"
             style={{ borderColor: 'var(--color-border)' }}
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle navigation"
@@ -88,7 +88,7 @@ export function Layout() {
             </select>
           )}
 
-          <nav aria-label="Main" className="ml-auto hidden items-center gap-0.5 lg:flex">
+          <nav aria-label="Main" className="ml-auto hidden items-center gap-0.5 xl:flex">
             {navItems.map((item) => {
               const active = isItemActive(item, pathname)
               return (
@@ -96,7 +96,7 @@ export function Layout() {
                   key={item.key}
                   to={item.to}
                   aria-current={active ? 'page' : undefined}
-                  className={`flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium ${active ? '' : 'opacity-70 hover:opacity-100'}`}
+                  className={`flex items-center gap-1 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm font-medium ${active ? '' : 'opacity-70 hover:opacity-100'}`}
                   style={{
                     backgroundColor: active ? 'var(--color-accent)' : 'transparent',
                     color: active ? 'var(--color-accent-contrast)' : 'var(--color-text)',
@@ -109,7 +109,7 @@ export function Layout() {
             })}
           </nav>
 
-          <div className="ml-auto flex items-center gap-2 lg:ml-0">
+          <div className="ml-auto flex items-center gap-2 xl:ml-0">
             {selectedLeague && (
               <span className="hidden text-xs sm:inline" style={{ color: 'var(--color-text-muted)' }}>
                 {selectedLeague.roles.map((r) => ROLE_LABEL[r]).join(' · ')}
@@ -135,7 +135,7 @@ export function Layout() {
         </div>
 
         {menuOpen && (
-          <nav id="mobile-navigation" aria-label="Main" className="flex flex-col gap-1 border-t px-4 py-2 lg:hidden" style={{ borderColor: 'var(--color-border)' }}>
+          <nav id="mobile-navigation" aria-label="Main" className="flex flex-col gap-1 border-t px-4 py-2 xl:hidden" style={{ borderColor: 'var(--color-border)' }}>
             {navItems.map((item) => {
               const active = isItemActive(item, pathname)
               return (

@@ -167,11 +167,16 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-2xl font-bold">{dashboard.championship.name}</h1>
-        <p className="text-sm" style={muted}>
-          {dashboard.season.name} · {selectedLeague.league.name} · {selectedLeague.roles.map((r) => ROLE_LABEL[r]).join(' · ')}
-        </p>
+      <div className="flex items-center gap-3">
+        {/^https?:\/\//i.test(dashboard.championship.logo_url ?? '') && (
+          <img src={dashboard.championship.logo_url as string} alt="Championship logo" className="h-12 w-12 rounded-lg border object-contain p-1" style={{ borderColor: 'var(--color-border)' }} />
+        )}
+        <div>
+          <h1 className="text-2xl font-bold">{dashboard.championship.name}</h1>
+          <p className="text-sm" style={muted}>
+            {dashboard.season.name} · {selectedLeague.league.name} · {selectedLeague.roles.map((r) => ROLE_LABEL[r]).join(' · ')}
+          </p>
+        </div>
       </div>
 
       <SetupWarningBanner items={dashboard.warnings} />
@@ -247,8 +252,16 @@ function DriverSection({ data, quickActions }: { data: DashboardData; quickActio
           </CardHeader>
           {standing ? (
             <ul className="space-y-1 text-sm">
-              {data.standings[0] && data.standings[0].driverId !== mine.driver.id && <li>Leader: <strong>{data.standings[0].name}</strong> ({battle.gapToLeader} pts ahead)</li>}
-              {battle.driverBehind && <li>Behind you: <strong>{battle.driverBehind.name}</strong> ({battle.gapBehind} pts back)</li>}
+              {data.standings[0] && data.standings[0].driverId !== mine.driver.id && (
+                <li>
+                  Leader: <strong>{data.standings[0].name}</strong> ({battle.gapToLeader ? `${battle.gapToLeader} pts ahead` : 'level on points'})
+                </li>
+              )}
+              {battle.driverBehind && (
+                <li>
+                  Behind you: <strong>{battle.driverBehind.name}</strong> ({battle.gapBehind ? `${battle.gapBehind} pts back` : 'level on points'})
+                </li>
+              )}
               {mine.rivalName && <li>Rival: <strong>{mine.rivalName}</strong>{mine.rivalRecord ? <span style={muted}> — {mine.rivalRecord}</span> : null}</li>}
               {standing.averageFinish !== null && <li style={muted}>Average finish {standing.averageFinish.toFixed(1)}</li>}
             </ul>

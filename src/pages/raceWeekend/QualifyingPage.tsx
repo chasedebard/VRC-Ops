@@ -196,6 +196,11 @@ export default function QualifyingPage() {
           {issue}
         </p>
       )}
+      {canEdit && (
+        <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          Importing qualifying from a photo of the game&apos;s results screen is available in the VRC Ops iPhone/iPad app (VRC Ops Pro). On the web, enter times by hand.
+        </p>
+      )}
       {message && (
         <p role="status" className="text-sm" style={{ color: 'var(--color-success)' }}>
           {message}

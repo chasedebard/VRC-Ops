@@ -74,8 +74,8 @@ export function EventEditor({
   }
 
   return (
-    <Modal title={title} onClose={() => !busy && onClose()} dismissible={!busy}>
-      <form onSubmit={submit} className="max-h-[75vh] space-y-4 overflow-y-auto pr-1">
+    <Modal title={title} onClose={() => !busy && onClose()} dismissible={!busy} size="lg">
+      <form onSubmit={submit} className="space-y-4">
         <fieldset className="space-y-3">
           <legend className="text-sm font-semibold">Track</legend>
           <Field label="Search tracks" type="search" value={trackSearch} onChange={(e) => setTrackSearch(e.target.value)} />

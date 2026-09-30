@@ -1,5 +1,13 @@
 # Xcode Source Analysis
 
+> **Historical snapshot.** This document records how the native app was first mapped onto the website. It is **superseded by
+> [`docs/IOS_PARITY.md`](IOS_PARITY.md)**, which reflects the current iOS registry, backend and website. Claims below that are no longer
+> true: viewer codes (removed from the backend), client-side prediction engine (predictions are now server-calculated and only read),
+> "MFA is not enforced at the database" (every table now has a restrictive `aal2` policy), "results save sends client-computed
+> standings" (the server writes `scoring_outputs`; standings are computed on load), the simplified class-strength/track-history
+> prediction factors (removed with the client engine), and the Home dashboard description (now a port of the iOS role-aware composer).
+
+
 This document records what was reviewed in the RFS Race Control (VRC) Xcode app at
 `/Users/chasedebard/RFSRaceControl` (read-only reference — never modified) to build the
 vrc-ops.org website, and how each area maps onto the web implementation in this repository.

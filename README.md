@@ -20,7 +20,10 @@ VRC is built for sim racing league organizers, race directors, and stewards who 
 - **Events & race weekends** — schedule events and race weekends tied to a season and a track.
 - **Qualifying & race results** — enter qualifying results (best lap, gaps, grid adjustments, penalties) and race results (finishing order, gaps, status such as DNS/DNF/DSQ, pole position, and fastest lap), with pole position auto-filled from qualifying.
 - **Standings** — automatically computed championship standings, including breakdowns by class, region, and team where a championship enables them, with round-over-round movement indicators.
-- **Predictions & forecasts** — a deterministic odds/prediction engine for race winner/podium/pole/fastest-lap, plus a championship forecast (clinch/magic-number/elimination math) scoped to overall, class, or regional standings, and a points-trend chart on driver profiles.
+- **Predictions & forecasts** — server-calculated race and championship odds (model `VRC-Odds-v3-hybrid`) read from the backend, with movement, accuracy against official results, and an Owner/Admin recompute request. Requires Pro / League Plus and AI consent.
+- **Driver profiles & Trophy Case** — season card, recent form, Pro career analytics (trend, placements, milestones, records, track/class history), the gemstone-tier Trophy Case, the redacted Global Rating badge, and "My Driver" self-service.
+- **Pit Wall (read-only on the web)** — the canonical Pit Wall V3 overview, setup and run history saved by the apps, behind Pro / League Plus.
+- **Administration** — members and roles, driver-account assignment, invitations, announcements, League Plus seats, and the full championship / season / race setup.
 - **Telemetry Capture** — optionally parse local telemetry summaries (for example, from Gran Turismo 7 on PS5) to enrich results with lap and pace data.
 - **Live session state** — race control tooling to manage session status through an event, with an audit trail of transitions.
 
@@ -50,6 +53,8 @@ Available scripts:
 | `npm run preview`   | Serve the production build locally         |
 | `npm run typecheck` | `tsc` project-wide, no emit                |
 | `npm run lint`      | ESLint over the whole project              |
+| `npm test`          | Vitest unit + component tests (jsdom)      |
+| `npm run test:e2e`  | Playwright flows (needs a reachable backend) |
 
 ### Environment variables
 
@@ -72,7 +77,8 @@ Deployed to GitHub Pages at the custom domain **vrc-ops.org**. See [docs/DEPLOYM
 - [Privacy Policy](PRIVACY_POLICY.md) — what data VRC collects, how it's used, and your rights.
 - [Terms of Use](TERMS_OF_USE.md) — terms for accounts, leagues, content, and subscriptions.
 - [Support](SUPPORT.md) — getting started, tips for common workflows, and troubleshooting.
-- [docs/XCODE_SOURCE_ANALYSIS.md](docs/XCODE_SOURCE_ANALYSIS.md) — how the native app's screens, roles, data model, and business logic were mapped onto this website.
+- [docs/IOS_PARITY.md](docs/IOS_PARITY.md) — the current iOS ↔ website parity checklist, backend contract notes, cross-platform differences and remaining limitations.
+- [docs/XCODE_SOURCE_ANALYSIS.md](docs/XCODE_SOURCE_ANALYSIS.md) — historical snapshot of how the native app was first mapped onto this website (superseded by the parity doc).
 - [docs/WEB_LIMITATIONS.md](docs/WEB_LIMITATIONS.md) — what can't (or doesn't yet) run on GitHub Pages, and why.
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — GitHub Pages + custom domain deployment steps.
 - [docs/QA_CHECKLIST.md](docs/QA_CHECKLIST.md) — manual QA checklist by role.

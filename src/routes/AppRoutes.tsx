@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { ProtectedLayout } from '@/app/ProtectedLayout'
@@ -8,39 +9,41 @@ import UpdatePasswordPage from '@/pages/auth/UpdatePasswordPage'
 import AuthCallbackPage from '@/pages/auth/AuthCallbackPage'
 import InviteAcceptancePage from '@/pages/InviteAcceptancePage'
 import JoinPage from '@/pages/JoinPage'
-import GlobalRatingPage from '@/pages/account/GlobalRatingPage'
-import SubscriptionPage from '@/pages/account/SubscriptionPage'
-import LegalPrivacyPage from '@/pages/account/LegalPrivacyPage'
-import LeaguesPage from '@/pages/account/LeaguesPage'
-import LeaguePlusPage from '@/pages/admin/LeaguePlusPage'
-import DashboardPage from '@/pages/DashboardPage'
-import AccountPage from '@/pages/AccountPage'
-import ChampionshipsPage from '@/pages/championships/ChampionshipsPage'
-import ChampionshipDetailPage from '@/pages/championships/ChampionshipDetailPage'
-import SeasonDetailPage from '@/pages/championships/SeasonDetailPage'
-import SeasonTeamsPage from '@/pages/championships/SeasonTeamsPage'
-import SchedulePage, { TeamsRedirect } from '@/pages/championships/SchedulePage'
-import DriversPage from '@/pages/drivers/DriversPage'
-import DriverProfilePage from '@/pages/drivers/DriverProfilePage'
-import MyDriverPage from '@/pages/drivers/MyDriverPage'
-import TracksPage from '@/pages/catalog/TracksPage'
-import ClassesPage from '@/pages/catalog/ClassesPage'
-import RegionsPage from '@/pages/catalog/RegionsPage'
-import RaceWeekendHubPage from '@/pages/raceWeekend/RaceWeekendHubPage'
-import RaceWeekendEventPage from '@/pages/raceWeekend/RaceWeekendEventPage'
-import RacePrepPage from '@/pages/raceWeekend/RacePrepPage'
-import QualifyingPage from '@/pages/raceWeekend/QualifyingPage'
-import ResultsPage from '@/pages/raceWeekend/ResultsPage'
-import ResultsHubPage from '@/pages/raceWeekend/ResultsHubPage'
-import PitWallPage from '@/pages/pitWall/PitWallPage'
-import ResultsAuditLogPage from '@/pages/raceWeekend/ResultsAuditLogPage'
-import StandingsPage from '@/pages/standings/StandingsPage'
-import PredictionsPage from '@/pages/predictions/PredictionsPage'
-import AdminHubPage from '@/pages/admin/AdminHubPage'
-import MembersPage from '@/pages/admin/MembersPage'
-import InvitationsPage from '@/pages/admin/InvitationsPage'
-import AnnouncementsPage from '@/pages/admin/AnnouncementsPage'
+const GlobalRatingPage = lazy(() => import('@/pages/account/GlobalRatingPage'))
+const SubscriptionPage = lazy(() => import('@/pages/account/SubscriptionPage'))
+const LegalPrivacyPage = lazy(() => import('@/pages/account/LegalPrivacyPage'))
+const LeaguesPage = lazy(() => import('@/pages/account/LeaguesPage'))
+const LeaguePlusPage = lazy(() => import('@/pages/admin/LeaguePlusPage'))
+const DashboardPage = lazy(() => import('@/pages/DashboardPage'))
+const AccountPage = lazy(() => import('@/pages/AccountPage'))
+const ChampionshipsPage = lazy(() => import('@/pages/championships/ChampionshipsPage'))
+const ChampionshipDetailPage = lazy(() => import('@/pages/championships/ChampionshipDetailPage'))
+const SeasonDetailPage = lazy(() => import('@/pages/championships/SeasonDetailPage'))
+const SeasonTeamsPage = lazy(() => import('@/pages/championships/SeasonTeamsPage'))
+const SchedulePage = lazy(() => import('@/pages/championships/SchedulePage'))
+const TeamsRedirect = lazy(() => import('@/pages/championships/SchedulePage').then((m) => ({ default: m.TeamsRedirect })))
+const DriversPage = lazy(() => import('@/pages/drivers/DriversPage'))
+const DriverProfilePage = lazy(() => import('@/pages/drivers/DriverProfilePage'))
+const MyDriverPage = lazy(() => import('@/pages/drivers/MyDriverPage'))
+const TracksPage = lazy(() => import('@/pages/catalog/TracksPage'))
+const ClassesPage = lazy(() => import('@/pages/catalog/ClassesPage'))
+const RegionsPage = lazy(() => import('@/pages/catalog/RegionsPage'))
+const RaceWeekendHubPage = lazy(() => import('@/pages/raceWeekend/RaceWeekendHubPage'))
+const RaceWeekendEventPage = lazy(() => import('@/pages/raceWeekend/RaceWeekendEventPage'))
+const RacePrepPage = lazy(() => import('@/pages/raceWeekend/RacePrepPage'))
+const QualifyingPage = lazy(() => import('@/pages/raceWeekend/QualifyingPage'))
+const ResultsPage = lazy(() => import('@/pages/raceWeekend/ResultsPage'))
+const ResultsHubPage = lazy(() => import('@/pages/raceWeekend/ResultsHubPage'))
+const PitWallPage = lazy(() => import('@/pages/pitWall/PitWallPage'))
+const ResultsAuditLogPage = lazy(() => import('@/pages/raceWeekend/ResultsAuditLogPage'))
+const StandingsPage = lazy(() => import('@/pages/standings/StandingsPage'))
+const PredictionsPage = lazy(() => import('@/pages/predictions/PredictionsPage'))
+const AdminHubPage = lazy(() => import('@/pages/admin/AdminHubPage'))
+const MembersPage = lazy(() => import('@/pages/admin/MembersPage'))
+const InvitationsPage = lazy(() => import('@/pages/admin/InvitationsPage'))
+const AnnouncementsPage = lazy(() => import('@/pages/admin/AnnouncementsPage'))
 import { ProGate } from '@/components/ProGate'
+import { LoadingState } from '@/components/States'
 import LegalSupportPage from '@/pages/LegalSupportPage'
 
 function RootRedirect() {
@@ -51,6 +54,7 @@ function RootRedirect() {
 
 export function AppRoutes() {
   return (
+    <Suspense fallback={<LoadingState label="Loading…" />}>
     <Routes>
       <Route path="/" element={<RootRedirect />} />
 
@@ -133,5 +137,6 @@ export function AppRoutes() {
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </Suspense>
   )
 }

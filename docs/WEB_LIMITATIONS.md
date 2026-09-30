@@ -44,63 +44,32 @@ What the website does read (Race Prep, `src/services/racePrep.ts`):
 It never uploads telemetry of any kind, and there's no "Start capture" control — that's
 inherently local-device-only.
 
-## Features explicitly out of scope for v1
+## Features that are device-specific or not exposed
 
-These exist in the native app but are outside the product brief for the website and are not
-implemented:
+The full, current checklist — including what is complete — lives in [`docs/IOS_PARITY.md`](IOS_PARITY.md). In short, the website does
+**not** provide:
 
-- **AI Race Night** — story/podium-image generation, admin review/validation workflow.
-- **Race replay** — lap-by-lap animated playback and replay authoring.
-- **Share cards / image export** — 1080×1080 result/standings/story share images.
-- **Raw telemetry capture** — GT7 UDP packet capture itself (only parsed summaries are read).
-- **Scenario / what-if calculator** — the native `ScenarioCalculatorService` (project standings
-  impact if a specific driver finishes a hypothetical race with a chosen position/status/pole/
-  fastest-lap) is fully derivable from Supabase data but not yet built on the web. The
-  championship-forecast math it would reuse (`buildChampionshipForecast` in
-  `src/utils/predictions.ts`) is already ported, so this is mostly a UI/inputs exercise.
-- **Driver head-to-head compare** — `DriverHeadToHeadService`'s direct/all-time/grouped stat
-  comparison (record, average-finish delta, reliability, etc.) doesn't have a web screen yet.
-  Not derivability-blocked, just not built in this pass.
-- **Driver photo cropping** — upload works, but the native app's crop/framing controls
-  (`imageCropX/Y/Scale`) aren't replicated; the web upload always stores the image as-is.
+- **Native-only capture and import** — live GT7 telemetry / practice capture, photo import of results, Pit Wall garage arrival,
+  run capture and engineering-call evaluation. Pit Wall on the web is a read-only view of the state those flows already saved.
+- **Apple purchases** — the site shows entitlement status and links to the App Store; it never sells or processes a subscription.
+- **Hidden / coming-soon iOS features** — Race Replay, AI Race Weekend / Stint Review, Cloud Publishing, Finale, Stories, Driver
+  Comparison, and games other than GT7. They are absent (or shown disabled "Coming soon") exactly as the iOS feature registry says.
+- **Client-side odds or ratings** — predictions are read from server-calculated runs (`VRC-Odds-v3-hybrid`); the performance
+  rating shown is the latest stored snapshot, not a number the browser computes.
+- **Free-form photo cropping** — driver photos are centre-cropped and compressed before upload.
+- **Share cards / image export** and trophy artwork — iOS bundle assets and legacy views.
 
 ## Driver avatars: web-derived colors, not class colors
 
-The native app tints a driver's initials-fallback circle using their assigned class's color.
-The `classes` table in this schema has no `color` column (only `teams` does), so
-`src/components/DriverAvatar.tsx` instead derives a stable color per driver from a hash of their
-id. Visually similar (a colored initials circle), but a given driver's color won't match their
-class-mate's the way it does natively. If a `classes.color` column is added later, swap the hash
-in `colorForDriver()` for a lookup.
+The native app tints a driver's initials-fallback circle using their assigned class's color. The `classes` table has no `color`
+column the web reads, so `src/components/DriverAvatar.tsx` derives a stable color per driver from a hash of their id.
 
-## Predictions: simplified factor inputs
+## Standings: computed from `scoring_outputs`, like the native app
 
-The web prediction engine (`src/utils/predictions.ts`) ports the native app's next-race scoring
-formulas and confidence-decay curve, and separately ports `VRCForecastEngine`'s championship/
-class/region clinch-magic-number-elimination math exactly (`buildChampionshipForecast`) — see
-`docs/XCODE_SOURCE_ANALYSIS.md`. Two next-race factor inputs are deliberately simplified relative
-to `VRCPredictionEngineV2`:
-
-- **Class strength** is currently a flat placeholder (`0.5`) rather than computed from
-  class-relative field strength — the native engine's class-strength derivation depends on data
-  shapes (class-scoped standings history) that would need a follow-up pass to port faithfully.
-- **Track history / pace** does not incorporate the native app's replay-derived lap insights
-  (`PredictionLapInsights`), since race replay itself is out of scope. It uses
-  `driver_history.best_lap_ms` and pole/fastest-lap counts as a proxy for pace instead.
-
-Both are documented placeholders, not silent inaccuracies — if the native app's class-strength
-and replay-derived pace models are ported later, only `buildFactorInputs` in
-`src/utils/predictions.ts` needs to change; the scoring/confidence math already matches.
-
-## Standings: client-computed, like the native app
-
-Neither the native app nor the website recomputes standings server-side — both compute points,
-tiebreaks, and clinch/elimination client-side and persist the result via `vrc_save_results`
-(see `src/utils/scoring.ts`). This means a web-side race result save recomputes the *entire*
-season's cumulative standings from every event's `scoring_outputs`, exactly mirroring what the
-native app sends into the same RPC. If two people (native + web) tried to save results for the
-same event concurrently, the RPC's revision check (`p_expected_revision`) would reject the
-stale write — the same optimistic-concurrency behavior the native app relies on.
+Both platforms compute standings from the season's `scoring_outputs` when a screen loads (drop rounds, tie-breaks, Out / Clinched /
+Champion, series outcomes). The server writes `scoring_outputs` when results are saved (`vrc_save_results`), and Owner/Admin
+reconcile `standing_awards` with `vrc_sync_series_awards`. Known scoring differences between platforms are listed in
+`docs/IOS_PARITY.md`.
 
 ## Universal Links / associated domains
 
@@ -126,23 +95,16 @@ The Xcode-side config was updated in the `vrc-platform` repo separately, along w
 `send-league-invite` so invite emails default to `https://vrc-ops.org/invite/<token>` instead of
 the bare `vrc://` scheme — this website's `/invite/:token` page is that link's real destination.
 
-## Two-factor authentication is web-only, enforced client-side
+## Two-factor authentication
 
-The website requires TOTP MFA for every sign-in — the native app does not, and this is
-intentional (the user explicitly asked for extra security on the web version specifically).
-Enforcement lives entirely in `src/hooks/useMfaGate.ts` + `src/app/ProtectedLayout.tsx`, checking
-Supabase Auth's Authenticator Assurance Level (`getAuthenticatorAssuranceLevel()`) after email
-verification and before anything else in the app renders. No backend schema or RLS policy was
-touched: MFA factors are account-level in Supabase Auth, but nothing in this repo requires `aal2`
-at the database layer, so native sign-ins remain password-only and are completely unaffected.
-
-If backend-level enforcement (RLS policies requiring `aal2` for writes) is wanted later, that
-would need migrations in the RFSRaceControl Supabase project and corresponding MFA
-enrollment/challenge UI in the native app — out of scope here by design.
+The website requires TOTP MFA for every sign-in and the backend agrees: every table carries a **restrictive `aal2` RLS policy**, so a
+session that has not completed MFA can read nothing. The client gate (`src/hooks/useMfaGate.ts` + `src/app/ProtectedLayout.tsx`)
+checks the Authenticator Assurance Level after email verification and before anything else renders, so a user sees the enrollment or
+challenge screen instead of empty pages. Sensitive actions (Global Rating participation, the permanent driver ⇄ account link, the
+champion Apple offer) additionally ask for a **fresh** authenticator code immediately beforehand; the server re-verifies it.
 
 ## Schema types are hand-written, not generated
 
-`src/types/database.ts` was hand-derived from the migration SQL because no Supabase CLI/project
-access was available during this build to run `supabase gen types typescript`. It should be
-treated as a snapshot as of the migrations reviewed (through
-`20260703155125_league_invite_email_delivery.sql`) — regenerate and diff when possible.
+`src/types/database.ts` is hand-maintained (no `supabase gen types` run in CI). It was last reconciled against the live project's
+catalog and the `vrc-platform` migrations on 2026-09-30 (see the header note in that file and `docs/IOS_PARITY.md`). Regenerate and
+diff when the schema changes.

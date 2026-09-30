@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode } from 'react'
+import { useId, type InputHTMLAttributes, type ReactNode } from 'react'
 
 interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
@@ -6,7 +6,9 @@ interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function Field({ label, hint, id, className = '', ...props }: FieldProps) {
-  const inputId = id ?? label.toLowerCase().replace(/\s+/g, '-')
+  // A generated id keeps every label bound to its own input even when two forms with the same label are on screen.
+  const generatedId = useId()
+  const inputId = id ?? generatedId
   return (
     <label htmlFor={inputId} className="block text-sm">
       <span className="mb-1 block font-medium" style={{ color: 'var(--color-text)' }}>

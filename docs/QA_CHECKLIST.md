@@ -29,8 +29,10 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 - [ ] An invalid/expired code shows an inline error and does not proceed.
 - [ ] Account settings lists enrolled authenticator device(s) with a "Remove" option and an "Add
       another device" flow; removing the only device forces re-enrollment on the next sign-in.
-- [ ] Native iOS/Android sign-in is unaffected (MFA is enforced only in this web app's client-side
-      gate, not via backend RLS).
+- [ ] A session that has not completed MFA sees the enrollment/challenge screen, never empty pages
+      (the backend also rejects it with a restrictive `aal2` RLS policy).
+- [ ] Global Rating participation, the permanent driver ⇄ account link and the champion Apple offer each ask for a
+      fresh authenticator code immediately before the action.
 - [ ] Refreshing any authenticated route preserves the session (no forced re-login).
 - [ ] Visiting a protected route while signed out redirects to `/login`, not a blank page.
 
@@ -40,8 +42,9 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 - [ ] New account without legal acceptance is shown the terms screen before league selection.
 - [ ] A brand-new user with zero leagues sees "Create league" / "Join with code", not an empty dashboard.
 - [ ] Creating a league makes the caller Owner and lands them in the dashboard.
-- [ ] Joining with a 6-digit viewer code grants Viewer only.
-- [ ] Joining with a longer invite code grants exactly the roles that were assigned.
+- [ ] Joining with an invite code grants exactly the roles that were assigned (there are no separate viewer codes any more).
+- [ ] An account that has not accepted the current Terms + Privacy sees the legal gate before anything else; AI / Sharing consent is asked only when a feature needs it.
+- [ ] An Owner whose league is still in guided setup resumes it (GT7 groups → championship → season) or cancels it.
 
 ## Invite flow
 
@@ -55,9 +58,10 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 
 ## Admin/Owner
 
-- [ ] Create/edit a championship (name, game); status badge reflects `draft/active/paused/...`.
+- [ ] Create a championship through the guided flow; edit identity/colours and feature toggles; status badge reflects `draft/active/paused/...`.
+- [ ] Hidden registry features (AI, replay is "Coming soon") never appear as available toggles; other games are disabled.
 - [ ] Create a season, then "Set active" — confirm the previously active season is deactivated.
-- [ ] Delete a championship (with seasons) and confirm it disappears from the list.
+- [ ] Delete a championship (Owner only) and confirm it disappears from the list; an Admin sees no delete control.
 - [ ] Add a driver, toggle inactive/active, confirm inactive drivers disappear from the
       qualifying/results driver picker but remain visible (marked inactive) in `/drivers`.
 - [ ] Add a track manually; bulk-import a small CSV and confirm the row count matches.
@@ -107,10 +111,12 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 
 ## Predictions
 
-- [ ] Predictions page shows race winner / podium / pole / fastest lap forecasts once a season
-      has at least one completed race.
+- [ ] Predictions page shows the server-calculated race markets (pole, fastest lap, podium, winner) for the current race once a run exists.
 - [ ] Confidence badge is "low" early in a season and rises as more races complete.
-- [ ] "Save forecast" is only visible to Owner/Admin/Marshal, and succeeds when clicked.
+- [ ] Forecasts are read from the server (no odds are computed in the browser); an Owner/Admin "Request recompute" queues a
+      fresh run and the page updates.
+- [ ] Without Pro / League Plus the page shows the subscribe-in-the-app state; without current AI consent it shows the
+      consent prompt and reads nothing.
 - [ ] Championship forecast section shows a narrative, magic number, and clinched/eliminated
       badges once at least 2 official races are complete; Overall/Class/Regional tabs each show
       the correct scoped standings and narrative.
@@ -149,3 +155,38 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 - [ ] The Actions workflow run succeeds on push to `main`.
 - [ ] https://vrc-ops.org serves the app after DNS propagates, over HTTPS.
 - [ ] A hard refresh on a deep route (e.g. `/standings`) does not 404 (verifies `404.html` SPA fallback).
+
+## iOS parity additions
+
+### Home
+- [ ] The next-race hero shows "Practice / Qualifying / Race is live" only from the session state, and a whole-day countdown (no hours).
+- [ ] A linked driver sees the driver section (performance, championship battle, recent form, quick actions) and no generic Quick Actions card.
+- [ ] Owner/Admin see leaders, season progress, driver spotlight and needs-attention; a Marshal sees the review queue and penalties.
+- [ ] A viewer sees neither Race Weekend, Pit Wall nor Administration in the navigation, and `/admin` shows "Restricted".
+
+### Race weekend
+- [ ] Owner/Admin/Marshal can Open Practice → Start Qualifying; Start Race is blocked until qualifying is Official (Owner/Admin can use an authorized override with a reason).
+- [ ] Cancel / Postpone ask for confirmation; every transition appears in the Session audit.
+- [ ] Race Prep lets staff mark a driver DNS; DNS drivers sort last and are recorded as DNS when results are finalized.
+- [ ] Qualifying and Results mention that photo import is an iPhone/iPad feature.
+
+### Drivers
+- [ ] A free account sees the season card, recent form and the Pro upsell; a Pro account also sees Season/Career analytics and the full race log.
+- [ ] Trophy Case shows tiers, gemstones and progress; a title is counted once even if it is both computed and awarded.
+- [ ] A linked driver can edit only self-service fields in My Driver; photo changes require the Sharing Terms.
+- [ ] Owner/Admin can approve or decline a number request, assign a league account, and create the permanent Global Rating link only after a fresh authenticator code.
+
+### Administration and setup
+- [ ] Members: adding/removing roles and removing a member each confirm first; only an Owner can grant the Owner role.
+- [ ] Invitations: create by email or code (with optional expiry), copy a code, resend, revoke.
+- [ ] Announcements: post, edit, delete; every member sees them on Home.
+- [ ] New race: requires a track, distance and (when classes are on) a class; the race name is generated from the track; a duplicate round is rejected.
+- [ ] Activating a second season is blocked with an explanation on the free tier and above the plan limit.
+
+### Settings
+- [ ] Appearance: theme mode and accent source persist; a low-contrast accent is adjusted (not rejected) and the page stays readable in both themes.
+- [ ] Delete account: an Owner with shared leagues must choose a new owner per league; the password and the word DELETE are both required.
+
+### Pit Wall
+- [ ] With Pro / League Plus, Pit Wall shows the current weekend's programme, engineering call, setup and captured runs read-only; without a started weekend it says to start one in the app.
+- [ ] Without Pro / League Plus it shows the subscribe-in-the-app state.

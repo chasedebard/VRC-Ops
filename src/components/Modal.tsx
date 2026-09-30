@@ -9,11 +9,13 @@ export function Modal({
   onClose,
   children,
   dismissible = true,
+  size = 'md',
 }: {
   title: string
   onClose: () => void
   children: ReactNode
   dismissible?: boolean
+  size?: 'md' | 'lg'
 }) {
   const panelRef = useRef<HTMLDivElement>(null)
   const titleId = useRef(`modal-${Math.random().toString(36).slice(2)}`).current
@@ -67,7 +69,7 @@ export function Modal({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border p-5 shadow-xl outline-none"
+        className={`max-h-[90vh] w-full ${size === 'lg' ? 'max-w-2xl' : 'max-w-lg'} overflow-y-auto rounded-2xl border p-5 shadow-xl outline-none`}
         style={{ backgroundColor: 'var(--color-surface-raised)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
       >
         <h2 id={titleId} className="mb-3 text-lg font-bold">
