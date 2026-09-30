@@ -29,6 +29,8 @@ import RaceWeekendEventPage from '@/pages/raceWeekend/RaceWeekendEventPage'
 import RacePrepPage from '@/pages/raceWeekend/RacePrepPage'
 import QualifyingPage from '@/pages/raceWeekend/QualifyingPage'
 import ResultsPage from '@/pages/raceWeekend/ResultsPage'
+import ResultsHubPage from '@/pages/raceWeekend/ResultsHubPage'
+import PitWallPage from '@/pages/pitWall/PitWallPage'
 import ResultsAuditLogPage from '@/pages/raceWeekend/ResultsAuditLogPage'
 import StandingsPage from '@/pages/standings/StandingsPage'
 import PredictionsPage from '@/pages/predictions/PredictionsPage'
@@ -84,10 +86,23 @@ export function AppRoutes() {
         <Route path="/race-weekend/:eventId" element={<RaceWeekendEventPage />} />
         <Route path="/race-prep/:eventId" element={<RacePrepPage />} />
         <Route path="/qualifying/:eventId" element={<QualifyingPage />} />
+        <Route path="/results" element={<ResultsHubPage />} />
         <Route path="/results/:eventId" element={<ResultsPage />} />
         <Route path="/results/:eventId/audit" element={<ResultsAuditLogPage />} />
 
         <Route path="/standings" element={<StandingsPage />} />
+        <Route
+          path="/pit-wall"
+          element={
+            <ProGate title="Pit Wall requires VRC Ops Pro" description="Pit Wall is included with VRC Ops Pro and League Plus.">
+              <PitWallPage />
+            </ProGate>
+          }
+        />
+        {/* Pre-Stage-7 iOS deep-link paths that now mean Pit Wall (never a dead link). */}
+        <Route path="/capture" element={<Navigate to="/pit-wall" replace />} />
+        <Route path="/telemetry" element={<Navigate to="/pit-wall" replace />} />
+        <Route path="/pitwall" element={<Navigate to="/pit-wall" replace />} />
         <Route
           path="/predictions"
           element={
