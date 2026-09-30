@@ -1,13 +1,15 @@
 import { supabase } from '@/supabase/client'
 import type { InvitationRow, VrcRole } from '@/types/database'
 
-export async function getLeagueInvitations(leagueId: string): Promise<InvitationRow[]> {
+export type InvitationWithRoles = InvitationRow & { invitation_roles: { role: VrcRole }[] }
+
+export async function getLeagueInvitations(leagueId: string): Promise<InvitationWithRoles[]> {
   const { data, error } = await supabase
     .from('invitations')
     .select('*, invitation_roles(role)')
     .eq('league_id', leagueId)
     .order('created_at', { ascending: false })
-    .returns<(InvitationRow & { invitation_roles: { role: VrcRole }[] })[]>()
+    .returns<InvitationWithRoles[]>()
   if (error) throw error
   return data ?? []
 }

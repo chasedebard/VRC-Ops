@@ -45,6 +45,11 @@ export async function updateEvent(id: string, patch: Partial<EventRow>): Promise
   if (error) throw error
 }
 
+export async function deleteEvent(id: string): Promise<void> {
+  const { error } = await supabase.from('events').delete().eq('id', id)
+  if (error) throw error
+}
+
 export async function getEventClasses(eventId: string): Promise<EventClassRow[]> {
   const { data, error } = await supabase
     .from('event_classes')

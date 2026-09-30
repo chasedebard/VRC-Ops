@@ -35,7 +35,10 @@ import PitWallPage from '@/pages/pitWall/PitWallPage'
 import ResultsAuditLogPage from '@/pages/raceWeekend/ResultsAuditLogPage'
 import StandingsPage from '@/pages/standings/StandingsPage'
 import PredictionsPage from '@/pages/predictions/PredictionsPage'
-import AdminPage from '@/pages/admin/AdminPage'
+import AdminHubPage from '@/pages/admin/AdminHubPage'
+import MembersPage from '@/pages/admin/MembersPage'
+import InvitationsPage from '@/pages/admin/InvitationsPage'
+import AnnouncementsPage from '@/pages/admin/AnnouncementsPage'
 import { ProGate } from '@/components/ProGate'
 import LegalSupportPage from '@/pages/LegalSupportPage'
 
@@ -118,7 +121,11 @@ export function AppRoutes() {
         />
 
         <Route path="/admin/league-plus" element={<LeaguePlusPage />} />
-        <Route path="/admin/*" element={<AdminPage />} />
+        <Route path="/admin" element={<AdminHubPage />} />
+        <Route path="/admin/members" element={<MembersPage />} />
+        <Route path="/admin/invitations" element={<InvitationsPage />} />
+        <Route path="/admin/announcements" element={<AnnouncementsPage />} />
+        <Route path="/admin/*" element={<Navigate to="/admin" replace />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -48,7 +48,7 @@ const TOKENS: [string, string][] = [
   ['RESULT_VERSION_CONFLICT', 'The result changed on another device. The latest version has been loaded.'],
   ['ACTION_REQUIRES_MANAGER', 'Only an Owner or Admin can do that.'],
   ['REGION_REQUIRED', 'Set the event’s region before entering results.'],
-  ['CLASS_REQUIRED', 'Add at least one class to the event before entering results.'],
+  ['CLASS_REQUIRED', 'This race needs a class. Edit the race, choose a class, then try again.'],
   ['ROW_CLASS_REQUIRED', 'Assign a class to every result row before saving.'],
   ['INVALID_CLASS_FOR_EVENT', 'A result row uses a class that isn’t part of this event.'],
   ['NOT_LOCKED', 'This result isn’t locked.'],
@@ -86,6 +86,12 @@ const TOKENS: [string, string][] = [
 
   // Management
   ['ROUND_CONFLICT', 'Another event already uses that round number in this season.'],
+  ['TRACK_REQUIRED', 'Choose a track for this race.'],
+  ['RACE_DISTANCE_REQUIRED', 'Enter the race distance (laps or minutes).'],
+  ['EVENT_SCOPE_MISMATCH', "This event doesn't belong to that season. Refresh and try again."],
+  ['SEASON_NOT_FOUND', 'That season no longer exists.'],
+  ['OWNER_REQUIRED', 'Only the league Owner can do that.'],
+  ['PIT_WALL_PRO_REQUIRED', 'Pit Wall is included with VRC Ops Pro and League Plus.'],
   ['SEASON_NEEDS_AT_LEAST_ONE_EVENT', 'Add at least one event before activating the season.'],
   ['SEASON_YEAR_REQUIRED', 'Set the season year before activating.'],
   ['CHAMPIONSHIP_NOT_FOUND', 'That championship no longer exists.'],

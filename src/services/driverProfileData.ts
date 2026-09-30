@@ -1,6 +1,6 @@
 import { supabase } from '@/supabase/client'
 import { getDrivers, getSeasonRoster } from '@/services/drivers'
-import { getChampionships } from '@/services/championships'
+import { getChampionships, getLeagueSeasons } from '@/services/championships'
 import { getSeasonScoringOutputs } from '@/services/standings'
 import { getDriverLiveStandingAwards } from '@/services/results'
 import { getLeagueDriverMmrDisplay } from '@/services/mmr'
@@ -69,12 +69,6 @@ import type { LeagueMmrDisplayRow } from '@/types/mmr'
 
 async function getLeagueEvents(leagueId: string): Promise<EventRow[]> {
   const { data, error } = await supabase.from('events').select('*').eq('league_id', leagueId).returns<EventRow[]>()
-  if (error) throw error
-  return data ?? []
-}
-
-async function getLeagueSeasons(leagueId: string): Promise<SeasonRow[]> {
-  const { data, error } = await supabase.from('seasons').select('*').eq('league_id', leagueId).returns<SeasonRow[]>()
   if (error) throw error
   return data ?? []
 }
