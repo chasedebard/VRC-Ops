@@ -361,7 +361,7 @@ export default function SeasonDetailPage() {
           <CardHeader>
             <CardTitle>Bonus Points</CardTitle>
           </CardHeader>
-          <form onSubmit={handleSaveBonusSettings} className="space-y-4">
+          <form onSubmit={handleSaveBonusSettings} className="space-y-4" aria-label="Bonus points">
             <BonusPointsControl
               label="Pole position bonus"
               enabled={bonusForm.poleBonusEnabled}

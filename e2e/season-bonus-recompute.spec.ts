@@ -43,7 +43,8 @@ test('owner enables bonus points, save recomputes scoring without duplicating po
   if (!(await fastestLapToggle.isChecked())) await fastestLapToggle.check()
   await page.getByRole('radio', { name: '+3' }).nth(1).click()
 
-  await page.getByRole('button', { name: /^Save$/ }).click()
+  // The season page now has several forms (details, structure, bonus points) — scope to the bonus form.
+  await page.getByRole('form', { name: 'Bonus points' }).getByRole('button', { name: /^Save$/ }).click()
 
   // Either a real recompute ran, or there were no finalized results to recompute — either is a
   // valid terminal state, but a raw/unhandled error is not.

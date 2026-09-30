@@ -190,3 +190,24 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 ### Pit Wall
 - [ ] With Pro / League Plus, Pit Wall shows the current weekend's programme, engineering call, setup and captured runs read-only; without a started weekend it says to start one in the app.
 - [ ] Without Pro / League Plus it shows the subscribe-in-the-app state.
+
+## Running the flows without credentials (local mock backend)
+
+`scripts/mock-supabase.mjs` is a tiny in-memory stand-in for the Supabase auth / REST / RPC surface, seeded with **synthetic** data
+(one league, a GT7 championship with an active season, six drivers, finalized rounds, an upcoming race). It never contacts the real
+project and holds no secrets. Use it to click through role-gated flows locally:
+
+```bash
+npm run mock:backend          # terminal 1 — listens on :54321 (MOCK_PRO=1 starts with Pro / League Plus on)
+npm run dev:mock              # terminal 2 — the site on :5180, pointed at the mock
+```
+
+Then, in the browser console on `http://localhost:5180`, seed a signed-in session (the mock issues an `aal2` token) and open the app:
+
+```js
+const r = await fetch('http://localhost:54321/auth/v1/token?grant_type=password', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: 'dev@example.test', password: 'x' }) })
+localStorage.setItem('sb-localhost-auth-token', JSON.stringify(await r.json())); location.href = '/dashboard'
+```
+
+`/__mock/pro?on=1|0` toggles the premium entitlement and `/__mock/db` dumps the in-memory tables. The mock does **not** enforce RLS or
+the database triggers, so it proves the UI and request shapes, not server authorization — pair it with a run against a real test project.
