@@ -24,6 +24,10 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 - [ ] The QR code renders as an actual scannable image (not literal text/broken image).
 - [ ] Entering a valid 6-digit code from the authenticator app completes enrollment and proceeds
       to the dashboard/onboarding gate.
+- [ ] After the sign-in MFA challenge, an account that already belongs to a league goes straight to that league (or the league
+      chooser when it belongs to several) — never to the terms, profile or "create/join a league" screens. (Account data is
+      read again once the session reaches aal2, because the database returns no rows to an aal1 session.)
+- [ ] With several leagues, the choice is remembered per account in this browser and the header switcher moves between them.
 - [ ] Signing out and back in with an enrolled account shows "Enter your authenticator code"
       (challenge), not the enrollment screen again.
 - [ ] An invalid/expired code shows an inline error and does not proceed.
@@ -198,7 +202,7 @@ Manual QA checklist for vrc-ops.org, organized by role and area. Check items off
 project and holds no secrets. Use it to click through role-gated flows locally:
 
 ```bash
-npm run mock:backend          # terminal 1 — listens on :54321 (MOCK_PRO=1 starts with Pro / League Plus on)
+npm run mock:backend          # terminal 1 — listens on :54321 (MOCK_PRO=1 starts with Pro / League Plus on; MOCK_MFA=1 emulates the aal1 → MFA challenge → aal2 sign-in, with RLS-style empty results until it completes)
 npm run dev:mock              # terminal 2 — the site on :5180, pointed at the mock
 ```
 

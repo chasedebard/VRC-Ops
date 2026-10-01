@@ -29,11 +29,18 @@ export async function getMyLeagues(userId: string): Promise<MyLeagueMembership[]
     >()
   if (error) throw error
 
-  return (memberships ?? []).map((m) => ({
-    league: m.leagues,
-    membershipId: m.id,
-    roles: m.membership_roles.map((r) => r.role),
-  }))
+  return sortLeaguesByName(
+    (memberships ?? []).map((m) => ({
+      league: m.leagues,
+      membershipId: m.id,
+      roles: m.membership_roles.map((r) => r.role),
+    })),
+  )
+}
+
+/** Same order as iOS (league name, case-insensitive) so "the first league" is the same one on every platform. */
+export function sortLeaguesByName<T extends { league: { name: string } }>(items: T[]): T[] {
+  return [...items].sort((a, b) => a.league.name.localeCompare(b.league.name, undefined, { sensitivity: 'base' }))
 }
 
 export async function createLeague(name: string, abbreviation: string): Promise<string> {

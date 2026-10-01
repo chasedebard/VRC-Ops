@@ -1,12 +1,31 @@
 import { supabase } from '@/supabase/client'
 import { getAuthCallbackUrl } from '@/utils/siteUrl'
-import type { User } from '@supabase/supabase-js'
+import type { Session, User } from '@supabase/supabase-js'
 
 export type AuthState =
   | { kind: 'signedOut' }
   | { kind: 'awaitingVerification'; email: string }
   | { kind: 'recoveringPassword' }
-  | { kind: 'authenticated'; user: User }
+  /**
+   * `aal` is the session's Authenticator Assurance Level (`aal1` = password only, `aal2` = MFA completed). Row-level security hides every
+   * row from an `aal1` session of an account that has a verified authenticator, so anything loaded at `aal1` must be reloaded at `aal2`.
+   */
+  | { kind: 'authenticated'; user: User; aal?: string | null }
+
+/** The `aal` claim of a session's access token (read locally, not verified — the server verifies it on every request). */
+export function sessionAssuranceLevel(session: Pick<Session, 'access_token'> | null | undefined): string | null {
+  const token = session?.access_token
+  if (!token) return null
+  try {
+    const payload = token.split('.')[1]
+    if (!payload) return null
+    const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
+    const claim = (JSON.parse(json) as { aal?: unknown }).aal
+    return typeof claim === 'string' ? claim : null
+  } catch {
+    return null
+  }
+}
 
 function isEmailValid(email: string): boolean {
   return email.trim().length > 0 && email.includes('@') && email.includes('.')
@@ -19,7 +38,7 @@ export async function restoreSession(): Promise<AuthState> {
   if (!user.email_confirmed_at && !user.confirmed_at) {
     return { kind: 'awaitingVerification', email: user.email ?? '' }
   }
-  return { kind: 'authenticated', user }
+  return { kind: 'authenticated', user, aal: sessionAssuranceLevel(data.session) }
 }
 
 export async function signIn(email: string, password: string): Promise<AuthState> {
@@ -32,7 +51,7 @@ export async function signIn(email: string, password: string): Promise<AuthState
   if (user && !user.email_confirmed_at && !user.confirmed_at) {
     return { kind: 'awaitingVerification', email }
   }
-  return { kind: 'authenticated', user: user! }
+  return { kind: 'authenticated', user: user!, aal: sessionAssuranceLevel(data.session) }
 }
 
 export async function createAccount(
@@ -130,7 +149,7 @@ export function onAuthStateChange(callback: (state: AuthState) => void) {
       callback({ kind: 'awaitingVerification', email: user.email ?? '' })
       return
     }
-    callback({ kind: 'authenticated', user })
+    callback({ kind: 'authenticated', user, aal: sessionAssuranceLevel(session) })
   })
   return () => data.subscription.unsubscribe()
 }

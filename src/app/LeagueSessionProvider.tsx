@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { getOwnProfile } from '@/services/profile'
 import { acceptLegalDocument, loadLegalState, revokeLegalDocument } from '@/services/legal'
@@ -12,6 +12,25 @@ import {
 import type { LegalDocType, LegalDocumentVersionRow, ProfileRow } from '@/types/database'
 
 const SELECTED_LEAGUE_KEY = 'vrc-selected-league'
+
+const selectedLeagueStorageKey = (userId: string | null) => (userId ? `${SELECTED_LEAGUE_KEY}:${userId}` : SELECTED_LEAGUE_KEY)
+
+function readSelectedLeague(userId: string | null): string | null {
+  try {
+    return localStorage.getItem(selectedLeagueStorageKey(userId))
+  } catch {
+    return null // Storage can be unavailable (private mode); the choice then applies for this page load only.
+  }
+}
+
+function writeSelectedLeague(userId: string | null, leagueId: string | null): void {
+  try {
+    if (leagueId) localStorage.setItem(selectedLeagueStorageKey(userId), leagueId)
+    else localStorage.removeItem(selectedLeagueStorageKey(userId))
+  } catch {
+    // ignore
+  }
+}
 const ACCOUNT_LOAD_FAILURE_MESSAGE =
   'We couldn’t load your profile and leagues. Check your connection and try again.'
 
@@ -65,53 +84,60 @@ export const LeagueSessionContext = createContext<LeagueSessionValue | null>(nul
 export function LeagueSessionProvider({ children }: { children: ReactNode }) {
   const { state } = useAuth()
   const userId = state.kind === 'authenticated' ? state.user.id : null
+  // Account data is read through RLS that depends on the session's assurance level (see AuthState.aal), so a change of level —
+  // completing the MFA challenge — is a reason to load again, exactly as iOS only bootstraps the account after authentication completes.
+  const aal = state.kind === 'authenticated' ? (state.aal ?? '') : ''
+  const sessionKey = userId ? `${userId}:${aal}` : null
 
   const [loading, setLoading] = useState(true)
+  const [loadedKey, setLoadedKey] = useState<string | null>(null)
+  const loadSeq = useRef(0)
   const [error, setError] = useState<string | null>(null)
   const [profile, setProfile] = useState<ProfileRow | null>(null)
   const [legal, setLegal] = useState<LegalState>(EMPTY_LEGAL_STATE)
   const [leagues, setLeagues] = useState<MyLeagueMembership[]>([])
-  const [selectedLeagueId, setSelectedLeagueId] = useState<string | null>(() => {
-    try {
-      return localStorage.getItem(SELECTED_LEAGUE_KEY)
-    } catch {
-      return null
-    }
-  })
+  // The chosen league is remembered per account (iOS keys it by user id), so a shared browser never carries one account's choice to another.
+  const [selectedLeagueId, setSelectedLeagueId] = useState<string | null>(null)
+  useEffect(() => {
+    setSelectedLeagueId(readSelectedLeague(userId))
+  }, [userId])
 
   const load = useCallback(async () => {
+    const seq = ++loadSeq.current
     if (!userId) {
       setError(null)
       setProfile(null)
       setLegal(EMPTY_LEGAL_STATE)
       setLeagues([])
+      setLoadedKey(null)
       setLoading(false)
       return
     }
+    const key = `${userId}:${aal}`
     setLoading(true)
     setError(null)
     try {
-      const [profileRow, legalState, myLeagues] = await Promise.all([
-        getOwnProfile(userId),
-        loadLegalState(userId),
-        getMyLeagues(userId),
-      ])
+      const [profileRow, legalState, myLeagues] = await Promise.all([getOwnProfile(userId), loadLegalState(userId), getMyLeagues(userId)])
+      if (seq !== loadSeq.current) return // a newer load (e.g. after the MFA step-up) owns the state now
       setProfile(profileRow)
       setLegal(legalState)
       setLeagues(myLeagues)
+      setLoadedKey(key)
+      setLoading(false)
     } catch (caught) {
+      if (seq !== loadSeq.current) return
       logAccountLoadFailure(caught)
       setProfile(null)
       setLegal(EMPTY_LEGAL_STATE)
       setLeagues([])
       setError(ACCOUNT_LOAD_FAILURE_MESSAGE)
-    } finally {
+      setLoadedKey(key)
       setLoading(false)
     }
-  }, [userId])
+  }, [userId, aal])
 
   useEffect(() => {
-    load()
+    void load()
   }, [load])
 
   const selectedLeague = useMemo(() => {
@@ -128,23 +154,18 @@ export function LeagueSessionProvider({ children }: { children: ReactNode }) {
 
   const pendingLegalDocuments = useMemo(() => generalAccessUnaccepted(legal), [legal])
 
-  const selectLeague = useCallback((leagueId: string) => {
-    try {
-      localStorage.setItem(SELECTED_LEAGUE_KEY, leagueId)
-    } catch {
-      // Storage can be unavailable (private mode); selection still applies for this page load.
-    }
-    setSelectedLeagueId(leagueId)
-  }, [])
+  const selectLeague = useCallback(
+    (leagueId: string) => {
+      writeSelectedLeague(userId, leagueId)
+      setSelectedLeagueId(leagueId)
+    },
+    [userId],
+  )
 
   const clearLeagueSelection = useCallback(() => {
-    try {
-      localStorage.removeItem(SELECTED_LEAGUE_KEY)
-    } catch {
-      // ignore
-    }
+    writeSelectedLeague(userId, null)
     setSelectedLeagueId(null)
-  }, [])
+  }, [userId])
 
   const acceptLegal = useCallback(
     async (document: LegalDocumentVersionRow, leagueId: string | null = null) => {
@@ -162,8 +183,11 @@ export function LeagueSessionProvider({ children }: { children: ReactNode }) {
     [userId],
   )
 
+  // Loading until the data on screen belongs to the CURRENT session (user + assurance level): the render that follows an MFA step-up must not
+  // show account data fetched at the lower level (it is empty for accounts with an authenticator).
+  const stale = sessionKey !== null && loadedKey !== sessionKey
   const value: LeagueSessionValue = {
-    loading,
+    loading: loading || stale,
     error,
     profile,
     profileCompleted: Boolean(profile?.profile_completed),
