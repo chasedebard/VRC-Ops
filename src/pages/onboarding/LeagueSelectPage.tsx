@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createLeague } from '@/services/leagues'
 import { acceptInvitationCode } from '@/services/invitations'
+import { useAuth } from '@/hooks/useAuth'
 import { useLeagueSession } from '@/hooks/useLeagueSession'
 import { useEntitlement } from '@/hooks/useEntitlement'
 import { Field } from '@/components/Field'
@@ -24,6 +25,9 @@ import { backendErrorMessage } from '@/utils/backendErrors'
  */
 export default function LeagueSelectPage({ onDone }: { onDone?: () => void }) {
   const { refresh, selectLeague, leagues } = useLeagueSession()
+  const { state, signOut } = useAuth()
+  const email = state.kind === 'authenticated' ? state.user.email ?? null : null
+  const [rechecking, setRechecking] = useState(false)
   const { source } = useEntitlement()
   const hasIndividualPro = source === 'individual_pro'
   const ownedLeagueCount = leagues.filter((l) => l.roles.includes('owner')).length
@@ -79,6 +83,41 @@ export default function LeagueSelectPage({ onDone }: { onDone?: () => void }) {
             Join a league with an invitation code, or create your own.
           </p>
         </div>
+
+        {leagues.length === 0 && (
+          <Card>
+            <h2 className="mb-1 text-base font-semibold">Already in a league?</h2>
+            <p className="mb-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              {email ? (
+                <>
+                  You&apos;re signed in as <strong>{email}</strong>, and this account isn&apos;t a member of a league yet. If your league is under a different
+                  account, sign out and sign in with that one.
+                </>
+              ) : (
+                'This account isn’t a member of a league yet.'
+              )}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="secondary"
+                disabled={rechecking}
+                onClick={async () => {
+                  setRechecking(true)
+                  try {
+                    await refresh()
+                  } finally {
+                    setRechecking(false)
+                  }
+                }}
+              >
+                {rechecking ? 'Checking…' : 'Check again'}
+              </Button>
+              <Button variant="ghost" onClick={() => signOut()}>
+                Sign out
+              </Button>
+            </div>
+          </Card>
+        )}
 
         <Card>
           <h2 className="mb-1 text-base font-semibold">Have an invite code?</h2>

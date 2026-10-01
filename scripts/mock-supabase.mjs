@@ -7,6 +7,10 @@ const PORT = Number(process.env.MOCK_PORT ?? 54321)
 const day = (offset) => new Date(Date.now() + offset * 86400000).toISOString().slice(0, 10)
 const now = () => new Date().toISOString()
 let pro = process.env.MOCK_PRO === '1'
+// MOCK_MFA=1 makes password sign-in return an aal1 session; the verified TOTP factor must then be challenged (any 6 digits) to reach aal2,
+// and — like the real project's restrictive `aal2` RLS policies — tables return NO rows (not an error) to an aal1 session.
+const mfaMode = process.env.MOCK_MFA === '1'
+let currentAal = 'aal2'
 
 const U = { me: 'u-me', ann: 'u-ann', bob: 'u-bob' }
 const L = 'l-1', C = 'c-1', S = 's-1'
@@ -113,7 +117,17 @@ function jwt(aal = 'aal2') {
   return `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ sub: U.me, aud: 'authenticated', role: 'authenticated', aal, amr: [{ method: 'totp', timestamp: t }], session_id: 'sess', email: 'dev@example.test', exp: t + 86400, iat: t })}.sig`
 }
 const user = () => ({ id: U.me, aud: 'authenticated', role: 'authenticated', email: 'dev@example.test', email_confirmed_at: now(), app_metadata: { provider: 'email' }, user_metadata: {}, created_at: now(), factors: [{ id: 'f1', factor_type: 'totp', status: 'verified', friendly_name: 'authenticator', created_at: now(), updated_at: now() }] })
-const session = () => ({ access_token: jwt(), token_type: 'bearer', expires_in: 86400, expires_at: Math.floor(Date.now() / 1000) + 86400, refresh_token: 'refresh', user: user() })
+const session = () => ({ access_token: jwt(currentAal), token_type: 'bearer', expires_in: 86400, expires_at: Math.floor(Date.now() / 1000) + 86400, refresh_token: 'refresh', user: user() })
+function aalOf(req) {
+  const token = (req.headers.authorization ?? '').replace(/^Bearer\s+/i, '')
+  try {
+    return JSON.parse(Buffer.from(token.split('.')[1] ?? '', 'base64url').toString()).aal ?? 'aal1'
+  } catch {
+    return 'aal1'
+  }
+}
+// Tables WITHOUT the restrictive aal2 policy in the live project.
+const AAL_EXEMPT = new Set(['profiles', 'legal_document_versions'])
 
 // ---- rest helpers -------------------------------------------------------------------------------
 const tableAlias = { per_game: 1 }
@@ -247,7 +261,15 @@ http
     try {
       if (p === '/__mock/pro') { pro = url.searchParams.get('on') === '1'; return send(res, 200, { pro }) }
       if (p === '/__mock/db') return send(res, 200, db)
-      if (p === '/auth/v1/token') return send(res, 200, session())
+      if (p === '/auth/v1/token') {
+        if (url.searchParams.get('grant_type') === 'password') currentAal = mfaMode ? 'aal1' : 'aal2'
+        return send(res, 200, session())
+      }
+      if (/^\/auth\/v1\/factors\/[^/]+\/challenge$/.test(p)) return send(res, 200, { id: 'ch1', type: 'totp', expires_at: Math.floor(Date.now() / 1000) + 300 })
+      if (/^\/auth\/v1\/factors\/[^/]+\/verify$/.test(p)) {
+        currentAal = 'aal2'
+        return send(res, 200, session())
+      }
       if (p === '/auth/v1/user') return send(res, 200, user())
       if (p === '/auth/v1/logout') return send(res, 204, null)
       if (p.startsWith('/auth/v1/factors')) return send(res, 200, { id: 'f1' })
@@ -259,7 +281,9 @@ http
       }
       if (p.startsWith('/rest/v1/')) {
         const table = p.replace('/rest/v1/', '')
-        const out = query(table, url, req.method, body, accept)
+        // RLS emulation: a restrictive aal2 policy hides every row from an aal1 session of a user who has a verified factor.
+        const hidden = !AAL_EXEMPT.has(table) && aalOf(req) !== 'aal2' && req.method === 'GET'
+        const out = hidden ? { status: 200, body: accept.includes('object') ? null : [] } : query(table, url, req.method, body, accept)
         if (out.status >= 400) console.log('rest', req.method, table, out.status, url.search.slice(0, 120))
         return send(res, out.status, out.body)
       }

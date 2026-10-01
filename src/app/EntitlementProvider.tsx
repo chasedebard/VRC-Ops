@@ -35,6 +35,8 @@ export function EntitlementProvider({ children }: { children: ReactNode }) {
   const { state } = useAuth()
   const { selectedLeague } = useLeagueSession()
   const userId = state.kind === 'authenticated' ? state.user.id : null
+  // `subscriptions` / `league_subscriptions` sit behind the aal2 RLS policy, so re-check after the MFA step-up.
+  const aal = state.kind === 'authenticated' ? (state.aal ?? '') : ''
   const leagueId = selectedLeague?.league.id ?? null
 
   const [status, setStatus] = useState<EntitlementStatus>('loading')
@@ -79,10 +81,10 @@ export function EntitlementProvider({ children }: { children: ReactNode }) {
     }
   }, [userId, leagueId])
 
-  // Refresh on sign-in (userId change) and on league switch (leagueId change).
+  // Refresh on sign-in (userId change), on league switch (leagueId change) and when the session steps up to aal2 (MFA completed).
   useEffect(() => {
     load()
-  }, [load])
+  }, [load, aal])
 
   // Web equivalent of iOS's scenePhase == .active refresh: re-check when the
   // tab regains focus after being backgrounded past the cache TTL, so a
