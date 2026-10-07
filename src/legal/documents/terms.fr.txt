@@ -1,0 +1,250 @@
+VRC Ops — Conditions d'utilisation
+Dernière mise à jour : 7 octobre 2026
+Bienvenue dans VRC Ops, une application pour organiser, gérer et suivre des ligues et des championnats de course simulée, et y participer.
+Les présentes conditions d'utilisation régissent votre utilisation de VRC Ops sur iOS, iPadOS, macOS et Android, ainsi que sur le site Web et l'application Web de VRC Ops.
+VRC Ops est conçu et exploité par Chase DeBard, un particulier établi en Pennsylvanie, aux États-Unis. Il n'est pas exploité par l'intermédiaire d'une société.
+VRC Ops est offert aux utilisateurs des États-Unis, du Canada et de l'Australie.
+En créant un compte, en acceptant une invitation, en joignant une ligue, en achetant un abonnement ou en utilisant autrement VRC Ops, vous acceptez les présentes conditions d'utilisation. La politique de confidentialité de VRC Ops explique comment les renseignements sont traités; veuillez la lire.
+Si vous n'acceptez pas ces conditions, n'utilisez pas VRC Ops.
+La version à jour des présentes conditions est accessible dans l'application (Réglages, puis Juridique et confidentialité) et à l'adresse https://vrc-ops.org/legal.
+
+1. À propos des présentes conditions et de vos droits
+
+Si vous êtes un consommateur, rien dans les présentes conditions ne vous enlève un droit que vous avez en vertu de la loi de l'endroit où vous vivez et auquel on ne peut légalement renoncer ni apporter de limite. Lorsqu'une section ci-dessous entre en conflit avec un tel droit, c'est le droit qui s'applique. Si vous êtes un consommateur au Canada, la loi de votre province sur la protection du consommateur s'applique aussi à vous, y compris la Loi sur la protection du consommateur au Québec, et rien dans les présentes conditions ne limite les droits qu'elle vous donne.
+Lorsque les présentes conditions disent « nous », « notre » ou « VRC Ops », elles désignent Chase DeBard, qui exploite VRC Ops.
+
+2. Admissibilité
+
+Vous devez avoir au moins 14 ans pour créer ou utiliser un compte VRC Ops.
+Lorsque vous créez un compte, nous demandons le mois et l'année de votre naissance afin de vérifier ce point (la politique de confidentialité explique comment ces renseignements sont conservés). Si le mois et l'année que vous indiquez montrent que vous avez moins de 14 ans, vous ne pouvez pas créer de compte, aucune autre réponse n'est acceptée de cet appareil ou de ce compte pendant 90 jours civils, et un compte existant appartenant à une personne de moins de 14 ans ne fonctionnera pas. Indiquez votre véritable mois et année de naissance.
+VRC Ops ne vérifie pas l'âge au moyen de pièces d'identité.
+Si vous n'avez pas atteint l'âge de la majorité là où vous vivez, vous ne devriez utiliser VRC Ops qu'avec la permission d'un parent ou d'un tuteur légal.
+VRC Ops est offert aux utilisateurs des États-Unis, du Canada et de l'Australie. Si vous êtes ailleurs, ne l'utilisez pas.
+
+3. Votre compte
+
+Vous êtes responsable de votre compte VRC Ops, de la sécurité de vos identifiants de connexion et de vos facteurs d'authentification, ainsi que de l'activité qui survient par l'intermédiaire de votre compte.
+Vous devez fournir une adresse courriel valide lors de la création d'un compte.
+Vous pouvez fournir, à titre facultatif, des renseignements de profil comme votre nom ou nom d'affichage, votre identifiant Discord, votre identifiant PlayStation Network et une image de profil ou de pilote.
+Il vous est interdit d'usurper l'identité d'une autre personne, de créer un compte au moyen de renseignements que vous n'êtes pas autorisé à utiliser, de céder un compte à une autre personne sans autorisation, ou de permettre à une autre personne d'utiliser votre compte d'une manière qui contrevient aux présentes conditions.
+VRC Ops prend en charge l'authentification par courriel et mot de passe et l'authentification multifacteur conditionnelle au moyen de mots de passe à usage unique basés sur le temps, générés par une application d'authentification.
+Vous êtes responsable de la sécurité de votre mot de passe, de vos identifiants multifacteur, de vos renseignements de récupération et de vos appareils.
+
+4. Ligues et rôles
+
+VRC Ops organise l'activité en ligues.
+Les rôles actuels dans une ligue sont propriétaire (Owner), administrateur (Admin), commissaire (Marshal), pilote (Driver) et observateur (Viewer).
+Les propriétaires et les administrateurs contrôlent la configuration de la ligue, l'adhésion, les rôles, les championnats, les saisons, les équipes, les épreuves, les pilotes et les autres fonctions d'administration.
+Les commissaires peuvent aider à l'administration des courses, à la gestion des séances, aux pénalités, aux résultats et aux autres fonctions autorisées par la ligue.
+Les pilotes et les observateurs ont accès selon les autorisations attribuées à leur compte.
+Vous devez respecter les autorisations liées à votre rôle et ne pouvez tenter d'obtenir l'accès à des fonctionnalités ou à des renseignements qui ne vous ont pas été accordés.
+Les propriétaires et les administrateurs de ligue sont responsables du fonctionnement de leur ligue, notamment des décisions d'adhésion, des règlements, des pénalités, de l'administration des courses, des résultats officiels, des renseignements qu'ils saisissent dans VRC Ops et du respect de toute loi qui s'applique à eux à titre d'organisateurs.
+VRC Ops fournit des outils d'administration de ligue, mais n'agit pas comme organisme sanctionnant les ligues individuelles.
+
+5. Fiches de pilote et renseignements sur d'autres personnes
+
+VRC Ops permet aux administrateurs de ligue autorisés de créer des fiches de pilote de course pour des personnes qui n'ont pas de compte VRC Ops.
+Une fiche de pilote peut contenir des renseignements liés à la course, comme le nom du pilote, son numéro de course, sa photo, son équipe, sa classe, sa région, ses affectations de saison, son historique de courses, ses résultats de qualification, ses résultats de championnat et d'autres renseignements de course dans le jeu.
+La création d'une fiche de pilote ne crée pas de compte VRC Ops pour cette personne.
+Les administrateurs de ligue ne doivent pas utiliser les fiches de pilote pour conserver des renseignements personnels inutiles, comme des adresses courriel privées, des numéros de téléphone, des dates de naissance, des adresses résidentielles ou d'autres renseignements personnels sans rapport.
+Si vous téléversez une photographie, un nom, une identité de course ou d'autres renseignements concernant une autre personne, vous déclarez avoir le droit ou la permission appropriée de fournir ces renseignements pour utilisation au sein de la ligue.
+Si vous croyez qu'une ligue détient à votre sujet des renseignements qu'elle ne devrait pas détenir, adressez-vous à l'administrateur de la ligue ou écrivez-nous à debard.chase@outlook.com. La politique de confidentialité explique ce que nous pouvons faire.
+
+6. Utilisation acceptable
+
+Vous ne pouvez utiliser VRC Ops qu'à des fins légales et conformément aux présentes conditions.
+Il vous est interdit d'utiliser VRC Ops pour une activité illégale, du harcèlement, des menaces, de la violence verbale, de la discrimination, de l'usurpation d'identité, de la fraude ou de la tromperie délibérée.
+Il vous est interdit de tenter d'accéder au compte d'une autre personne ou à des renseignements auxquels vous n'êtes pas autorisé à accéder.
+Il vous est interdit de contourner l'authentification, les autorisations, les contrôles d'abonnement, les autorisations de ligue ou d'autres restrictions d'accès.
+Il vous est interdit de sonder, d'exploiter, d'attaquer, de surcharger, de perturber ou d'entraver délibérément VRC Ops, Supabase, ses API ou l'infrastructure connexe.
+Il vous est interdit d'introduire des logiciels malveillants, de tenter d'obtenir des identifiants ou des secrets, ou d'utiliser VRC Ops pour distribuer du contenu nuisible.
+Il vous est interdit d'utiliser des méthodes automatisées pour extraire, copier ou utiliser abusivement les données ou les services de VRC Ops d'une manière qui nuit au fonctionnement normal ou qui porte atteinte aux droits d'une autre personne.
+Il vous est interdit de rétroconcevoir ou de tenter de contourner les systèmes de sécurité ou de contrôle d'accès, sauf lorsque la loi applicable interdit de telles restrictions.
+Les propriétaires et les administrateurs de ligue peuvent retirer des membres de leurs ligues ou restreindre leurs droits.
+Nous pouvons aussi suspendre ou mettre fin à l'accès, comme il est décrit à la section 16.
+
+7. Votre contenu
+
+Vous demeurez propriétaire du contenu que vous soumettez à VRC Ops.
+Il peut s'agir de noms, de dossiers de course, de notes, d'images, de renseignements sur les pilotes, de résultats de course, de contenu de ligue, de renseignements de réglage et d'autre contenu que vous fournissez.
+En soumettant du contenu à VRC Ops, vous donnez à VRC Ops la permission d'héberger, de conserver, de traiter, de reproduire et d'afficher ce contenu dans la mesure raisonnablement nécessaire pour exploiter le service et offrir les fonctionnalités que vous demandez.
+Vous autorisez aussi la ligue visée à rendre ce contenu accessible aux autres membres de la ligue selon les autorisations de la ligue et votre rôle.
+Cette permission est non exclusive et n'existe que dans la mesure raisonnablement nécessaire pour exploiter, entretenir, sécuriser et fournir VRC Ops.
+Vous êtes responsable de vous assurer que le contenu que vous téléversez ne viole pas les droits d'auteur, la vie privée, le droit à l'image, la propriété intellectuelle ou d'autres droits légaux d'une autre personne.
+VRC Ops peut retirer le contenu qui contrevient aux présentes conditions ou à la loi applicable. Si vous croyez qu'un contenu porte atteinte à vos droits, écrivez à debard.chase@outlook.com et dites-nous de quel contenu il s'agit et pourquoi.
+
+8. Résultats de course, classements et décisions de ligue
+
+VRC Ops fournit des outils pour consigner les résultats de qualification, les résultats de course, les pénalités, les points, les classements, l'historique des pilotes et les renseignements de compétition connexes.
+VRC Ops peut calculer ou dériver automatiquement des renseignements à partir des données saisies par les administrateurs de ligue et les participants.
+Ces calculs peuvent contenir des erreurs découlant de données sources incorrectes, d'erreurs logicielles, d'erreurs de configuration, de renseignements incomplets ou d'autres causes.
+À moins qu'une ligue n'établisse autrement, les propriétaires, les administrateurs, les commissaires ou les autres organisateurs autorisés de la ligue demeurent responsables de déterminer les résultats officiels, les pénalités, les classifications, les classements de championnat et les décisions de compétition de la ligue.
+VRC Ops est un outil de gestion et n'est pas une autorité sanctionnante indépendante.
+
+9. Prédictions
+
+VRC Ops peut offrir des fonctions de prédiction et de prévision des courses.
+Le système de prédiction actuel utilise des calculs déterministes fondés sur les renseignements disponibles dans VRC Ops.
+Les prédictions ne sont que des estimations.
+Leur exactitude n'est pas garantie, et elles ne doivent pas être considérées comme des résultats de course officiels, des garanties de rendement futur ou des conseils professionnels.
+Les prédictions peuvent être influencées par des données incomplètes, des résultats incorrects, des pénalités, la disponibilité des pilotes, les conditions de course, des changements de rendement et d'autres facteurs qui ne peuvent être prédits de façon fiable.
+VRC Ops n'envoie pas de données de prédiction à un fournisseur externe d'IA générative ou de grands modèles de langage.
+Les prédictions sont offertes à titre d'information sur la course et de divertissement et ne sont pas destinées à faciliter le jeu ou les paris financiers.
+
+10. Cote mondiale et récompenses
+
+VRC Ops peut calculer une cote pour votre compte à partir des résultats officiels des ligues dans lesquelles un propriétaire ou un administrateur de ligue a lié votre compte à une fiche de pilote.
+La cote est un outil. Elle est calculée selon des règles fixes à partir des résultats officiels, et elle n'est ni un classement officiel d'une organisation de course ni une garantie de talent ou de résultats futurs.
+La cote est désactivée par défaut. Elle n'est calculée pour vous que si vous l'activez dans les Réglages, ce qui exige que l'authentification à deux facteurs soit activée sur votre compte. Vous pouvez la désactiver en tout temps dans les Réglages. La politique de confidentialité explique comment la cote est traitée.
+Les résultats peuvent être corrigés ou annulés par la ligue, et les cotes peuvent être recalculées lorsque cela se produit. Nous pouvons corriger une cote calculée erronément.
+Une récompense de Champion du monde, si elle vous est offerte, est assujettie aux conditions qui vous sont présentées au moment de l'offre. Nous pouvons retirer ou modifier le programme de récompenses pour les trimestres futurs.
+
+11. Pit Wall et Ingénieur de course
+
+VRC Ops peut offrir des fonctions Pit Wall et Ingénieur de course (Race Engineer) qui analysent les renseignements de réglage de course et fournissent des recommandations de mise au point.
+Le système Pit Wall utilise des règles et des calculs déterministes plutôt qu'un service externe d'IA générative.
+Les recommandations peuvent utiliser des renseignements comme le jeu, le véhicule, le circuit, la classe, les valeurs de réglage, les renseignements sur les tours et les commentaires du pilote.
+Les recommandations de Pit Wall ne sont que des conseils.
+Le comportement d'un véhicule dans un jeu de course peut différer en raison de mises à jour de la physique, de changements de véhicule, des conditions de piste, du style de conduite, de correctifs du jeu, de renseignements incomplets ou d'autres variables.
+VRC Ops ne garantit pas qu'un changement recommandé améliorera les temps au tour, le rendement du véhicule ou les résultats de course.
+Il vous revient de décider d'appliquer ou non un changement de réglage recommandé.
+
+12. Télémétrie et Capture
+
+VRC Ops peut offrir une fonction de Capture pour certains jeux et plateformes pris en charge, y compris la télémétrie prise en charge de Gran Turismo 7.
+La Capture peut exiger une communication avec une console ou un autre appareil sur votre réseau local.
+Vous devez vous assurer que vous êtes autorisé à vous connecter à l'appareil et au réseau utilisés.
+Les captures de télémétrie brute prises en charge sont traitées localement et ne sont pas téléversées vers le service de VRC Ops.
+VRC Ops peut traiter une version analysée de la télémétrie et téléverser des renseignements de course analysés vers nos serveurs pour les fonctionnalités prises en charge, les résultats, l'analyse ou d'autres fonctions de l'application.
+L'adresse IP de la console ou de l'appareil utilisée pour la Capture est conservée localement et ne fait pas partie de votre compte VRC Ops ni du dossier de la ligue.
+Les fichiers de télémétrie brute conservés localement sur votre appareil demeurent sous votre contrôle.
+La disponibilité de la Capture dépend des jeux, des appareils, du comportement du réseau, des mises à jour de jeu, du comportement de la plateforme et de la compatibilité technique pris en charge.
+VRC Ops ne garantit pas une compatibilité continue avec toutes les versions d'un jeu, d'une console, d'une configuration réseau ou d'un protocole de télémétrie.
+
+13. Abonnements et fonctionnalités payantes
+
+VRC Ops offre des abonnements payants et des fonctionnalités réservées aux abonnés.
+Les abonnements payants sont actuellement vendus par l'App Store d'Apple et traités par Apple. Apple affiche le prix, la période de facturation et le renouvellement éventuel de l'abonnement avant l'achat.
+Les abonnements se renouvellent automatiquement à la fin de chaque période de facturation jusqu'à ce que vous les annuliez. Vous les annulez dans les réglages de votre compte Apple (Abonnements), avant la date de renouvellement; Apple affiche la date exacte et ses règles actuelles déterminent le dernier moment où une annulation prend effet. L'annulation arrête le prochain renouvellement; vous gardez l'accès jusqu'à la fin de la période que vous avez déjà payée.
+VRC Ops ne recueille ni ne conserve vos renseignements complets de carte de paiement.
+La facturation, les taxes, l'autorisation de paiement et les remboursements pour les achats de l'App Store sont gérés par Apple selon ses conditions d'achat et d'abonnement. Nous ne pouvons pas émettre nous-mêmes un remboursement de l'App Store. Si vous voulez un remboursement, demandez-le à Apple; si vous communiquez avec nous, nous vous aiderons à le faire. Cela ne limite aucun droit que vous avez en vertu de la loi de l'endroit où vous vivez.
+L'annulation d'un abonnement ne supprime pas votre compte VRC Ops.
+Certaines fonctionnalités peuvent devenir indisponibles lorsqu'un abonnement expire, est annulé, est remboursé, ne peut être vérifié ou n'est plus actif pour une autre raison.
+Un abonnement payant ne crée pas un droit inconditionnel à un accès continu si votre compte est suspendu ou résilié pour les motifs énoncés à la section 16.
+Nous pouvons modifier les offres d'abonnement, les fonctionnalités incluses ou les prix à l'avenir, conformément à la section 24, aux exigences applicables de la plateforme et à la loi. Un changement de prix ne s'applique pas à vous avant qu'Apple vous l'ait présenté et que, lorsqu'Apple l'exige, vous l'ayez accepté.
+
+14. Communications de service
+
+VRC Ops peut envoyer les communications transactionnelles nécessaires à l'exploitation du service.
+Il peut s'agir de messages de compte, de la vérification de l'adresse courriel, de réinitialisations de mot de passe, d'invitations de ligue, de communications de sécurité, de renseignements liés à l'abonnement et d'autres avis opérationnels.
+VRC Ops n'envoie pas de campagnes de courriels promotionnels ou de marketing.
+Si des courriels promotionnels sont introduits à l'avenir, ils ne seront envoyés qu'aux personnes qui ont choisi d'en recevoir, et chaque message identifiera l'expéditeur et comprendra un moyen accessible de se désabonner.
+Des messages opérationnels ou exigés par la loi peuvent quand même être envoyés lorsque cela est nécessaire, même si un utilisateur refuse les communications promotionnelles.
+
+15. Vie privée
+
+Votre utilisation de VRC Ops est aussi couverte par la politique de confidentialité de VRC Ops.
+La politique de confidentialité est un avis. Elle explique quels renseignements VRC Ops recueille, comment ils sont utilisés, où ils sont conservés, comment ils sont communiqués au sein des ligues, quels sont les fournisseurs de services visés, les pratiques de télémétrie, la suppression de compte, la conservation des données et les procédures de demande relative à la vie privée. En prendre connaissance ne constitue pas un consentement aux fonctionnalités facultatives, qui demandent leur propre consentement.
+La version à jour de la politique de confidentialité est accessible par VRC Ops et à l'adresse https://vrc-ops.org/legal.
+Si les présentes conditions d'utilisation et la politique de confidentialité traitent de sujets différents, chaque document s'applique au sujet qu'il régit.
+
+16. Suspension et résiliation
+
+Vous pouvez cesser d'utiliser VRC Ops en tout temps et supprimer votre compte (section 17).
+Nous pouvons suspendre, restreindre ou résilier un compte ou l'accès à des fonctionnalités particulières lorsque cela est raisonnablement nécessaire pour les motifs suivants : vous avez contrevenu aux présentes conditions; une activité illégale; des préoccupations de sécurité, un usage abusif ou de la fraude; des tentatives de contourner les autorisations ou les exigences d'abonnement; une entrave au service; un état d'abonnement invalide ou impayé; des obligations légales; ou un comportement qui menace VRC Ops ou ses utilisateurs.
+Lorsque c'est possible, nous vous informerons, avant ou après une restriction de compte, et nous vous en donnerons la raison. Nous pouvons agir immédiatement lorsque c'est nécessaire pour la sécurité, la conformité légale, la prévention de la fraude ou la protection des utilisateurs ou de l'infrastructure.
+Si nous mettons fin à l'accès d'un abonné payant pour un motif qui ne figure pas ci-dessus, ou si nous cessons complètement d'offrir VRC Ops, nous vous donnerons un préavis d'au moins 60 jours, et nous vous aiderons à demander à Apple le remboursement de toute période que vous avez payée et que vous ne pouvez pas utiliser.
+Un abonnement payant ne l'emporte pas sur les exigences de sécurité du compte, les exigences légales, la prévention des abus ou les exigences de bonne conduite.
+
+17. Suppression du compte
+
+Vous pouvez supprimer votre compte VRC Ops au moyen du processus de suppression de compte dans l'application, dans les Réglages.
+Vous pouvez aussi écrire à debard.chase@outlook.com pour obtenir de l'aide.
+La suppression d'un compte retire des systèmes actifs de VRC Ops le compte d'authentification et les renseignements de niveau compte qui y sont associés, sous réserve des pratiques de conservation décrites dans la politique de confidentialité.
+Un compte VRC Ops et une fiche de pilote de ligue sont distincts.
+Si vous êtes pilote dans une ligue dont vous n'êtes pas propriétaire, la suppression de votre compte VRC Ops ne supprime pas l'historique de course de la ligue associé à ce pilote. La fiche est dissociée de votre compte, et votre photo, votre biographie et vos noms en sont retirés. Le nom du pilote devient le mot « Driver » (conservé tel quel, en anglais, dans toutes les langues de l'application) suivi du numéro de course du pilote (par exemple, « Driver 73 »). Le numéro de course, les résultats, les classements et l'historique de championnat demeurent afin que les dossiers de la ligue soient préservés. Si une fiche de pilote n'a jamais été liée à un compte, la personne qu'elle décrit peut demander à l'administrateur de la ligue, ou à nous, de remplacer le nom de la même façon.
+Si vous êtes propriétaire d'une ligue qui compte d'autres membres actifs, vous devez en transférer la propriété avant de supprimer votre compte.
+Si vous êtes le seul membre actif d'une ligue dont vous êtes propriétaire, la suppression de votre compte ferme cette ligue et en conserve l'historique de course comme dossier en lecture seule; elle n'est cédée à personne. Une ligue qui ne contient que des brouillons inutilisés est supprimée.
+Certains dossiers de sauvegarde, de sécurité, de transactions ou d'infrastructure peuvent subsister temporairement, comme il est décrit dans la politique de confidentialité.
+
+18. Disponibilité du service et modifications
+
+VRC Ops peut modifier, ajouter, retirer, suspendre, remplacer ou cesser d'offrir des fonctionnalités.
+Nous ne garantissons pas que chaque fonctionnalité demeurera toujours disponible ni que VRC Ops sera toujours compatible avec tous les appareils, toutes les versions de système d'exploitation, tous les jeux, toutes les consoles ou toutes les plateformes tierces.
+Si nous cessons d'offrir VRC Ops, nous vous donnerons un préavis d'au moins 30 jours, ou d'au moins 60 jours si vous êtes un abonné payant (section 16).
+Le service peut parfois être indisponible en raison d'entretien, de pannes, de défaillances d'infrastructure, de défauts logiciels, de défaillances de services tiers, de conditions de réseau ou d'autres circonstances.
+VRC Ops peut déployer des mises à jour nécessaires pour continuer à utiliser une partie ou la totalité des fonctionnalités.
+
+19. Exactitude, bogues et soutien
+
+VRC Ops est offert comme un outil d'organisation de la course simulée, d'administration de ligue, d'analyse, de traitement de la télémétrie, de prédiction, de cote et d'aide à la mise au point.
+Les renseignements générés par VRC Ops peuvent contenir des erreurs.
+Il vous revient de vérifier les renseignements avant de vous y fier pour l'administration officielle d'une ligue.
+VRC Ops ne garantit pas l'exactitude, l'exhaustivité, la disponibilité ni la pertinence des classements, des résultats, des classifications de télémétrie, des prédictions, des cotes, des analyses, des recommandations de Pit Wall ou d'autres renseignements générés.
+VRC Ops est conçu et exploité par une seule personne. Les logiciels comportent des bogues, et VRC Ops aura de temps à autre des bogues, des erreurs, des pannes et d'autres problèmes. En utilisant VRC Ops, vous acceptez que cela fasse partie de son utilisation.
+Si vous nous signalez un problème à debard.chase@outlook.com, nous ferons de notre mieux pour l'examiner et le corriger. Nous ne promettons pas de répondre dans un délai déterminé, de corriger tous les problèmes, de corriger un problème d'une manière ou à une date particulière, ni de maintenir VRC Ops disponible à un niveau particulier. Nous n'offrons pas de niveau de service ni de soutien garanti.
+
+20. Exclusion de garanties et garanties du consommateur
+
+Dans toute la mesure permise par la loi applicable, VRC Ops est fourni « tel quel » et « selon la disponibilité », avec tous ses défauts, et vous l'utilisez à vos propres risques.
+VRC Ops ne garantit pas que le service sera ininterrompu, exempt d'erreurs, entièrement sécurisé, compatible avec tous les appareils ou toutes les plateformes, ni exempt de perte de données, et il ne donne aucune garantie d'aucune sorte, expresse ou implicite, y compris toute garantie implicite de qualité marchande, d'adaptation à un usage particulier ou de non-contrefaçon.
+Rien dans les présentes conditions n'exclut une garantie, une assurance ou une protection du consommateur qui ne peut légalement être exclue.
+Si vous êtes un consommateur en Australie, nos services sont assortis de garanties qui ne peuvent être exclues en vertu de la loi australienne sur la consommation (Australian Consumer Law). Rien dans les présentes conditions ne limite ces garanties.
+
+21. Limite de responsabilité et votre responsabilité
+
+Dans toute la mesure permise par la loi applicable, Chase DeBard et VRC Ops ne seront pas responsables des dommages indirects, accessoires, spéciaux, consécutifs, exemplaires ou punitifs découlant de l'utilisation de VRC Ops ou de l'impossibilité de l'utiliser.
+Cela comprend, lorsque la loi le permet, les pertes découlant d'interruptions de service, de bogues, de la perte de renseignements de ligue, de résultats incorrects, de classements incorrects, d'erreurs de prédiction, d'erreurs de cote, d'erreurs de télémétrie, de recommandations de mise au point, d'épreuves manquées, d'une perte d'accès ou de défaillances de services tiers.
+Dans toute la mesure permise par la loi applicable, notre responsabilité totale envers vous pour l'ensemble des réclamations découlant de VRC Ops ou s'y rapportant est limitée au plus élevé des montants suivants : le montant que vous avez payé pour VRC Ops au cours des 12 mois précédant la naissance de la réclamation, et 100 $ US.
+VRC Ops n'est pas responsable des différends entre membres d'une ligue ni des décisions prises par les propriétaires, administrateurs, commissaires, pilotes ou observateurs d'une ligue.
+Dans la mesure permise par la loi applicable, vous acceptez de défendre et de tenir à couvert Chase DeBard à l'égard des réclamations, pertes et frais qui découlent du contenu que vous soumettez, de votre manquement aux présentes conditions, de votre atteinte aux droits d'une autre personne ou de vos actes à titre d'organisateur de ligue.
+Rien dans les présentes conditions ne limite ni n'exclut une responsabilité qui ne peut être limitée ou exclue par la loi. Cela comprend la responsabilité en cas de décès ou de lésions corporelles, de fraude, de notre propre faute intentionnelle ou lourde, et à l'égard des garanties du consommateur mentionnées à la section 20.
+
+22. Services de tiers
+
+VRC Ops dépend de plateformes et d'infrastructures tierces pour offrir certaines fonctionnalités.
+Les fournisseurs de services actuels comprennent Supabase pour le service, l'authentification, le stockage et l'infrastructure connexe; Resend pour les courriels transactionnels; et Apple pour la distribution par l'App Store, les achats StoreKit, les abonnements, les codes d'offre et les diagnostics de plantage fournis par Apple; GitHub (GitHub Pages) héberge les pages du site Web; IONOS enregistre le nom de domaine et exploite son système de noms de domaine; et Microsoft fournit le compte de courriel utilisé pour le soutien. Sur Android, Google assure la distribution.
+VRC Ops n'est pas responsable des pannes, des changements, des suspensions ou des défaillances causés par des services tiers indépendants de sa volonté raisonnable.
+Votre utilisation de plateformes tierces peut aussi être assujettie à leurs propres conditions et politiques de confidentialité.
+
+23. Propriété intellectuelle
+
+À l'exception du contenu soumis par les utilisateurs ou les membres des ligues, VRC Ops ainsi que ses logiciels, sa conception, sa marque, ses fonctionnalités, sa documentation et son contenu original appartiennent à l'exploitant de VRC Ops ou lui sont concédés sous licence, et sont protégés par les lois applicables en matière de propriété intellectuelle.
+Les présentes conditions ne vous transfèrent aucun droit de propriété sur les logiciels, le code source, la marque ou toute autre propriété intellectuelle de VRC Ops.
+Vous ne pouvez utiliser VRC Ops que de la façon permise par les présentes conditions et les fonctionnalités rendues disponibles par le service.
+
+24. Modifications des présentes conditions
+
+Nous pouvons mettre à jour les présentes conditions d'utilisation de temps à autre.
+Nous pouvons les modifier pour tenir compte de nouvelles fonctionnalités, d'offres et de prix d'abonnement, d'exigences de sécurité, de changements de fournisseurs de services, de changements opérationnels ou d'exigences légales. Nous n'utiliserons pas ce droit pour modifier autre chose.
+Nous vous informerons de toute modification importante au moins 30 jours avant son entrée en vigueur, par courriel à l'adresse de votre compte et dans l'application. L'avis indiquera le nouveau texte et la date de son entrée en vigueur.
+Les modifications exigées par la loi, ou nécessaires sur-le-champ pour assurer la sécurité du service, peuvent entrer en vigueur plus tôt.
+Lorsque les conditions sont mises à jour, la date de dernière mise à jour est modifiée. On pourrait vous demander de lire et d'accepter la nouvelle version avant de continuer à utiliser VRC Ops.
+Si vous n'acceptez pas une modification qui augmente vos obligations ou réduit les nôtres, vous pouvez la refuser et cesser d'utiliser VRC Ops dans les 30 jours suivant son entrée en vigueur, sans frais. Vous pouvez supprimer votre compte en tout temps, et pour un abonnement payant, nous vous aiderons à demander à Apple le remboursement de toute période que vous avez payée et que vous ne pouvez pas utiliser.
+
+25. Droit applicable et différends
+
+Les présentes conditions, ainsi que tout différend découlant d'elles ou de VRC Ops ou s'y rapportant, sont régis par les lois du Commonwealth de Pennsylvanie, aux États-Unis, et par les lois fédérales américaines applicables, sans égard aux règles de conflit de lois.
+Avant d'engager une réclamation, vous acceptez de nous écrire à debard.chase@outlook.com, de décrire le problème et de nous accorder 30 jours pour tenter de le régler.
+S'il n'est pas réglé, vous acceptez que toute réclamation soit portée uniquement devant les tribunaux d'État de la Pennsylvanie ou les tribunaux fédéraux situés en Pennsylvanie, que vous reconnaissez la compétence de ces tribunaux et que vous ne les contesterez pas comme étant un endroit inapproprié. Les réclamations ne peuvent être présentées qu'à titre individuel, et non en tant que demandeur ou membre d'un groupe dans une procédure collective ou représentative.
+La présente section s'applique dans toute la mesure permise par la loi. Elle ne vous enlève pas un droit que vous avez, à titre de consommateur, en vertu de la loi impérative de l'endroit où vous vivez et auquel on ne peut légalement renoncer par contrat, y compris tout droit de présenter une réclamation devant les tribunaux de cet endroit lorsque la loi vous accorde ce droit.
+
+26. Langue
+
+Les présentes conditions sont offertes en anglais et en français, et l'application est offerte dans les deux langues. L'application affiche la langue de votre appareil lorsqu'il s'agit de l'anglais ou du français, et vous pouvez changer de langue à l'endroit où les conditions sont affichées.
+Les deux versions ont le même sens. En cas de divergence, la version anglaise s'applique, sauf lorsque la loi exige que la version française s'applique, comme c'est le cas pour les consommateurs du Québec. Le texte français a été préparé à l'aide de l'intelligence artificielle et n'a pas encore été révisé par un traducteur professionnel; il peut donc comporter des inexactitudes.
+
+27. Intégralité de l'entente
+
+Les présentes conditions d'utilisation, avec toute condition supplémentaire présentée pour une fonctionnalité ou un achat particulier de VRC Ops, forment l'entente qui régit votre utilisation de VRC Ops.
+Si une disposition des présentes conditions est jugée inapplicable, les autres dispositions demeurent en vigueur dans la mesure permise par la loi applicable.
+Le fait de ne pas faire respecter une disposition des présentes conditions n'emporte pas renonciation au droit de la faire respecter plus tard.
+
+28. Nous joindre
+
+Les questions au sujet des présentes conditions d'utilisation peuvent être envoyées à :
+Chase DeBard
+VRC Ops
+Adresse postale pour les avis juridiques : fournie sur demande par courriel à l'adresse ci-dessus
+Courriel : debard.chase@outlook.com
+Site Web : https://vrc-ops.org

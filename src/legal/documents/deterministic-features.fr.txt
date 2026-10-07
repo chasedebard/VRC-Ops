@@ -1,0 +1,187 @@
+VRC Ops — Consentement aux fonctionnalités déterministes
+Dernière mise à jour : 7 octobre 2026
+VRC Ops comprend des fonctions facultatives de prédiction, d'analyse, de Pit Wall, d'Ingénieur de course et d'autres fonctions d'aide à la décision qui utilisent des calculs et des règles déterministes.
+Malgré toute mention interne héritée de ces fonctions comme étant de l'« IA », VRC Ops n'utilise pas actuellement d'intelligence artificielle générative, de grands modèles de langage ni de fournisseurs externes d'IA pour exploiter ces fonctions.
+Le présent consentement explique ce que font ces fonctions, quels renseignements elles utilisent et quelles sont leurs limites.
+En acceptant ce consentement et en utilisant une fonction visée, vous autorisez VRC Ops à traiter les données VRC Ops applicables décrites ci-dessous aux fins d'offrir cette fonction.
+
+1. Ce que font ces fonctions
+
+VRC Ops utilise une logique logicielle déterministe pour analyser des renseignements de course et produire des résultats comme :
+des prédictions et prévisions de courses;
+des analyses de pilotes et de rendement;
+des cotes calculées, des mesures de confiance et des indicateurs de rendement (la cote mondiale facultative du compte a son propre interrupteur dans les Réglages et est expliquée dans la politique de confidentialité; elle n'est pas couverte par le présent consentement);
+des recommandations de mise au point de Pit Wall;
+des conseils de réglage de l'Ingénieur de course;
+des statistiques et des comparaisons dérivées; et
+d'autres observations de course produites à partir de renseignements déjà disponibles dans VRC Ops ou saisis localement dans une fonction prise en charge.
+« Déterministe » signifie que ces fonctions s'appuient sur des règles programmées, des formules, des calculs, des systèmes de pondération et une logique d'affaires définie.
+Les mêmes données d'entrée et le même état du système sont censés produire des résultats selon ces règles définies, et non par une IA générative ouverte.
+
+2. Aucun traitement par une IA externe ou un grand modèle de langage
+
+VRC Ops n'envoie pas actuellement les renseignements utilisés par ces fonctions à OpenAI, à Anthropic, à Google Gemini ni à un autre fournisseur externe d'IA générative ou de grands modèles de langage.
+VRC Ops n'utilise pas actuellement de modèle externe d'IA générative pour produire des prédictions de courses, des recommandations de Pit Wall, des recommandations de l'Ingénieur de course, des cotes de pilotes ou des résultats connexes d'aide à la décision.
+Les systèmes actuels sont fondés sur une logique déterministe contrôlée par VRC Ops.
+Si VRC Ops introduit à l'avenir une IA externe ou un traitement par apprentissage automatique sensiblement différent, le présent consentement et la politique de confidentialité applicable seront mis à jour avant l'utilisation de ce nouveau traitement lorsque cela est exigé.
+Les utilisateurs pourraient devoir lire et accepter des conditions mises à jour ou donner un nouveau consentement avant d'accéder à la fonction modifiée.
+
+3. Prédictions de courses
+
+Les prédictions de courses utilisent des renseignements de course pertinents déjà disponibles dans VRC Ops.
+Selon l'épreuve et les données disponibles, les calculs de prédiction peuvent tenir compte de renseignements comme :
+les résultats officiels de course;
+les résultats de qualification;
+les positions à l'arrivée;
+les positions de départ;
+les statuts DNS, DNF et DSQ;
+les renseignements sur les tours et les temps de course;
+les écarts avec le meneur;
+les meilleurs tours;
+le rendement historique des pilotes;
+le rendement dans le championnat et la saison;
+le rendement récent;
+les renseignements sur la participation et l'admissibilité;
+les renseignements sur le circuit, la classe, la région ou l'épreuve, lorsqu'ils s'appliquent;
+la qualité des données;
+la taille de l'échantillon; et
+les calculs de confiance.
+Les résultats des prédictions sont des estimations dérivées des renseignements disponibles.
+Ils ne déterminent pas les résultats officiels des courses, les positions de départ, les pénalités, les points de championnat, les classements ni les décisions de la ligue.
+
+4. Pit Wall et Ingénieur de course
+
+Les fonctions Pit Wall et Ingénieur de course utilisent des règles et des calculs déterministes pour offrir des conseils de réglage et de mise au point.
+Selon le jeu et la fonction pris en charge, le système peut traiter des renseignements comme :
+le jeu ou la simulation;
+le véhicule;
+le circuit;
+la classe du véhicule;
+les valeurs actuelles de mise au point et de réglage;
+les plages de réglage permises;
+les commentaires du pilote;
+les renseignements sur les tours;
+le comportement du véhicule signalé par le pilote;
+les recommandations précédentes; et
+les commentaires indiquant si un réglage recommandé a amélioré ou nui au rendement.
+Le système utilise ces renseignements pour choisir et expliquer des recommandations de réglage selon des règles et des relations de mise au point définies.
+Les recommandations de Pit Wall et de l'Ingénieur de course ne sont que des conseils.
+Elles ne garantissent pas une amélioration du comportement du véhicule, des temps au tour, des résultats de course ou de la compétitivité.
+
+5. Télémétrie et renseignements de Capture
+
+Les données brutes de télémétrie de Capture ne sont pas téléversées vers Supabase pour être utilisées par ces fonctions.
+Les captures de télémétrie brute demeurent localement sur l'appareil de l'utilisateur.
+VRC Ops peut analyser localement une capture de télémétrie brute et téléverser vers Supabase des renseignements de course analysés pris en charge.
+Selon la source de télémétrie prise en charge, les renseignements analysés peuvent comprendre des éléments comme :
+le jeu;
+le véhicule;
+le circuit;
+le classement de la séance;
+les renseignements sur les tours;
+les renseignements sur les secteurs;
+les temps au tour ou par secteur;
+les renseignements sur les pneus;
+les renseignements sur le carburant; et
+d'autres mesures de course dérivées prises en charge par VRC Ops.
+Les fonctions de VRC Ops peuvent utiliser les renseignements analysés ou dérivés applicables déjà conservés dans Supabase lorsqu'ils sont pertinents pour le calcul demandé.
+L'adresse IP locale de la console ou de la PlayStation utilisée pour la Capture n'est pas téléversée dans le cadre de ces fonctions.
+
+6. Renseignements de Pit Wall sur nos serveurs
+
+Les séances de mise au point de Pit Wall, les données de réglage saisies, les recommandations et les commentaires sur les recommandations sont conservés sur les serveurs de VRC Ops (Supabase), rattachés à votre compte, afin que vous puissiez conserver et examiner votre travail de réglage.
+Ces renseignements sont privés pour le compte qui les a créés. Ils ne sont pas montrés aux autres membres de vos ligues, y compris aux propriétaires et administrateurs de ligue.
+Les renseignements saisis dans Pit Wall servent à offrir la fonction de mise au point demandée.
+Vous pouvez supprimer vos renseignements de Pit Wall, et ils sont supprimés lorsque vous supprimez votre compte. Si VRC Ops modifie de façon importante la manière dont les renseignements de Pit Wall sont conservés ou utilisés, la politique de confidentialité et les conditions de consentement applicables seront mises à jour avant que le traitement modifié s'applique, lorsque cela est exigé.
+
+7. Qualité des données et confiance
+
+La qualité d'un résultat déterministe dépend de la qualité et de la quantité des renseignements dont le système dispose.
+Les résultats peuvent être moins fiables lorsque les renseignements sont manquants, incorrects, incomplets, périmés ou fondés sur un petit nombre de courses ou d'observations.
+Lorsque c'est pris en charge, VRC Ops peut utiliser des mesures de confiance, des exigences de taille d'échantillon, des pondérations ou d'autres contrôles déterministes pour tenir compte de la qualité des données.
+Ces mesures réduisent l'incertitude, mais ne l'éliminent pas.
+
+8. Aucune garantie d'exactitude
+
+Les prédictions, les analyses, les cotes, les recommandations de mise au point, les valeurs de confiance et les autres résultats générés peuvent être erronés.
+Un calcul peut aussi devenir inexact en raison de circonstances que le système ne peut connaître ni prédire, notamment :
+l'amélioration ou le déclin d'un pilote;
+les pénalités;
+les remplacements de pilotes;
+un DNS ou un retrait;
+la météo ou les conditions de course;
+les changements de physique du jeu;
+les changements d'équilibre des performances;
+les changements de réglage du véhicule;
+les changements de matériel;
+les incidents de course;
+des dossiers de ligue incomplets; ou
+des renseignements incorrects saisis dans VRC Ops.
+Les renseignements générés doivent être traités comme des renseignements d'aide à la décision plutôt que comme des faits ou une garantie de rendement futur.
+
+9. Contrôle humain
+
+Les fonctions déterministes de VRC Ops ne remplacent pas l'administration de la ligue.
+Les propriétaires, administrateurs, commissaires et autres organisateurs autorisés de la ligue demeurent responsables des décisions officielles de la ligue.
+Les prédictions et les analyses ne déterminent pas automatiquement les résultats officiels, les pénalités, les classements, l'admissibilité, les classifications de championnat ni les mesures disciplinaires.
+Les recommandations de Pit Wall et de l'Ingénieur de course ne modifient pas automatiquement un véhicule ni un réglage de jeu.
+C'est l'utilisateur qui décide d'appliquer ou non une recommandation.
+
+10. Aucun usage pour le jeu ou les finances
+
+Les prédictions de VRC Ops sont conçues pour l'information sur la course simulée, l'analyse de la compétition et le divertissement.
+Elles ne sont ni conçues ni offertes pour le jeu, les paris, les mises, les décisions financières ou toute autre activité où de l'argent ou une valeur est mis en jeu en fonction d'un résultat.
+VRC Ops ne garantit pas l'exactitude d'une prédiction à de telles fins.
+
+11. Renseignements de la ligue
+
+Les fonctions de prédiction et d'analyse peuvent traiter des renseignements appartenant à la ligue dans laquelle la fonction est utilisée.
+Cela peut comprendre des dossiers de course associés à d'autres pilotes de cette ligue.
+L'accès demeure assujetti à l'authentification de VRC Ops, à l'appartenance à la ligue, aux autorisations selon les rôles et aux contrôles de sécurité au niveau des lignes applicables.
+L'utilisation d'une fonction de prédiction ou d'analyse ne donne pas accès à des renseignements de la ligue auxquels le compte demandeur n'est pas autrement autorisé à accéder.
+
+12. Partage des données
+
+VRC Ops n'envoie pas actuellement les renseignements traités en vertu du présent consentement à un fournisseur externe d'IA ou de grands modèles de langage.
+Les renseignements côté serveur nécessaires aux fonctions déterministes applicables peuvent être traités au moyen du service Supabase de VRC Ops.
+Supabase est la source de vérité principale du service pour les renseignements de VRC Ops conservés côté serveur.
+Le traitement des données est aussi régi par la politique de confidentialité de VRC Ops.
+
+13. Consentement
+
+Certaines fonctions déterministes de prédiction, d'analyse, de Pit Wall, d'Ingénieur de course, de télémétrie ou de partage de données de VRC Ops peuvent exiger un consentement affirmatif avant que la fonction soit accessible.
+Votre consentement autorise VRC Ops à traiter les renseignements applicables décrits dans le présent document aux fins d'exploiter la fonction que vous choisissez d'utiliser.
+Le refus de ce consentement peut empêcher l'accès aux fonctions qui dépendent du traitement visé, mais n'empêche pas l'utilisation des fonctionnalités de VRC Ops sans rapport pour lesquelles ce consentement n'est pas exigé.
+VRC Ops peut consigner que vous avez accepté ce consentement, y compris la version du document et la date ou l'heure de l'acceptation.
+
+14. Retrait du consentement
+
+Vous pouvez retirer ce consentement en tout temps dans les Réglages, puis Juridique et confidentialité.
+Si vous ne pouvez pas utiliser cette commande, écrivez à :
+debard.chase@outlook.com
+Le retrait s'applique au traitement futur fondé sur le consentement, le cas échéant, et n'invalide pas le traitement qui a eu lieu pendant que le consentement valide était en vigueur.
+Une fonction qui exige le consentement retiré peut devenir indisponible après le retrait.
+
+15. Fonctions futures d'IA ou d'apprentissage automatique
+
+VRC Ops peut introduire à l'avenir des fonctions différentes de prédiction, d'apprentissage automatique, d'intelligence artificielle ou d'IA générative.
+L'acceptation de la présente version ne constitue pas un consentement général à ce que VRC Ops envoie vos renseignements à un futur fournisseur externe d'IA.
+Si une fonction future modifie de façon importante la manière dont les renseignements visés sont traités, notamment par l'introduction d'un fournisseur externe d'IA générative ou de grands modèles de langage, VRC Ops mettra à jour les documents juridiques pertinents.
+Lorsque cela est exigé, on demandera aux utilisateurs de lire et d'accepter les conditions mises à jour ou de donner un nouveau consentement avant que ce traitement commence.
+
+16. Modifications des présentes conditions
+
+VRC Ops peut mettre à jour les présentes conditions lorsque les fonctions déterministes, la logique de prédiction, le traitement de la télémétrie, les fonctions de Pit Wall, les pratiques en matière de données ou la technologie de soutien changent de façon importante.
+Lorsque les présentes conditions sont mises à jour, la date de dernière mise à jour change.
+Si une mise à jour modifie de façon importante le traitement couvert par votre consentement, VRC Ops peut exiger que vous lisiez et acceptiez la nouvelle version avant de continuer à utiliser la fonction visée.
+
+17. Documents connexes
+
+L'utilisation de ces fonctions est aussi régie par les conditions d'utilisation et la politique de confidentialité de VRC Ops.
+La politique de confidentialité explique plus en détail comment VRC Ops recueille, conserve, communique, garde et supprime les renseignements.
+Si vous avez des questions au sujet de ces fonctions ou du présent consentement, écrivez à :
+Chase DeBard
+VRC Ops
+Adresse postale : fournie sur demande par courriel
+Courriel : debard.chase@outlook.com
+Site Web : https://vrc-ops.org

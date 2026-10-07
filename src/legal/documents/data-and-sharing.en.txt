@@ -1,0 +1,233 @@
+VRC Ops — Data & Sharing Consent
+Last updated: October 7, 2026
+These terms explain what information may be shared within a VRC Ops league, what information remains on your device, how telemetry and generated content are handled, and what happens to shared league information if you delete your account.
+By accepting these terms and using features that require sharing consent, you authorize VRC Ops to process and share the applicable information as described below.
+
+1. League-based sharing
+
+VRC Ops is a private, authenticated league-management platform.
+League information is not publicly accessible by default. A person must sign into a VRC Ops account and have permission to access the applicable league.
+Depending on your role and the league's configuration, information visible to other members of your league may include:
+Your driver or display name;
+Racing number;
+Optional driver or profile photo;
+Team;
+Class;
+Region;
+Season participation;
+Race and qualifying participation;
+Starting and finishing positions;
+DNS, DNF, and DSQ status;
+Lap and race-time information;
+Penalties;
+Pole positions;
+Fastest laps;
+Points;
+Championship standings;
+Historical racing performance;
+Generated league content and graphics; and
+Other racing information that forms part of the league's records.
+Current league roles include Owner, Admin, Marshal, Driver, and Viewer.
+What a league member can see or manage depends on their role and permissions.
+
+2. Driver records and user accounts are separate
+
+A VRC Ops user account and a league driver record are separate.
+League Owners and Admins may create a racing driver record for someone who does not have a VRC Ops account.
+Those records are intended for racing-related information and must not be used to store unnecessary personal information such as private email addresses, telephone numbers, birthdays, home addresses, or other unrelated personal information.
+A league administrator may upload a driver photo.
+Creating a driver record does not create a VRC Ops account on that person's behalf.
+If a driver later creates an account, a league Owner or Admin may associate the account with the applicable league driver record.
+
+3. Information you provide about other people
+
+If you upload a name, photograph, racing identity, result, or other information relating to another person, you are responsible for having appropriate authority or permission to provide and use that information within the league.
+League administrators are responsible for the information they enter into their leagues and for ensuring that league-managed content is appropriate for its intended use.
+
+4. Raw telemetry stays on your device
+
+If you use VRC Ops Capture functionality, the raw telemetry capture remains local to your device.
+Raw telemetry is not uploaded to Supabase.
+Raw telemetry may contain detailed information such as speed, throttle, brake input, steering input, gear, position, individual samples, and other high-frequency vehicle or session data.
+These raw capture artifacts remain under your control on the device where they were created.
+
+5. Parsed telemetry may be uploaded
+
+Although the raw telemetry capture remains local, VRC Ops may parse that telemetry on your device and upload supported parsed racing information to Supabase.
+Depending on the supported game, telemetry source, and feature, uploaded parsed information may include:
+Game or simulation;
+Vehicle;
+Track;
+Session information;
+Lap information;
+Individual or representative lap times;
+Sector information;
+Sector times;
+Lap counts;
+Tire information;
+Fuel information;
+Session classification;
+Derived racing measurements; and
+Other supported racing information extracted from the telemetry.
+The uploaded information is intended to support VRC Ops racing, analytics, results, prediction, and related league functionality.
+VRC Ops does not upload the original raw telemetry capture itself.
+
+6. Console and local-network information
+
+Capture may require you to provide or select the local network address of a supported console or device.
+The PlayStation or console IP address used by Capture is stored locally on your device.
+It is not stored as part of your VRC Ops account or league record in Supabase.
+VRC Ops does not use the console IP address for advertising, profiling, or unrelated tracking.
+
+7. How parsed racing information may be used
+
+Parsed or derived racing information stored in Supabase may be used by supported VRC Ops features, including:
+Race Weekend analytics;
+Results processing;
+Lap and session analysis;
+Driver performance analysis;
+Predictions;
+Championship analytics;
+Confidence and data-quality calculations; and
+Other racing-related calculations supported by VRC Ops.
+The exact information used depends on the feature and the information available.
+VRC Ops does not currently send this information to an external generative-AI or large-language-model provider.
+
+8. Pit Wall and Race Engineer data
+
+Pit Wall and Race Engineer functionality uses deterministic rules and calculations.
+Tuning inputs, setup values, recommendations, recommendation history, and user feedback generated in Pit Wall are stored on VRC Ops servers (Supabase) against your account. They are private to the account that created them and are not shared with other members of your leagues, including league Owners and Admins.
+Pit Wall may use information such as the game, vehicle, track, class, setup values, lap information, and driver feedback to provide recommendations.
+If VRC Ops materially changes how Pit Wall information is stored or shared in the future, the applicable privacy and consent terms will be updated before the changed processing applies where required.
+
+9. Predictions and analytics
+
+VRC Ops may use league racing information and supported parsed telemetry information to produce predictions, analytics, ratings, confidence values, and other derived racing information.
+These systems currently use deterministic logic controlled by VRC Ops.
+Prediction and analytics outputs may be visible to authorized members of the applicable league according to their permissions.
+These outputs are estimates and do not replace official decisions made by league organizers.
+The optional global account rating is off by default. If you turn it on in Settings, what other members of your leagues can see about it is described in the Privacy Policy. The shared display has not started, so today no one can see another person's rating.
+
+10. Generated content and graphics
+
+VRC Ops may create league-related graphics, summaries, analytics displays, predictions, statistics, or other generated content using information already available within the league.
+Generated content may include driver names, photos, race results, championship information, statistics, or other league information where appropriate to the feature being used.
+Generated league content remains subject to the same league authentication and role-based access controls as other league information unless a specific feature clearly states otherwise.
+
+11. Viewer access
+
+Viewer is an authenticated league role.
+A Viewer must have a VRC Ops account and must have been granted permission to access the applicable league.
+League organizers may determine which supported league information is available to Viewers.
+Viewer access does not make a league or its information publicly available on the open internet.
+
+12. League permissions and access controls
+
+VRC Ops uses authentication, league membership, role-based permissions, and Supabase Row Level Security to limit access to league information.
+Accepting these sharing terms does not grant another VRC Ops user unrestricted access to your information.
+A user must still have appropriate access to the applicable league.
+Owners and Admins have broader access than Drivers and Viewers because their roles require league-management functionality.
+
+13. Supabase storage and processing
+
+Supabase is the primary backend source of truth for server-side VRC Ops information.
+Information shared or synchronized with a league may be stored in Supabase, including applicable driver records, league records, race information, parsed telemetry information, consent records, and uploaded images.
+Driver and league images may be stored using Supabase Storage.
+Server-side information remains subject to VRC Ops permissions and Supabase Row Level Security policies.
+
+14. Resend and invitations
+
+If a league Owner or Admin invites another person to a league, VRC Ops processes the invited person's email address for the purpose of delivering and validating that invitation.
+VRC Ops currently uses Resend to deliver transactional invitation emails.
+Invitation information is used for the purpose of providing the requested league invitation and related service functionality.
+
+15. Information that is not shared publicly
+
+VRC Ops does not currently operate public, unauthenticated league feeds.
+League information requires an authenticated account with permission to access the applicable league.
+VRC Ops also does not currently sell league or user information to advertisers or provide it for cross-context behavioral advertising.
+
+16. Account deletion
+
+You may delete your VRC Ops account through the in-app account deletion process.
+You may also contact debard.chase@outlook.com for assistance.
+When your account is deleted, account-level information associated with your login is removed from active VRC Ops systems as described in the VRC Ops Privacy Policy.
+However, deleting a user account does not delete every historical league record associated with that person's driver.
+
+17. Driver records after account deletion
+
+If you are a driver in a league you do not own, the league keeps the racing record associated with your driver after your VRC Ops account is deleted.
+When your account is deleted, your account is unlinked from the driver record, and the driver's photo, biography, platform and racing identifiers, and first and last names are removed. The driver's name becomes the word "Driver" followed by the driver's racing number. For example, if the racing number was 73, the driver becomes "Driver 73".
+Retained league information may include:
+The racing number;
+Race and qualifying results;
+Championship history;
+Points;
+Standings;
+Penalties;
+Performance history; and
+Other information necessary to preserve the league's historical record.
+The retained driver record is separate from the deleted VRC Ops login account.
+Deleting your account does not give another person access to the deleted account or permit the historical driver record to be used as a login account.
+If a driver record was never linked to an account, the person it describes can ask the league administrator, or ask VRC Ops, to replace the name in the same way.
+
+18. League Owner deletion
+
+If you own a league that has other active members, you must transfer ownership to one of them before you delete your VRC Ops account.
+If you are the only active member of a league you own and you delete your VRC Ops account, the league is closed. A closed league has no owner, cannot be joined or changed, and is not visible to anyone, but its racing records (championships, seasons, events, results, standings, and driver records) are kept as a read-only history. The files that belong to the league, such as driver portraits and championship logos of retained championships, remain with it. Personal information attached to your account is removed or unlinked as described in the Privacy Policy.
+A league that contains only unused drafts and no racing history is deleted instead.
+Certain temporary backups, infrastructure records, transactional records, or security logs may remain for a limited period as described in the VRC Ops Privacy Policy.
+
+19. Local data after account deletion
+
+Raw telemetry captures and other information stored only on your device are not part of the VRC Ops server-side account record.
+Local files are controlled by the device and application storage where they exist.
+Deleting a VRC Ops account does not guarantee deletion of every local file outside VRC Ops server-side systems if that file remains stored independently on a device.
+You are responsible for deleting local telemetry or other locally retained files from your device where necessary.
+
+20. Retention
+
+VRC Ops generally retains shared league information for as long as necessary to operate the applicable account, league, championship, subscription, or feature.
+Information may also be retained where reasonably necessary for security, fraud prevention, legal compliance, dispute resolution, technical recovery, or legitimate preservation of league history.
+Certain logs, transactional records, backup copies, or service-provider records may remain after deletion from active VRC Ops systems for as long as the provider's standard backup schedule provides, subject to the practices described in the Privacy Policy.
+
+21. Consent
+
+Certain VRC Ops features require you to accept these Data & Sharing Terms before using functionality that processes or shares applicable information.
+Your consent authorizes VRC Ops to process and share the applicable information described in these terms for the purpose of providing those features.
+Declining these terms may prevent access to functionality that depends on the covered sharing or processing.
+It does not necessarily prevent you from using unrelated VRC Ops functionality where this consent is not required.
+VRC Ops may store a record that you accepted these terms, including the applicable document version and the date or time of acceptance.
+
+22. Withdrawing consent
+
+You can withdraw this consent at any time in Settings, then Legal & Privacy.
+If you cannot use that control, contact:
+debard.chase@outlook.com
+Withdrawal applies to future consent-based processing where applicable.
+It does not invalidate processing or league sharing that lawfully occurred before withdrawal.
+Some historical league records may continue to be retained where necessary to preserve legitimate league history, as described in these terms and the Privacy Policy.
+A feature that requires the withdrawn consent may become unavailable after withdrawal.
+
+23. Changes to these terms
+
+VRC Ops may update these Data & Sharing Terms if the service, telemetry processing, league-sharing functionality, storage practices, generated-content features, or supporting technology changes.
+When these terms are updated, the Last updated date will change.
+If an update materially changes the information processed or how it is shared, VRC Ops may require you to review and accept the updated version before continuing to use the affected functionality.
+Acceptance of this version does not constitute blanket consent to materially different future data-sharing practices.
+
+24. Related documents
+
+These Data & Sharing Terms operate together with the VRC Ops Privacy Policy, Terms of Service, and Deterministic Features Consent.
+The Privacy Policy provides additional information about collection, storage, retention, service providers, account deletion, and privacy rights.
+The Terms of Service govern general use of VRC Ops.
+The Deterministic Features Consent explains how Predictions, Pit Wall, Race Engineer, analytics, and related deterministic functionality process applicable racing information.
+
+25. Contact
+
+Questions about data sharing, consent, account deletion, or information associated with your VRC Ops account may be sent to:
+Chase DeBard
+VRC Ops
+Postal address: provided on request by email
+Email: debard.chase@outlook.com
+Website: https://vrc-ops.org

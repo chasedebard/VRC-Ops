@@ -1,0 +1,233 @@
+VRC Ops — Consentement aux données et au partage
+Dernière mise à jour : 7 octobre 2026
+Les présentes conditions expliquent quels renseignements peuvent être partagés au sein d'une ligue VRC Ops, quels renseignements demeurent sur votre appareil, comment la télémétrie et le contenu généré sont traités, et ce qui arrive aux renseignements partagés de la ligue si vous supprimez votre compte.
+En acceptant les présentes conditions et en utilisant des fonctions qui exigent un consentement au partage, vous autorisez VRC Ops à traiter et à partager les renseignements applicables de la façon décrite ci-dessous.
+
+1. Partage au sein d'une ligue
+
+VRC Ops est une plateforme privée et authentifiée de gestion de ligues.
+Les renseignements d'une ligue ne sont pas accessibles au public par défaut. Une personne doit ouvrir une session dans un compte VRC Ops et avoir la permission d'accéder à la ligue visée.
+Selon votre rôle et la configuration de la ligue, les renseignements visibles pour les autres membres de votre ligue peuvent comprendre :
+votre nom de pilote ou nom d'affichage;
+le numéro de course;
+une photo de pilote ou de profil facultative;
+l'équipe;
+la classe;
+la région;
+la participation aux saisons;
+la participation aux courses et aux qualifications;
+les positions de départ et à l'arrivée;
+le statut DNS, DNF et DSQ;
+les renseignements sur les tours et les temps de course;
+les pénalités;
+les positions de tête (pole);
+les meilleurs tours;
+les points;
+les classements de championnat;
+le rendement historique en course;
+le contenu et les graphiques de ligue générés; et
+d'autres renseignements de course qui font partie des dossiers de la ligue.
+Les rôles actuels dans une ligue sont propriétaire (Owner), administrateur (Admin), commissaire (Marshal), pilote (Driver) et observateur (Viewer).
+Ce qu'un membre de la ligue peut voir ou gérer dépend de son rôle et de ses autorisations.
+
+2. Les fiches de pilote et les comptes d'utilisateur sont distincts
+
+Un compte d'utilisateur VRC Ops et une fiche de pilote de ligue sont distincts.
+Les propriétaires et les administrateurs de ligue peuvent créer une fiche de pilote de course pour une personne qui n'a pas de compte VRC Ops.
+Ces fiches sont destinées aux renseignements liés à la course et ne doivent pas servir à conserver des renseignements personnels inutiles comme des adresses courriel privées, des numéros de téléphone, des dates de naissance, des adresses résidentielles ou d'autres renseignements personnels sans rapport.
+Un administrateur de ligue peut téléverser une photo de pilote.
+La création d'une fiche de pilote ne crée pas de compte VRC Ops au nom de cette personne.
+Si un pilote crée plus tard un compte, un propriétaire ou un administrateur de ligue peut associer le compte à la fiche de pilote de la ligue visée.
+
+3. Renseignements que vous fournissez sur d'autres personnes
+
+Si vous téléversez un nom, une photographie, une identité de course, un résultat ou d'autres renseignements concernant une autre personne, vous devez avoir l'autorisation ou la permission appropriée de fournir et d'utiliser ces renseignements au sein de la ligue.
+Les administrateurs de ligue sont responsables des renseignements qu'ils saisissent dans leurs ligues et de s'assurer que le contenu géré par la ligue convient à l'usage prévu.
+
+4. La télémétrie brute reste sur votre appareil
+
+Si vous utilisez la fonction de Capture de VRC Ops, la capture de télémétrie brute demeure locale sur votre appareil.
+La télémétrie brute n'est pas téléversée vers Supabase.
+La télémétrie brute peut contenir des renseignements détaillés comme la vitesse, l'accélérateur, le freinage, la direction, le rapport de vitesse, la position, des échantillons individuels et d'autres données de véhicule ou de séance à haute fréquence.
+Ces fichiers de capture bruts demeurent sous votre contrôle sur l'appareil où ils ont été créés.
+
+5. La télémétrie analysée peut être téléversée
+
+Même si la capture de télémétrie brute reste locale, VRC Ops peut analyser cette télémétrie sur votre appareil et téléverser vers Supabase des renseignements de course analysés pris en charge.
+Selon le jeu, la source de télémétrie et la fonction pris en charge, les renseignements analysés téléversés peuvent comprendre :
+le jeu ou la simulation;
+le véhicule;
+le circuit;
+des renseignements sur la séance;
+des renseignements sur les tours;
+des temps au tour individuels ou représentatifs;
+des renseignements sur les secteurs;
+des temps par secteur;
+le nombre de tours;
+des renseignements sur les pneus;
+des renseignements sur le carburant;
+le classement de la séance;
+des mesures de course dérivées; et
+d'autres renseignements de course pris en charge extraits de la télémétrie.
+Les renseignements téléversés servent à soutenir les fonctions de course, d'analyse, de résultats, de prédiction et les fonctions de ligue connexes de VRC Ops.
+VRC Ops ne téléverse pas la capture de télémétrie brute d'origine elle-même.
+
+6. Renseignements sur la console et le réseau local
+
+La Capture peut exiger que vous fournissiez ou choisissiez l'adresse du réseau local d'une console ou d'un appareil pris en charge.
+L'adresse IP de la PlayStation ou de la console utilisée par la Capture est conservée localement sur votre appareil.
+Elle n'est pas conservée dans votre compte VRC Ops ni dans le dossier de la ligue dans Supabase.
+VRC Ops n'utilise pas l'adresse IP de la console à des fins publicitaires, de profilage ou de suivi sans rapport.
+
+7. Comment les renseignements de course analysés peuvent être utilisés
+
+Les renseignements de course analysés ou dérivés conservés dans Supabase peuvent être utilisés par les fonctions prises en charge de VRC Ops, notamment :
+les analyses du week-end de course;
+le traitement des résultats;
+l'analyse des tours et des séances;
+l'analyse du rendement des pilotes;
+les prédictions;
+les analyses de championnat;
+les calculs de confiance et de qualité des données; et
+d'autres calculs liés à la course pris en charge par VRC Ops.
+Les renseignements exacts utilisés dépendent de la fonction et des renseignements disponibles.
+VRC Ops n'envoie pas actuellement ces renseignements à un fournisseur externe d'IA générative ou de grands modèles de langage.
+
+8. Données de Pit Wall et de l'Ingénieur de course
+
+Les fonctions Pit Wall et Ingénieur de course utilisent des règles et des calculs déterministes.
+Les données de mise au point, les valeurs de réglage, les recommandations, l'historique des recommandations et les commentaires des utilisateurs générés dans Pit Wall sont conservés sur les serveurs de VRC Ops (Supabase), rattachés à votre compte. Ils sont privés pour le compte qui les a créés et ne sont pas partagés avec les autres membres de vos ligues, y compris les propriétaires et les administrateurs de ligue.
+Pit Wall peut utiliser des renseignements comme le jeu, le véhicule, le circuit, la classe, les valeurs de réglage, les renseignements sur les tours et les commentaires du pilote pour formuler des recommandations.
+Si VRC Ops modifie de façon importante, à l'avenir, la manière dont les renseignements de Pit Wall sont conservés ou partagés, les conditions de confidentialité et de consentement applicables seront mises à jour avant que le traitement modifié s'applique, lorsque cela est exigé.
+
+9. Prédictions et analyses
+
+VRC Ops peut utiliser les renseignements de course de la ligue et les renseignements de télémétrie analysés pris en charge pour produire des prédictions, des analyses, des cotes, des valeurs de confiance et d'autres renseignements de course dérivés.
+Ces systèmes utilisent actuellement une logique déterministe contrôlée par VRC Ops.
+Les résultats des prédictions et des analyses peuvent être visibles pour les membres autorisés de la ligue visée selon leurs autorisations.
+Ces résultats sont des estimations et ne remplacent pas les décisions officielles prises par les organisateurs de la ligue.
+La cote mondiale facultative du compte est désactivée par défaut. Si vous l'activez dans les Réglages, ce que les autres membres de vos ligues peuvent en voir est décrit dans la politique de confidentialité. L'affichage partagé n'a pas commencé; aujourd'hui, personne ne peut donc voir la cote d'une autre personne.
+
+10. Contenu et graphiques générés
+
+VRC Ops peut créer des graphiques, des résumés, des affichages d'analyse, des prédictions, des statistiques ou d'autre contenu généré lié à la ligue, à partir des renseignements déjà disponibles dans la ligue.
+Le contenu généré peut comprendre des noms de pilotes, des photos, des résultats de course, des renseignements de championnat, des statistiques ou d'autres renseignements de la ligue lorsque c'est approprié à la fonction utilisée.
+Le contenu de ligue généré demeure assujetti aux mêmes contrôles d'authentification de la ligue et d'accès selon les rôles que les autres renseignements de la ligue, sauf si une fonction précise indique clairement le contraire.
+
+11. Accès des observateurs
+
+Observateur (Viewer) est un rôle de ligue authentifié.
+Un observateur doit avoir un compte VRC Ops et avoir reçu la permission d'accéder à la ligue visée.
+Les organisateurs de la ligue peuvent déterminer quels renseignements de ligue pris en charge sont accessibles aux observateurs.
+L'accès d'observateur ne rend pas une ligue ni ses renseignements accessibles au public sur l'Internet ouvert.
+
+12. Autorisations de ligue et contrôles d'accès
+
+VRC Ops utilise l'authentification, l'appartenance à la ligue, les autorisations selon les rôles et la sécurité au niveau des lignes de Supabase pour limiter l'accès aux renseignements de la ligue.
+L'acceptation des présentes conditions de partage ne donne pas à un autre utilisateur de VRC Ops un accès illimité à vos renseignements.
+Un utilisateur doit quand même avoir l'accès approprié à la ligue visée.
+Les propriétaires et les administrateurs ont un accès plus étendu que les pilotes et les observateurs, car leurs rôles exigent des fonctions de gestion de ligue.
+
+13. Stockage et traitement par Supabase
+
+Supabase est la source de vérité principale du service pour les renseignements de VRC Ops conservés côté serveur.
+Les renseignements partagés ou synchronisés avec une ligue peuvent être conservés dans Supabase, y compris les fiches de pilote, les dossiers de ligue, les renseignements de course, les renseignements de télémétrie analysés, les dossiers de consentement et les images téléversées applicables.
+Les images de pilotes et de ligues peuvent être conservées au moyen de Supabase Storage.
+Les renseignements côté serveur demeurent assujettis aux autorisations de VRC Ops et aux politiques de sécurité au niveau des lignes de Supabase.
+
+14. Resend et invitations
+
+Si un propriétaire ou un administrateur de ligue invite une autre personne dans une ligue, VRC Ops traite l'adresse courriel de la personne invitée afin de livrer et de valider cette invitation.
+VRC Ops utilise actuellement Resend pour livrer les courriels d'invitation transactionnels.
+Les renseignements d'invitation servent à offrir l'invitation de ligue demandée et les fonctionnalités de service connexes.
+
+15. Renseignements qui ne sont pas partagés publiquement
+
+VRC Ops n'exploite pas actuellement de fils de ligue publics non authentifiés.
+Les renseignements d'une ligue exigent un compte authentifié ayant la permission d'accéder à la ligue visée.
+VRC Ops ne vend pas non plus actuellement de renseignements de ligue ou d'utilisateur à des annonceurs et ne les fournit pas à des fins de publicité comportementale intercontextuelle.
+
+16. Suppression du compte
+
+Vous pouvez supprimer votre compte VRC Ops au moyen du processus de suppression de compte dans l'application.
+Vous pouvez aussi écrire à debard.chase@outlook.com pour obtenir de l'aide.
+Lorsque votre compte est supprimé, les renseignements de niveau compte associés à votre identifiant sont retirés des systèmes actifs de VRC Ops, comme il est décrit dans la politique de confidentialité de VRC Ops.
+Toutefois, la suppression d'un compte d'utilisateur ne supprime pas tous les dossiers historiques de la ligue associés au pilote de cette personne.
+
+17. Fiches de pilote après la suppression d'un compte
+
+Si vous êtes pilote dans une ligue dont vous n'êtes pas propriétaire, la ligue conserve le dossier de course associé à votre pilote après la suppression de votre compte VRC Ops.
+Lorsque votre compte est supprimé, il est dissocié de la fiche de pilote, et la photo, la biographie, les identifiants de plateforme et de course ainsi que les prénoms et noms de famille du pilote en sont retirés. Le nom du pilote devient le mot « Driver » (conservé tel quel, en anglais, dans toutes les langues de l'application) suivi du numéro de course du pilote. Par exemple, si le numéro de course était 73, le pilote devient « Driver 73 ».
+Les renseignements de ligue conservés peuvent comprendre :
+le numéro de course;
+les résultats de qualification et de course;
+l'historique de championnat;
+les points;
+les classements;
+les pénalités;
+l'historique de rendement; et
+d'autres renseignements nécessaires pour préserver l'historique de la ligue.
+La fiche de pilote conservée est distincte du compte de connexion VRC Ops supprimé.
+La suppression de votre compte ne donne à personne l'accès au compte supprimé et ne permet pas d'utiliser la fiche de pilote historique comme compte de connexion.
+Si une fiche de pilote n'a jamais été liée à un compte, la personne qu'elle décrit peut demander à l'administrateur de la ligue, ou à VRC Ops, de remplacer le nom de la même façon.
+
+18. Suppression du compte d'un propriétaire de ligue
+
+Si vous êtes propriétaire d'une ligue qui compte d'autres membres actifs, vous devez en transférer la propriété à l'un d'eux avant de supprimer votre compte VRC Ops.
+Si vous êtes le seul membre actif d'une ligue dont vous êtes propriétaire et que vous supprimez votre compte VRC Ops, la ligue est fermée. Une ligue fermée n'a pas de propriétaire, ne peut être ni jointe ni modifiée et n'est visible pour personne, mais ses dossiers de course (championnats, saisons, épreuves, résultats, classements et fiches de pilote) sont conservés comme historique en lecture seule. Les fichiers qui appartiennent à la ligue, comme les portraits de pilotes et les logos des championnats conservés, demeurent avec elle. Les renseignements personnels rattachés à votre compte sont retirés ou dissociés, comme il est décrit dans la politique de confidentialité.
+Une ligue qui ne contient que des brouillons inutilisés et aucun historique de course est plutôt supprimée.
+Certaines sauvegardes temporaires, certains dossiers d'infrastructure, dossiers transactionnels ou journaux de sécurité peuvent subsister pendant une période limitée, comme il est décrit dans la politique de confidentialité de VRC Ops.
+
+19. Données locales après la suppression du compte
+
+Les captures de télémétrie brute et les autres renseignements conservés seulement sur votre appareil ne font pas partie du dossier de compte côté serveur de VRC Ops.
+Les fichiers locaux relèvent de l'appareil et du stockage de l'application, là où ils existent.
+La suppression d'un compte VRC Ops ne garantit pas la suppression de tous les fichiers locaux situés hors des systèmes côté serveur de VRC Ops si ce fichier demeure conservé indépendamment sur un appareil.
+Il vous revient de supprimer de votre appareil la télémétrie locale ou les autres fichiers conservés localement lorsque c'est nécessaire.
+
+20. Conservation
+
+VRC Ops conserve généralement les renseignements de ligue partagés aussi longtemps que nécessaire pour exploiter le compte, la ligue, le championnat, l'abonnement ou la fonction visés.
+Les renseignements peuvent aussi être conservés lorsque cela est raisonnablement nécessaire à des fins de sécurité, de prévention de la fraude, de conformité légale, de règlement de différends, de reprise technique ou de préservation légitime de l'historique de la ligue.
+Certains journaux, dossiers transactionnels, copies de sauvegarde ou dossiers de fournisseurs de services peuvent subsister après la suppression des systèmes actifs de VRC Ops aussi longtemps que le prévoit le calendrier habituel de sauvegarde du fournisseur, sous réserve des pratiques décrites dans la politique de confidentialité.
+
+21. Consentement
+
+Certaines fonctions de VRC Ops exigent que vous acceptiez les présentes conditions de données et de partage avant d'utiliser des fonctionnalités qui traitent ou partagent des renseignements applicables.
+Votre consentement autorise VRC Ops à traiter et à partager les renseignements applicables décrits dans les présentes conditions aux fins d'offrir ces fonctions.
+Le refus des présentes conditions peut empêcher l'accès aux fonctionnalités qui dépendent du partage ou du traitement visé.
+Il ne vous empêche pas nécessairement d'utiliser les fonctionnalités de VRC Ops sans rapport pour lesquelles ce consentement n'est pas exigé.
+VRC Ops peut conserver un dossier indiquant que vous avez accepté les présentes conditions, y compris la version du document et la date ou l'heure de l'acceptation.
+
+22. Retrait du consentement
+
+Vous pouvez retirer ce consentement en tout temps dans les Réglages, puis Juridique et confidentialité.
+Si vous ne pouvez pas utiliser cette commande, écrivez à :
+debard.chase@outlook.com
+Le retrait s'applique au traitement futur fondé sur le consentement, le cas échéant.
+Il n'invalide pas le traitement ni le partage de ligue qui ont eu lieu légalement avant le retrait.
+Certains dossiers historiques de la ligue peuvent continuer d'être conservés lorsque c'est nécessaire pour préserver l'historique légitime de la ligue, comme il est décrit dans les présentes conditions et dans la politique de confidentialité.
+Une fonction qui exige le consentement retiré peut devenir indisponible après le retrait.
+
+23. Modifications des présentes conditions
+
+VRC Ops peut mettre à jour les présentes conditions de données et de partage si le service, le traitement de la télémétrie, les fonctions de partage de ligue, les pratiques de conservation, les fonctions de contenu généré ou la technologie de soutien changent.
+Lorsque les présentes conditions sont mises à jour, la date de dernière mise à jour change.
+Si une mise à jour modifie de façon importante les renseignements traités ou la façon dont ils sont partagés, VRC Ops peut exiger que vous lisiez et acceptiez la version mise à jour avant de continuer à utiliser la fonctionnalité visée.
+L'acceptation de la présente version ne constitue pas un consentement général à des pratiques futures de partage de données sensiblement différentes.
+
+24. Documents connexes
+
+Les présentes conditions de données et de partage s'appliquent avec la politique de confidentialité, les conditions d'utilisation et le consentement aux fonctionnalités déterministes de VRC Ops.
+La politique de confidentialité fournit des renseignements supplémentaires sur la collecte, la conservation, la durée de conservation, les fournisseurs de services, la suppression de compte et les droits relatifs à la vie privée.
+Les conditions d'utilisation régissent l'utilisation générale de VRC Ops.
+Le consentement aux fonctionnalités déterministes explique comment les Prédictions, Pit Wall, l'Ingénieur de course, les analyses et les fonctionnalités déterministes connexes traitent les renseignements de course applicables.
+
+25. Nous joindre
+
+Les questions sur le partage de données, le consentement, la suppression de compte ou les renseignements associés à votre compte VRC Ops peuvent être envoyées à :
+Chase DeBard
+VRC Ops
+Adresse postale : fournie sur demande par courriel
+Courriel : debard.chase@outlook.com
+Site Web : https://vrc-ops.org

@@ -1,0 +1,331 @@
+Politique de confidentialité
+Dernière mise à jour : 7 octobre 2026
+La présente politique de confidentialité explique comment VRC Ops (« VRC Ops », « l'application », « nous », « notre » ou « nos ») recueille, utilise, conserve, communique et protège les renseignements lorsque vous utilisez VRC Ops et ses services connexes.
+Cette politique s'applique à VRC Ops sur iOS, iPadOS, macOS et Android, ainsi qu'au site Web et à l'application Web de VRC Ops.
+VRC Ops est offert aux utilisateurs des États-Unis, du Canada et de l'Australie. Il n'est pas offert dans l'Espace économique européen, au Royaume-Uni ni en Suisse.
+La version à jour de cette politique est accessible sur les écrans de connexion avant d'ouvrir une session, dans l'application (Réglages, puis Juridique et confidentialité) et à l'adresse https://vrc-ops.org/legal.
+Pour toute question au sujet de cette politique de confidentialité ou pour présenter une demande relative à la vie privée, écrivez-nous à debard.chase@outlook.com.
+
+Comment lire cette politique
+
+Les sections 1 à 16 s'appliquent à tout le monde. Les sections 17, 18 et 19 ajoutent des renseignements et des droits pour les personnes qui se trouvent aux États-Unis, au Canada (y compris au Québec) et en Australie. Si une section régionale vous accorde un droit plus étendu qu'une section précédente, c'est le droit le plus étendu qui s'applique.
+Cette politique est offerte en anglais et en français. L'application affiche la langue de votre appareil lorsqu'il s'agit de l'anglais ou du français, et vous pouvez changer de langue à l'endroit où la politique est affichée. Les deux versions ont le même sens. En cas de divergence, la version anglaise s'applique, sauf lorsque la loi exige que la version française s'applique, comme c'est le cas pour les consommateurs du Québec. Le texte français a été préparé à l'aide de l'intelligence artificielle et n'a pas encore été révisé par un traducteur professionnel; il peut donc comporter des inexactitudes.
+Cette politique est un avis. Elle vous dit ce que nous faisons des renseignements. Elle ne constitue pas une demande de consentement aux fonctionnalités facultatives. Les fonctionnalités facultatives demandent leur propre consentement, seulement lorsque vous les utilisez (section 12).
+
+1. Qui nous sommes et comment nous joindre
+
+VRC Ops est exploité par Chase DeBard, un particulier établi en Pennsylvanie, aux États-Unis.
+VRC Ops est le nom du produit et de l'application, et il est conçu par Chase DeBard. Il n'est pas exploité actuellement par l'intermédiaire d'une société par actions, d'une société à responsabilité limitée ou d'une autre entité juridique distincte.
+Chase DeBard est la personne responsable de la protection des renseignements personnels chez VRC Ops. Vous pouvez la joindre à debard.chase@outlook.com. VRC Ops ne publie pas d'adresse postale. Si vous devez écrire par la poste, demandez une adresse postale par courriel et nous vous en fournirons une.
+Vous pouvez utiliser ce moyen de contact pour poser une question, demander une copie de vos renseignements, demander de les corriger, retirer un consentement ou porter plainte.
+Site Web : https://vrc-ops.org
+
+2. Renseignements que nous recueillons
+
+2.1 Renseignements sur le compte et l'authentification
+Lorsque vous créez un compte VRC Ops, nous recueillons l'adresse courriel que vous utilisez pour vous inscrire.
+VRC Ops prend actuellement en charge l'authentification par courriel et mot de passe ainsi que l'authentification multifacteur conditionnelle au moyen d'une application d'authentification et de mots de passe à usage unique basés sur le temps (TOTP).
+L'authentification est assurée par Supabase Auth. VRC Ops ne conserve pas votre mot de passe en clair.
+Supabase peut traiter les renseignements d'authentification nécessaires pour authentifier votre compte, maintenir les sessions, réinitialiser les mots de passe, vérifier les comptes, limiter le débit des requêtes et gérer les facteurs d'authentification multifacteur.
+Nous demandons aussi le mois et l'année de votre naissance, lorsque vous créez un compte et, pour les comptes créés auparavant, la première fois que vous ouvrez une session dans une version de l'application qui pose la question. Nous l'utilisons à une seule fin : vérifier que vous avez au moins 14 ans, soit l'âge minimal pour utiliser VRC Ops (section 13). Nous conservons le mois et l'année, et non le jour, dans un dossier privé. Aucun membre d'une ligue ne peut le voir, et nous ne l'utilisons à aucune autre fin. Vous ne pouvez pas le modifier dans l'application une fois saisi; si vous avez commis une erreur, communiquez avec nous. Si, au moment de créer un compte, vous saisissez une date qui montre que vous avez moins de 14 ans, aucun compte n'est créé, nous ne conservons pas ce que vous avez saisi, et l'application sur cet appareil n'acceptera pas d'autre réponse pendant 90 jours civils (l'appareil retient seulement qu'un refus a eu lieu).
+
+2.2 Renseignements de profil facultatifs
+Vous pouvez fournir, à titre facultatif, d'autres renseignements pour votre profil VRC Ops, notamment votre nom ou nom d'affichage, votre nom d'utilisateur Discord, votre identifiant PlayStation Network (PSN) ainsi qu'une image de profil ou de pilote lorsque la fonction est offerte.
+À l'exception de l'adresse courriel nécessaire pour tenir un compte, ces champs de profil sont facultatifs.
+
+2.3 Fiches de pilote et renseignements sur d'autres personnes
+VRC Ops sépare le compte d'utilisateur des fiches de pilote de course d'une ligue.
+Un propriétaire (Owner) ou un administrateur (Admin) de ligue peut créer une fiche de pilote pour une personne qui n'a pas de compte VRC Ops. Ces fiches sont destinées à contenir des renseignements liés à la course et peuvent comprendre un nom de pilote ou nom d'affichage, un numéro de course, une photo du pilote, une équipe, une classe, une région, la participation et les affectations aux saisons, l'association entre le compte et le pilote si celui-ci a plus tard un compte, l'historique des qualifications et des courses, les résultats et classements des championnats ainsi que d'autres renseignements de course dans le jeu utilisés par la ligue.
+Les administrateurs de ligue ne peuvent pas créer un compte d'utilisateur VRC Ops au nom d'une autre personne au moyen du système de fiches de pilote. Les fiches de pilote des personnes sans compte ne sont pas destinées à contenir des renseignements propres à un compte, comme des adresses courriel, des numéros de téléphone, des dates de naissance, des adresses résidentielles ou des coordonnées semblables.
+Des noms, des photographies, des identifiants en ligne et des renseignements semblables peuvent quand même être des renseignements personnels même si les numéros de téléphone, les adresses ou d'autres coordonnées ne sont pas recueillis.
+Les administrateurs de ligue qui saisissent ces renseignements décident de ce qui figure dans les dossiers de leur ligue. Si vous fournissez des renseignements ou une photographie qui concernent une autre personne, vous devez avoir l'autorisation ou la permission appropriée de les fournir à la ligue.
+Si une ligue détient à votre sujet des renseignements que vous ne voulez pas qu'elle détienne, vous pouvez vous adresser à l'administrateur de la ligue ou à nous (section 11).
+
+2.4 Renseignements sur les ligues, les championnats, les saisons, les épreuves et les résultats
+VRC Ops conserve les renseignements nécessaires à l'exploitation des ligues de course, notamment ceux qui concernent les ligues, les championnats, les saisons, les équipes, les classes, les régions, les circuits, les épreuves et les week-ends de course planifiés, l'admissibilité et la participation des pilotes, les séances de qualification, les séances de course, les positions de départ ou sur la grille, les positions à l'arrivée, le nombre de tours, les temps au tour et par secteur, les temps de course totaux, les écarts avec le meneur, les statuts DNS, DNF et DSQ, les pénalités, les positions de tête (pole), les meilleurs tours, les points boni, les points de championnat, les classements, le rendement historique des pilotes et les autres renseignements de gestion de course saisis par des membres autorisés de la ligue.
+VRC Ops peut calculer, à partir de ces données, des classements, des notes, des statistiques, des prédictions, des cotes et d'autres renseignements dérivés.
+
+2.5 Accès à la ligue et autorisations
+Les renseignements d'une ligue ne sont pas accessibles au public sans authentification.
+Une personne doit ouvrir une session dans un compte VRC Ops et avoir la permission d'accéder à une ligue donnée.
+Les rôles actuels dans une ligue sont propriétaire (Owner), administrateur (Admin), commissaire (Marshal), pilote (Driver) et observateur (Viewer).
+Les renseignements et les commandes offerts à un utilisateur dépendent de son appartenance à la ligue et de son rôle.
+
+2.6 Télémétrie et Capture
+VRC Ops comprend une fonction facultative de Capture pour certains jeux et plateformes de course pris en charge, y compris la télémétrie prise en charge de Gran Turismo 7.
+Lorsque la Capture est utilisée, VRC Ops peut communiquer avec une console ou un appareil pris en charge sur le réseau local de l'utilisateur.
+La capture de télémétrie brute est traitée localement et n'est pas téléversée vers nos serveurs.
+VRC Ops peut créer une version analysée de la télémétrie et téléverser ces renseignements analysés vers nos serveurs. Selon la télémétrie disponible, les renseignements analysés peuvent comprendre le jeu ou la simulation, le véhicule, le circuit, des renseignements sur la séance, des renseignements sur les tours et les secteurs, les temps au tour ou par secteur, des renseignements sur les pneus ou le carburant, le classement de la séance et d'autres mesures de course ou de télémétrie dérivées.
+L'adresse IP de la console ou de la PlayStation saisie ou détectée pour la Capture est conservée localement sur l'appareil et n'est pas conservée par VRC Ops sur nos serveurs en tant que donnée de ligue ou de compte.
+Des fichiers de télémétrie brute peuvent rester localement sur l'appareil de l'utilisateur après une séance de Capture. Ces fichiers locaux relèvent de l'appareil et ne sont pas conservés par VRC Ops sur ses systèmes.
+Sur Android, la Capture s'exécute comme un service de premier plan et affiche une notification pendant son exécution; l'application demande donc l'autorisation d'afficher des notifications. La recherche d'une console sur votre réseau local utilise la fonction de multidiffusion Wi-Fi de l'appareil. Ni l'une ni l'autre ne sert à trouver votre position.
+
+2.7 Prédictions
+VRC Ops offre une fonction de prédiction et de prévision des courses à partir des données déjà disponibles dans VRC Ops.
+Le système de prédiction actuel est déterministe. Il n'est pas alimenté par OpenAI, Anthropic, Google Gemini ou un autre fournisseur externe d'IA générative ou de grands modèles de langage.
+Les prédictions peuvent utiliser des renseignements de course pertinents, comme les résultats historiques, les données de championnat, le rendement des pilotes, la participation aux courses et d'autres renseignements applicables de la ligue.
+Les résultats des prédictions et l'historique d'évaluation ne sont pas envoyés à un fournisseur externe d'IA.
+
+2.8 Pit Wall et Ingénieur de course
+Pit Wall et Ingénieur de course (Race Engineer) vous aident à planifier et à examiner les réglages de votre voiture.
+Selon ce que vous utilisez, VRC Ops conserve sur nos serveurs, rattachés à votre compte, des renseignements comme le jeu, le véhicule, le circuit et la classe sur lesquels vous travaillez, vos valeurs de réglage et vos modifications, des fiches de roulage et des résumés des roulages que vous choisissez de capturer, les commentaires du pilote, les recommandations qui vous ont été présentées et leur utilité.
+Ces renseignements sont privés pour le compte qui les a créés. Ils ne sont pas montrés aux autres membres de vos ligues, y compris aux propriétaires et administrateurs de ligue.
+Les recommandations sont produites par des règles et des calculs fixes à l'intérieur de VRC Ops. Elles ne sont pas produites par un service externe d'IA générative.
+La télémétrie brute reste sur votre appareil (section 2.6).
+
+2.9 Cote mondiale et récompenses
+VRC Ops peut calculer une cote pour votre compte à partir des résultats officiels des ligues dans lesquelles un propriétaire ou un administrateur de ligue a lié votre compte à une fiche de pilote. La cote appartient à votre compte, et non à la fiche de pilote d'une seule ligue.
+La cote est désactivée par défaut. Aucune cote n'est calculée pour votre compte, et aucun de vos résultats n'est compté dans une cote, tant que vous n'avez pas choisi de l'activer. Vous l'activez dans les Réglages. Pour ce faire, l'authentification à deux facteurs doit être activée sur votre compte. Les résultats des courses qui commencent au moins 24 heures après l'activation sont comptés. Vous pouvez la désactiver en tout temps dans les Réglages. La désactiver met fin à votre période de cote en cours et arrête le comptage des nouveaux résultats. Si vous l'activez de nouveau plus tard, vous commencez une nouvelle période de cote.
+Nous conservons un dossier des changements de cote, des corrections et de vos décisions d'activer ou de désactiver la cote, afin qu'une cote puisse être expliquée et corrigée.
+Les cotes sont calculées à partir des résultats officiels selon des règles fixes. Les résultats peuvent être corrigés ou annulés par la ligue, et les cotes peuvent être recalculées lorsque cela se produit.
+Aujourd'hui, aucun membre d'une ligue ne peut voir la cote de quiconque : l'affichage partagé n'a pas commencé et l'application indique qu'il est à venir. Lorsqu'il commencera, les autres membres d'une ligue dont vous faites partie verront, à côté de votre fiche de pilote, et seulement si vous avez activé la cote et qu'au moins une course a été comptée : votre niveau (ou « provisoire » tant que votre cote n'est pas établie), votre rang mondial une fois qu'il n'est plus provisoire, un insigne de champion du monde ou de champion national si vous en détenez un, et la variation finalisée de la cote pour une course.
+Si vous terminez un trimestre à titre de Champion du monde, une période d'abonnement gratuite peut vous être offerte. Pour l'offrir, VRC Ops demande au service App Store Connect d'Apple de créer un code d'offre à usage unique pour le produit d'abonnement que vous détenez. Le code est conservé avec votre compte jusqu'à son utilisation, et nous pouvons vous écrire à ce sujet. Seuls les comptes qui ont activé la cote peuvent être sélectionnés.
+
+2.10 Invitations
+Lorsqu'un propriétaire ou un administrateur de ligue invite une autre personne à utiliser VRC Ops, nous traitons l'adresse courriel de la personne invitée et le nom d'affichage de la personne qui invite afin d'envoyer et de valider l'invitation.
+Les jetons d'invitation sont chiffrés de façon sécuritaire (hachage) et ne sont pas conservés sous forme de jetons d'invitation utilisables en clair.
+Les courriels d'invitation transactionnels sont livrés au moyen de Resend.
+Un courriel d'invitation est envoyé uniquement parce qu'un propriétaire ou un administrateur de ligue nous a demandé de l'envoyer à cette adresse. Il contient l'invitation et rien de promotionnel.
+
+2.11 Dossiers de consentement et d'acceptation
+Lorsque vous acceptez les conditions d'utilisation, prenez connaissance de la politique de confidentialité ou donnez un consentement pour une fonctionnalité facultative, nous conservons un dossier indiquant le document et la version, le moment de la décision, la plateforme et la version de l'application, ainsi que la ligue lorsqu'il y a lieu.
+Certaines fonctionnalités exigent une décision de consentement explicite avant d'être utilisées. C'est le cas des Prédictions, de Pit Wall, de la télémétrie ou de la Capture, et du partage des données de la ligue.
+Vous pouvez retirer un consentement facultatif dans les Réglages, puis Juridique et confidentialité. Le retrait n'a pas d'effet sur le traitement qui a eu lieu légalement avant le retrait. Certaines fonctionnalités peuvent cesser de fonctionner après le retrait du consentement nécessaire à leur fonctionnement.
+Si vous voulez retirer un consentement et qu'aucune commande n'est offerte dans l'application, écrivez à debard.chase@outlook.com.
+
+2.12 Renseignements sur l'abonnement et les achats
+VRC Ops offre des abonnements payants, y compris des fonctionnalités de VRC Ops réservées aux abonnés.
+Les achats sont traités par l'App Store d'Apple et StoreKit. À la date de la présente politique, les abonnements payants ne sont vendus que par l'App Store d'Apple; aucun n'est vendu sur Android, sur Google Play ni sur le site Web.
+VRC Ops ne recueille ni ne conserve le numéro complet de votre carte de crédit ou de débit ni d'autres données complètes de carte de paiement. Apple traite la transaction de paiement elle-même.
+VRC Ops peut recevoir et conserver les renseignements nécessaires pour déterminer le droit à l'abonnement et offrir les fonctionnalités payantes, notamment le niveau d'abonnement, l'état du droit ou de l'abonnement, les identifiants de transaction ou de droit, les renseignements sur l'achat ou le renouvellement, les renseignements sur l'expiration et les renseignements de validation de reçu ou d'environnement App Store nécessaires pour confirmer l'accès.
+VRC Ops n'utilise pas RevenueCat, Stripe, Paddle ni un autre processeur distinct de paiement d'abonnement.
+
+2.13 Courriels transactionnels
+VRC Ops utilise Resend pour les courriels transactionnels.
+Les messages transactionnels peuvent comprendre des invitations de ligue, des messages liés au compte, la vérification de l'adresse courriel, des messages de réinitialisation de mot de passe et d'autres communications de service nécessaires au fonctionnement d'un compte ou d'une ligue.
+Le service de courriel de VRC Ops chez Resend fonctionne aux États-Unis. Nous n'avons pas activé le suivi des ouvertures ni des clics; Resend ne nous indique donc pas si vous avez ouvert un message ou suivi un lien qui s'y trouve.
+VRC Ops n'envoie pas de campagnes de courriels promotionnels ou de marketing.
+Si des courriels promotionnels sont introduits à l'avenir, ils ne seront envoyés qu'aux personnes qui ont choisi d'en recevoir, chaque message nous identifiera et comprendra un moyen accessible de se désabonner, et la présente politique de confidentialité sera d'abord mise à jour.
+
+2.14 Soutien et demandes relatives à la vie privée
+Si vous communiquez avec nous, nous conservons votre message, notre réponse et les renseignements dont nous avons besoin pour confirmer votre identité et traiter votre demande, pendant la durée décrite à la section 9.
+
+2.15 Diagnostics et renseignements techniques
+VRC Ops n'intègre aucune plateforme tierce d'analyse comportementale ni aucun kit de développement tiers de rapport de plantage.
+Si vous avez choisi, dans les réglages de votre appareil, de partager les diagnostics avec les développeurs d'applications, Apple peut mettre à notre disposition des renseignements de plantage et de diagnostic par ses systèmes de développeur habituels. Si vous installez l'application depuis Google Play, Google peut nous fournir des renseignements sur les plantages et le rendement de l'application au moyen de ses outils de développeur. Les rapports de plantage peuvent contenir des renseignements techniques nécessaires pour comprendre une défaillance, comme la version de l'application, des renseignements sur le système d'exploitation, les caractéristiques de l'appareil, l'état au moment du plantage et d'autres détails de diagnostic connexes.
+Nous utilisons ces renseignements pour diagnostiquer les défauts et améliorer la stabilité de l'application.
+VRC Ops ne recueille pas intentionnellement, au moyen de l'application, les identifiants publicitaires de l'appareil, la position précise, la position approximative de l'appareil, les contacts ni les données de publicité comportementale.
+L'application utilise l'accès aux photos de votre appareil seulement pour vous permettre de choisir les images que vous voulez ajouter, comme une photo de pilote ou une image de résultats.
+L'utilisation d'un service Internet entraîne nécessairement la réception de renseignements au niveau du réseau par les fournisseurs d'infrastructure. En particulier, l'infrastructure d'authentification et d'API de Supabase peut recevoir et consigner automatiquement des métadonnées de requête comme l'adresse IP, l'agent utilisateur, l'activité d'authentification et les renseignements de requête, à des fins de sécurité, de limitation du débit, de prévention de la fraude, de dépannage et d'exploitation du service.
+VRC Ops ne tient aucun champ d'adresse IP dans votre profil d'utilisateur ou de pilote et n'utilise pas les adresses IP à des fins publicitaires ou de suivi entre applications.
+
+2.16 Le site Web
+Le site Web de VRC Ops ne recueille aucun renseignement qui lui soit propre. Si vous ouvrez une session sur le site, vous utilisez le même compte et la même connexion que dans l'application; ce que la présente politique dit de votre compte s'applique donc aussi à cet endroit. Les pages du site sont hébergées sur GitHub Pages, un service de GitHub, Inc., aux États-Unis. Le nom de domaine vrc-ops.org est enregistré auprès d'IONOS, qui exploite aussi son système de noms de domaine. Comme tout site Web, ces services peuvent conserver des journaux techniques ordinaires des requêtes, comme les adresses IP et les pages demandées. Les liens d'invitation et de connexion utilisés par l'application passent aussi par ce domaine.
+
+3. Comment nous utilisons les renseignements
+
+Nous utilisons les renseignements décrits dans la présente politique pour créer et tenir à jour les comptes VRC Ops, authentifier les utilisateurs et offrir l'authentification multifacteur, assurer la sécurité des comptes, exploiter les ligues, les championnats, les saisons, les équipes, les épreuves et les week-ends de course, tenir les listes de pilotes et les dossiers de course, calculer les résultats, les points, les classements, les cotes et les statistiques de course, offrir les fonctions de prédiction, offrir les fonctions Pit Wall et Ingénieur de course, traiter les renseignements de télémétrie de la Capture pris en charge, livrer les invitations de ligue, vérifier les droits d'abonnement, offrir les fonctionnalités payantes, gérer les autorisations et l'accès selon les rôles, diagnostiquer les plantages et les défauts de l'application, protéger VRC Ops contre l'usage abusif, l'accès non autorisé et les menaces à la sécurité, répondre aux demandes de soutien et de protection de la vie privée, maintenir la fiabilité et l'intégrité du service et respecter les obligations légales applicables.
+Nous ne vendons pas de renseignements personnels.
+Nous ne communiquons pas de renseignements personnels à des fins de publicité comportementale intercontextuelle.
+Nous n'utilisons pas de traceurs publicitaires de tiers.
+
+Calculs automatisés
+Les classements, les prédictions, les cotes et les recommandations de Pit Wall sont calculés automatiquement à partir des données de VRC Ops. Ce sont des outils pour aider les ligues et les pilotes. Les résultats et les pénalités sont saisis ou confirmés par des personnes de la ligue.
+VRC Ops ne prend aucune décision ayant des effets juridiques ou des effets importants semblables sur vous exclusivement par des moyens automatisés.
+Vous pouvez nous demander d'expliquer comment une cote ou une prédiction à votre sujet a été produite et de corriger les données sur lesquelles elle s'est appuyée (section 11).
+
+4. Communication des données au sein d'une ligue
+
+VRC Ops est un système de gestion de ligues à utilisateurs multiples.
+Les renseignements d'une ligue peuvent être visibles par les autres membres authentifiés de cette ligue selon leur rôle et leurs autorisations.
+Par exemple, les membres peuvent voir des renseignements comme les noms et les images des pilotes, les équipes, la participation aux courses, les résultats des qualifications et des courses, les classements, les pénalités et le rendement historique en course.
+Les propriétaires et les administrateurs ont un accès administratif plus étendu que les pilotes ou les observateurs.
+Les renseignements d'une ligue ne sont pas destinés à être accessibles aux comptes VRC Ops sans lien avec cette ligue qui n'ont pas reçu l'accès.
+Les propriétaires et les administrateurs de ligue sont responsables des renseignements qu'ils saisissent au sujet d'autres personnes et du respect de toute loi qui s'applique à eux à titre d'organisateurs.
+
+5. Fournisseurs de services et autres destinataires de renseignements
+
+Supabase
+Supabase fournit l'infrastructure de service de VRC Ops, notamment l'hébergement de la base de données PostgreSQL, l'authentification, la fonction multifacteur, le stockage de fichiers (y compris les images de pilote), les services d'API, la sécurité au niveau des lignes (Row Level Security), les fonctions périphériques et planifiées lorsqu'elles sont utilisées, ainsi que la journalisation et les fonctions de sécurité de l'infrastructure.
+Supabase est la source de vérité principale du service pour les données de VRC Ops conservées côté serveur.
+Supabase et ses fournisseurs d'infrastructure peuvent traiter des renseignements techniques limités nécessaires pour offrir, protéger et exploiter leurs services. Supabase publie sur son site Web la liste de ses propres sous-traitants.
+
+Resend
+Resend sert à livrer les courriels transactionnels, notamment les invitations de ligue et d'autres messages de compte ou de service pris en charge.
+Resend reçoit les renseignements nécessaires pour livrer le courriel visé, y compris l'adresse courriel du destinataire et le contenu du message.
+
+GitHub et IONOS
+GitHub (GitHub Pages) héberge les pages du site Web de VRC Ops. IONOS enregistre le nom de domaine et exploite son système de noms de domaine. Ils reçoivent les renseignements techniques qu'envoie l'appareil d'un visiteur lorsqu'il charge une page ou interroge le nom de domaine, comme l'adresse IP.
+
+Microsoft
+L'adresse courriel indiquée dans cette politique est un compte de courriel fourni par Microsoft (Outlook). Les messages que vous nous envoyez, et nos réponses, y sont conservés.
+
+Apple et Google
+Apple fournit des services utilisés par VRC Ops sur les plateformes Apple, notamment la distribution par l'App Store, StoreKit et les transactions d'abonnement, le service App Store Connect utilisé pour les codes d'offre, ainsi que les rapports de plantage et de diagnostic fournis par Apple.
+Les renseignements de carte de paiement transmis à Apple pour une transaction de l'App Store sont traités par Apple et ne sont pas communiqués à VRC Ops sous forme de renseignements complets de carte.
+Si vous installez la version Android, Google assure la distribution et peut fournir des renseignements sur les plantages et le rendement, comme il est décrit à la section 2.15.
+VRC Ops n'utilise pas actuellement le service de notifications push d'Apple pour des notifications push en production.
+
+Autres communications
+Nous pouvons communiquer des renseignements lorsque la loi l'exige, pour répondre à une procédure judiciaire valide, pour protéger les droits, la sécurité ou la sûreté de personnes ou de VRC Ops, ou pour enquêter sur un usage abusif du service.
+Si VRC Ops est transféré à un autre exploitant, les renseignements nécessaires à l'exploitation du service seraient transférés avec lui, sous réserve de la présente politique, et nous vous en informerions avant que le transfert prenne effet.
+VRC Ops n'utilise aucun fournisseur externe supplémentaire d'IA, d'analyse, de publicité, de paiement ou de notifications push.
+Chaque fournisseur traite les renseignements selon ses propres conditions et seulement pour nous fournir son service.
+
+6. Lieu de traitement des renseignements
+
+VRC Ops conserve les renseignements de compte et de ligue sur des serveurs aux États-Unis. Le service principal de production est un projet Supabase hébergé aux États-Unis (région us-east-2 d'Amazon Web Services, en Ohio).
+Nos fournisseurs de services (Supabase, Resend, Apple, GitHub, IONOS, Microsoft et, pour Android, Google) peuvent traiter des renseignements aux États-Unis et dans d'autres pays. Ils traitent les renseignements selon leurs propres conditions et pratiques de sécurité habituelles.
+Cela signifie que, si vous êtes au Canada ou en Australie, vos renseignements sont envoyés aux États-Unis et y sont conservés, et qu'ils peuvent être traités dans d'autres pays par nos fournisseurs. Les renseignements conservés dans un autre pays sont assujettis aux lois de ce pays et peuvent être accessibles à ses tribunaux et à ses autorités.
+
+7. Publicité, analyse et suivi
+
+VRC Ops n'affiche pas de publicité de tiers, ne contient aucun kit de développement publicitaire, n'utilise pas de suivi publicitaire entre applications, n'utilise pas l'IDFA à des fins publicitaires, n'utilise pas d'analyse comportementale de tiers et ne vend pas de renseignements d'utilisateurs à des annonceurs.
+VRC Ops ne vous suit pas d'une application ou d'un site Web d'une autre entreprise à l'autre.
+Ces pratiques décrivent VRC Ops à la date indiquée au début de la présente politique.
+Si une version future modifie ces pratiques de façon importante, VRC Ops mettra à jour la présente politique de confidentialité et présentera la politique révisée au besoin avant que les pratiques modifiées s'appliquent.
+
+8. Sécurité et incidents
+
+Nous utilisons des mesures de protection techniques et organisationnelles destinées à protéger les renseignements de VRC Ops.
+Ces mesures comprennent les politiques de sécurité au niveau des lignes (Row Level Security) de Supabase qui restreignent l'accès selon l'appartenance à la ligue et les autorisations, l'exigence d'authentification avant l'accès aux données d'une ligue, l'autorisation fondée sur les rôles, des jetons d'invitation chiffrés de façon sécuritaire (hachage), le chiffrement HTTPS/TLS des communications entre VRC Ops et les services en arrière-plan, des contrôles d'accès aux systèmes de production, la prise en charge conditionnelle de l'authentification multifacteur au moyen de facteurs d'authentification/TOTP et la séparation entre les autorisations de ligue et l'accès authentifié au compte.
+Aucun système connecté à Internet ne peut garantir une sécurité absolue.
+Les utilisateurs sont responsables de la sécurité de leur propre mot de passe, de leurs facteurs d'authentification et de leurs appareils.
+Si un incident de sécurité touchant vos renseignements personnels crée un risque de préjudice pour vous que la loi considère comme sérieux, nous vous en informerons par courriel et nous en informerons l'organisme de réglementation, comme la loi l'exige. Nous tenons un registre des incidents de sécurité touchant des renseignements personnels.
+
+9. Conservation des données
+
+Nous conservons généralement les renseignements de compte et de ligue aussi longtemps que nécessaire pour exploiter le compte, la ligue, l'abonnement ou la fonctionnalité de VRC Ops visés. Les règles précises sont les suivantes :
+Profil du compte et renseignements de connexion : jusqu'à la suppression de votre compte.
+Mois et année de naissance : jusqu'à la suppression de votre compte.
+Adhésions et invitations rattachées à votre compte : supprimées lorsque vous supprimez votre compte ou quittez la ligue.
+Dossiers de consentement et d'acceptation : supprimés avec votre compte.
+Données privées de Pit Wall et fichiers de capture : supprimés lorsque vous les supprimez ou supprimez votre compte.
+Dossiers de la ligue (championnats, saisons, épreuves, résultats, classements, historique de cote et fiches de pilote) : conservés aussi longtemps que la ligue existe, et conservés après la fermeture d'une ligue, comme il est décrit à la section 10.
+Dossiers de nos communications avec vous au sujet de demandes relatives à la vie privée : conservés dans le compte de courriel de VRC Ops aussi longtemps que raisonnablement nécessaire pour traiter la demande et démontrer la façon dont elle a été traitée.
+Autres dossiers, soit les invitations non acceptées, les dossiers d'abonnement et de droit d'accès, les dossiers de vérification des cotes, les dossiers de demandes de suppression de compte et les journaux des fournisseurs : nous n'appliquons pas, à ce jour, de calendrier de suppression automatique qui nous soit propre. Ils sont conservés dans notre base de données aussi longtemps que le compte ou la ligue auquel ils se rattachent existe, et la suppression d'un compte (section 10) les supprime ou les dépersonnalise comme il y est décrit. Les journaux et dossiers de livraison détenus par Supabase, Resend et Apple sont conservés selon la durée de conservation habituelle de ces fournisseurs.
+Les renseignements peuvent aussi être conservés lorsque cela est raisonnablement nécessaire à des fins de sécurité, de prévention de la fraude, de dépannage, de conformité légale, de règlement de différends, de dossiers de transactions ou de reprise technique.
+Certains journaux, dossiers de courriels transactionnels, copies de sauvegarde ou dossiers de fournisseurs de services peuvent subsister pendant une période limitée après la suppression des renseignements des systèmes actifs de VRC Ops. Le cas échéant, ces renseignements résiduels peuvent subsister aussi longtemps que le prévoit le calendrier habituel de sauvegarde et de conservation d'infrastructure du fournisseur de services, sauf si la loi exige une période plus courte ou plus longue.
+Les renseignements qui ne subsistent que dans des systèmes de sauvegarde ou de reprise ne seront pas restaurés intentionnellement pour l'usage ordinaire de VRC Ops, sauf si cela est nécessaire à une reprise après sinistre ou à une restauration du système légitime.
+Les fichiers de capture de télémétrie brute conservés seulement sur votre appareil ne sont pas inclus dans la conservation côté serveur de VRC Ops, car VRC Ops ne possède pas ces fichiers bruts.
+VRC Ops peut suspendre ou révoquer l'accès au service lorsque cela est approprié en vertu de ses conditions d'utilisation.
+
+10. Suppression du compte
+
+VRC Ops offre un processus de suppression de compte dans l'application. Vous le trouverez dans les Réglages. Vous pouvez aussi demander de l'aide en écrivant à debard.chase@outlook.com.
+Lorsqu'un compte est supprimé, le compte d'authentification VRC Ops est supprimé, les renseignements de profil de niveau compte associés à ce compte sont supprimés, votre avatar et vos réglages personnels sont supprimés, vos dossiers de consentement et d'acceptation sont supprimés, vos données privées de Pit Wall et vos fichiers de capture sont supprimés, et vos adhésions et invitations sont retirées.
+
+Fiches de pilote après la suppression d'un compte
+Un compte VRC Ops et une fiche de pilote de ligue sont des dossiers distincts.
+Si votre compte était lié à une fiche de pilote, la suppression de votre compte dissocie cette fiche. La photo, la biographie ainsi que les identifiants de plateforme et de course du pilote en sont retirés, et votre compte n'y est plus rattaché.
+La fiche elle-même reste dans la ligue, afin que l'historique de la ligue ne soit pas perdu. Son nom est remplacé : le nom du pilote devient le mot « Driver » (nom conservé tel quel, en anglais, dans toutes les langues de l'application) suivi du numéro de course du pilote. Par exemple, si le numéro de course était 73, le pilote devient « Driver 73 ». Si la fiche n'a pas de numéro de course, elle devient « Driver ». Les prénoms et noms de famille sont aussi retirés.
+Une ligue peut conserver les dossiers de course nécessaires pour préserver l'historique légitime de la ligue, notamment le numéro de course, les résultats des qualifications et des courses, l'historique des championnats, les points et classements ainsi que l'historique de cote. Une fiche de pilote conservée n'est pas un compte de connexion actif.
+Si une fiche de pilote n'a jamais été liée à un compte, la personne qu'elle décrit peut demander à l'administrateur de la ligue ou à nous de remplacer le nom de la même façon, tout en conservant les résultats de la ligue.
+
+Propriétaires de ligue
+Si d'autres membres actifs demeurent dans une ligue dont vous êtes propriétaire, vous devez en transférer la propriété à l'un d'eux avant que votre compte puisse être supprimé. VRC Ops ne transfère pas la propriété automatiquement, et les arrangements d'abonnement ou de facturation ne la suivent pas.
+Si vous êtes le seul membre actif d'une ligue dont vous êtes propriétaire, la suppression de votre compte ferme la ligue. Une ligue fermée n'a pas de propriétaire, ne peut être ni jointe ni modifiée et n'est visible pour personne, mais VRC Ops en conserve les dossiers de course (championnats, saisons, épreuves, résultats, classements et fiches de pilote) afin que l'historique ne soit pas perdu. Les renseignements personnels rattachés à votre compte sont retirés des dossiers conservés ou dissociés de ceux-ci. Une ligue qui ne contient que des brouillons inutilisés et aucun historique de course est plutôt supprimée.
+Les sauvegardes et les journaux sont décrits à la section 9.
+
+11. Vos droits et la façon de les exercer
+
+Selon l'endroit où vous vivez et la demande, vous pouvez nous demander de : vous dire quels renseignements personnels nous détenons à votre sujet et vous en remettre une copie; corriger des renseignements inexacts; supprimer des renseignements dont nous n'avons plus besoin; vous remettre vos renseignements sous une forme transférable; arrêter ou limiter certains usages; expliquer comment un calcul automatisé à votre sujet a été produit; ou consigner le retrait d'un consentement.
+Comment présenter une demande : utilisez les Réglages, puis Juridique et confidentialité, puis Vos renseignements, ou écrivez à debard.chase@outlook.com. Dites-nous ce que vous demandez et de quel compte il s'agit.
+Nous pouvons avoir besoin de confirmer que la personne qui présente la demande est le titulaire du compte avant de communiquer, de modifier, d'exporter ou de supprimer des renseignements. Nous demanderons seulement ce qui est nécessaire à cette fin.
+Nous répondrons dans les 30 jours suivant la réception de votre demande. Si nous avons besoin de plus de temps, nous vous dirons pourquoi et quand vous pouvez vous attendre à une réponse. Lorsque la loi vous accorde un délai plus court, nous respectons la loi.
+Si votre nom ou votre photo figure dans les dossiers d'une ligue, vous pouvez aussi nous demander, ou demander à l'administrateur de la ligue, d'arrêter de les afficher ou de les remplacer, tout en conservant les résultats de la ligue. Lorsque la loi vous donne le droit de faire cesser la communication de renseignements vous concernant, nous nous y conformons.
+Nous ne facturons pas les demandes ordinaires.
+VRC Ops n'a pas actuellement d'outil d'exportation automatisé. Nous préparons nous-mêmes une copie de vos renseignements.
+Si nous refusons tout ou partie d'une demande, nous vous en expliquerons les raisons par écrit et vous indiquerons comment porter plainte ou en appeler.
+Les renseignements figurant dans les dossiers d'une ligue peuvent appartenir à la ligue autant qu'à vous. Lorsqu'une demande modifierait les résultats officiels de la ligue, nous pourrions devoir faire intervenir l'administrateur de la ligue.
+
+12. Consentement, acceptation et fonctionnalités facultatives
+
+VRC Ops distingue quatre choses différentes :
+Les conditions d'utilisation sont une entente. Vous les acceptez pour utiliser VRC Ops.
+La présente politique de confidentialité est un avis. Vous confirmez en avoir pris connaissance. En prendre connaissance ne constitue pas un consentement aux fonctionnalités facultatives.
+Les fonctionnalités facultatives demandent chacune leur propre consentement, seulement la première fois que vous les utilisez. Les Prédictions, Pit Wall et Ingénieur de course ainsi que les renseignements de Capture sont couverts par ce que l'application appelle le Consentement aux fonctionnalités déterministes. Le partage des données de la ligue est couvert par ce que l'application appelle le Consentement aux données et au partage.
+Il n'existe pas de consentement au marketing, car VRC Ops n'envoie pas de marketing. Si cela devait changer, il s'agirait d'un choix distinct qui ne serait pas requis pour utiliser votre compte.
+Refuser un consentement facultatif ne vous empêche pas d'utiliser le reste de VRC Ops.
+
+13. Âge et enfants
+
+Vous devez avoir au moins 14 ans pour créer ou utiliser un compte VRC Ops.
+Lorsque vous créez un compte, nous demandons le mois et l'année de votre naissance (section 2.1). S'ils montrent que vous avez moins de 14 ans, nous ne créons pas le compte, et l'application sur cet appareil n'acceptera pas d'autre réponse pendant 90 jours civils. Si le mois et l'année d'un compte existant montrent que la personne a moins de 14 ans, le compte cesse de fonctionner et l'application l'en informe; ce compte ne peut pas donner une réponse différente pendant 90 jours civils, après quoi il peut répondre de nouveau. Cette personne peut supprimer le compte à partir de cet écran. Nous pouvons supprimer un compte dont nous savons qu'il appartient à une personne de moins de 14 ans.
+VRC Ops ne s'adresse pas aux enfants, et nous ne permettons pas sciemment à des enfants de moins de 14 ans de créer des comptes VRC Ops.
+VRC Ops ne vérifie pas l'âge au moyen de pièces d'identité. Nous nous fions au mois et à l'année que vous nous donnez.
+Si vous croyez que des renseignements ont été recueillis auprès d'un enfant de moins de 14 ans, écrivez à debard.chase@outlook.com.
+
+14. Plaintes
+
+Si vous n'êtes pas satisfait de la façon dont nous avons traité vos renseignements ou une demande, écrivez-nous d'abord à l'adresse indiquée à la section 16. Nous accuserons réception de votre plainte, l'examinerons et vous répondrons par écrit.
+Si vous n'êtes pas satisfait de notre réponse, vous pouvez porter plainte auprès d'un organisme de réglementation. Les sections 17, 18 et 19 indiquent quels organismes sont accessibles là où vous vivez.
+
+15. Modifications de la présente politique et fonctionnalités futures
+
+Nous pouvons mettre à jour la présente politique de confidentialité de temps à autre pour tenir compte de changements apportés à VRC Ops, de nouvelles fonctionnalités, de changements de fournisseurs de services, de changements dans les pratiques en matière de données, d'exigences de sécurité ou d'exigences légales ou réglementaires.
+Lorsque la politique change, la date de dernière mise à jour au début est modifiée. Nous donnerons un avis des modifications importantes dans l'application avant qu'elles prennent effet, et nous vous demanderons de prendre connaissance de la nouvelle version avant que vous continuiez.
+VRC Ops peut ajouter ou modifier des fonctionnalités au fil du temps. Les versions futures peuvent introduire des fonctionnalités comme les notifications push, les communications promotionnelles, des diagnostics ou des analyses supplémentaires, de nouvelles intégrations ou d'autres fonctionnalités qui touchent de nouvelles catégories de renseignements ou de nouveaux usages. Le fait qu'une fonctionnalité puisse être envisagée pour l'avenir ne signifie pas que VRC Ops effectue actuellement ce traitement.
+Lorsqu'un changement nécessite votre consentement, nous le demanderons avant que le nouveau traitement commence.
+
+16. Nous joindre
+
+Pour toute question sur la vie privée, toute demande, toute aide pour la suppression de compte, tout retrait de consentement, toute demande d'accès ou d'exportation de données ou toute plainte, communiquez avec :
+Chase DeBard
+VRC Ops
+Adresse postale : fournie sur demande par courriel
+Courriel : debard.chase@outlook.com
+Site Web : https://vrc-ops.org
+
+17. Si vous êtes aux États-Unis
+
+17.1 Vos droits
+Certains États américains accordent à leurs résidents des droits à l'égard de leurs renseignements personnels, comme le droit de savoir et d'accéder à ces renseignements, de les corriger, de les supprimer, d'en recevoir une copie transférable et de refuser la vente de renseignements personnels, la publicité ciblée ou certains profilages. VRC Ops ne vend pas de renseignements personnels, ne les utilise pas pour de la publicité ciblée et ne les utilise pas pour un profilage produisant des effets juridiques ou des effets importants semblables.
+Pour exercer un droit, suivez la section 11. Si vous êtes en désaccord avec notre décision, répondez à notre réponse en demandant qu'elle soit réexaminée. Nous la réexaminerons et vous communiquerons le résultat par écrit dans le délai que la loi permet.
+Vous ne serez pas traité différemment parce que vous avez exercé un droit relatif à la vie privée.
+
+17.2 Californie
+Lorsque la loi californienne sur la vie privée s'applique, les résidents de la Californie peuvent avoir le droit de savoir quelles catégories de renseignements personnels nous recueillons, de demander l'accès à des renseignements personnels précis, de demander la correction de renseignements personnels inexacts, de demander la suppression de renseignements personnels admissibles, de savoir quelles catégories de tiers reçoivent des renseignements, de refuser toute vente ou communication de renseignements personnels et de limiter certains usages de renseignements personnels sensibles.
+Au cours des 12 derniers mois, nous avons recueilli les catégories de renseignements décrites à la section 2 (identifiants comme l'adresse courriel et les identifiants de compte; renseignements de profil et d'image; renseignements de course et de résultats; renseignements d'achat et d'abonnement; renseignements d'activité sur Internet ou dans l'application décrits à la section 2.15). Nous les recueillons auprès de vous, des administrateurs de ligue et d'Apple pour l'état de l'abonnement. Nous les utilisons aux fins énoncées à la section 3 et ne les communiquons qu'aux fournisseurs mentionnés à la section 5.
+VRC Ops ne vend pas de renseignements personnels et ne les communique pas à des fins de publicité comportementale intercontextuelle.
+Pour présenter une demande en Californie, suivez la section 11.
+
+17.3 Enfants
+VRC Ops ne s'adresse pas aux enfants et ne recueille pas sciemment de renseignements personnels auprès d'enfants de moins de 13 ans. Son âge minimal est de 14 ans (voir la section 13).
+
+18. Si vous êtes au Canada
+
+18.1 Toute personne au Canada
+Nous sommes responsables des renseignements personnels que nous détenons. La personne responsable de la protection des renseignements personnels est nommée à la section 1.
+Nous recueillons et utilisons des renseignements personnels aux fins décrites aux sections 2 et 3. Nous demandons votre accord de la façon décrite à la section 12. Lorsque les renseignements sont sensibles, ou que notre usage ne correspondrait pas à ce à quoi vous vous attendriez raisonnablement, nous demandons votre consentement exprès avant de les utiliser.
+Vous pouvez demander à consulter vos renseignements personnels, demander de les corriger, retirer un consentement et contester la façon dont nous traitons vos renseignements (section 11). Nous répondons dans les 30 jours.
+Vos renseignements sont conservés aux États-Unis et peuvent être traités dans d'autres pays par nos fournisseurs (section 6).
+Si vous n'êtes pas satisfait de notre réponse, vous pouvez porter plainte auprès du Commissariat à la protection de la vie privée du Canada (priv.gc.ca) ou de l'organisme de protection de la vie privée de votre province.
+
+18.2 Québec
+La personne responsable de la protection des renseignements personnels chez VRC Ops est Chase DeBard, que l'on peut joindre à debard.chase@outlook.com. La présente politique est publiée sur le site Web de VRC Ops à https://vrc-ops.org/legal; le nom et les coordonnées de la personne y sont donc aussi publiés.
+Vos renseignements personnels sont communiqués à l'extérieur du Québec, à des serveurs situés aux États-Unis et à nos fournisseurs. Avant de communiquer à l'extérieur du Québec des renseignements personnels de personnes se trouvant au Québec, nous en évaluons les risques pour la vie privée. Les fournisseurs qui les reçoivent sont nommés à la section 5.
+Vous devez avoir au moins 14 ans pour utiliser VRC Ops; nous ne recueillons donc pas sciemment de renseignements personnels auprès de personnes de moins de 14 ans (section 13).
+Certaines fonctionnalités calculent des cotes et des prédictions sur votre rendement en course (sections 2.7 et 2.9). La cote mondiale est désactivée tant que vous ne l'activez pas, et vous pouvez la désactiver de nouveau dans les Réglages.
+Nous répondons aux demandes d'accès et de rectification dans les 30 jours.
+Cette politique et l'application sont offertes en français. L'application affiche le français lorsque votre appareil est réglé en français.
+Si vous n'êtes pas satisfait de notre réponse, vous pouvez déposer une plainte auprès de la Commission d'accès à l'information du Québec.
+
+19. Si vous êtes en Australie
+
+19.1 Notre approche
+Nous traitons les renseignements personnels des personnes se trouvant en Australie conformément à la Privacy Act 1988 et aux Australian Privacy Principles, dans la mesure où ils s'appliquent à nous.
+Nous recueillons vos renseignements pour gérer votre compte et vos ligues, comme il est décrit aux sections 2 et 3. Si vous ne nous donnez pas les renseignements dont nous avons besoin (par exemple, votre adresse courriel), nous ne pouvons pas créer votre compte.
+
+19.2 Communication à l'étranger
+Nous sommes susceptibles de communiquer vos renseignements personnels à des destinataires situés à l'extérieur de l'Australie. Il s'agit de nos fournisseurs de services aux États-Unis et, selon le fournisseur, dans d'autres pays (sections 5 et 6).
+
+19.3 Accès, correction et plaintes
+Vous pouvez demander l'accès à vos renseignements personnels ou nous demander de les corriger (section 11). Nous répondons dans les 30 jours.
+Si vous voulez porter plainte, écrivez-nous d'abord (section 14). Si vous n'êtes pas satisfait de notre réponse, vous pouvez porter plainte auprès du Office of the Australian Information Commissioner (OAIC, oaic.gov.au).
+
+19.4 Traitement automatisé
+Les classements, les prédictions, les cotes et les recommandations de Pit Wall font appel à des calculs automatisés (section 3). Voir la section 3 pour savoir ce qu'ils décident et ce qu'ils ne décident pas.
+
+19.5 Atteintes à la protection des données
+Si une atteinte à la protection des données touchant vos renseignements personnels est susceptible de vous causer un préjudice grave, nous vous en informerons ainsi que l'organisme de réglementation, comme la loi l'exige.
