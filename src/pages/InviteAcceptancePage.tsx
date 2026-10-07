@@ -11,6 +11,8 @@ import {
 import { getMyLeagues } from '@/services/leagues'
 import { Card } from '@/components/Card'
 import { Button } from '@/components/Button'
+import { APP_STORE_URL } from '@/config/links'
+import { describeInviteError, type InviteFailure } from '@/utils/inviteErrors'
 import { LoadingState } from '@/components/States'
 
 /**
@@ -27,9 +29,11 @@ export default function InviteAcceptancePage() {
   const navigate = useNavigate()
   const [status, setStatus] = useState<'pending' | 'success' | 'error'>('pending')
   const [leagueName, setLeagueName] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [failure, setFailure] = useState<InviteFailure | null>(null)
   const userId = state.kind === 'authenticated' ? state.user.id : null
   const invitePath = token ? `/invite/${encodeURIComponent(token)}` : null
+  // The same link, for an iPhone or iPad that has the app but opened this page in the browser instead.
+  const openInAppURL = token ? `vrc://invite/accept?token=${encodeURIComponent(token)}` : null
 
   useEffect(() => {
     if (!token) return
@@ -53,7 +57,7 @@ export default function InviteAcceptancePage() {
       })
       .catch((err) => {
         if (cancelled) return
-        setError(err instanceof Error ? err.message : 'This invite link is invalid or expired.')
+        setFailure(describeInviteError(err))
         setStatus('error')
       })
     return () => {
@@ -66,8 +70,11 @@ export default function InviteAcceptancePage() {
       <div className="flex min-h-screen items-center justify-center px-4">
         <Card className="w-full max-w-sm text-center">
           <h1 className="mb-2 text-xl font-bold">Sign in to accept your invite</h1>
-          <p className="mb-4 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+          <p className="mb-2 text-sm" style={{ color: 'var(--color-text-muted)' }}>
             We'll finish joining the league as soon as you sign in or create an account.
+          </p>
+          <p className="mb-4 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            Use the email address this invite was sent to. The invite only works for that address.
           </p>
           <div className="flex justify-center gap-2">
             <Link to={authPathWithRedirect('/login', invitePath)}>
@@ -76,6 +83,22 @@ export default function InviteAcceptancePage() {
             <Link to={authPathWithRedirect('/signup', invitePath)}>
               <Button variant="secondary">Create account</Button>
             </Link>
+          </div>
+          <div className="mt-6 border-t pt-4 text-sm" style={{ borderColor: 'var(--color-border)' }}>
+            <p className="mb-2 font-semibold">Prefer the iPhone or iPad app?</p>
+            <p className="mb-3" style={{ color: 'var(--color-text-muted)' }}>
+              Get VRC Ops from the App Store, create your account with the same address, then open this invite link again.
+            </p>
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+              <a href={APP_STORE_URL} className="underline" style={{ color: 'var(--color-accent)' }}>
+                Get VRC Ops on the App Store
+              </a>
+              {openInAppURL && (
+                <a href={openInAppURL} className="underline" style={{ color: 'var(--color-accent)' }}>
+                  Already installed? Open in the app
+                </a>
+              )}
+            </div>
           </div>
         </Card>
       </div>
@@ -98,9 +121,10 @@ export default function InviteAcceptancePage() {
         {status === 'error' && (
           <>
             <h1 className="mb-2 text-xl font-bold">Invite not accepted</h1>
-            <p className="mb-4 text-sm" style={{ color: 'var(--color-danger)' }}>{error}</p>
+            <p className="mb-2 text-sm" style={{ color: 'var(--color-danger)' }}>{failure?.message}</p>
+            <p className="mb-4 text-sm" style={{ color: 'var(--color-text-muted)' }}>{failure?.advice}</p>
             <Link to="/join" className="text-sm underline" style={{ color: 'var(--color-accent)' }}>
-              Enter a code manually instead
+              Enter an invite code instead
             </Link>
           </>
         )}
