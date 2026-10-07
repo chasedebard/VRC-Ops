@@ -4,6 +4,8 @@ export const LEGAL_LINKS = [
   { to: '/legal#eula', label: 'EULA' },
   { to: '/legal#privacy', label: 'Privacy' },
   { to: '/legal#terms', label: 'Terms' },
+  { to: '/legal#deterministic-features', label: 'Features consent' },
+  { to: '/legal#data-and-sharing', label: 'Data & sharing' },
   { to: '/legal#support', label: 'Support' },
 ] as const
 

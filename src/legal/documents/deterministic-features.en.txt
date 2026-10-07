@@ -1,0 +1,187 @@
+VRC Ops — Deterministic Features Consent
+Last updated: October 7, 2026
+VRC Ops includes optional prediction, analytics, Pit Wall, Race Engineer, and other decision-support features that use deterministic calculations and rules.
+Despite any legacy internal reference to these features as "AI," VRC Ops does not currently use generative artificial intelligence, large-language models, or external AI providers to operate these features.
+This consent explains what these features do, what information they use, and their limitations.
+By accepting this consent and using a covered feature, you authorize VRC Ops to process the applicable VRC Ops data described below for the purpose of providing that feature.
+
+1. What these features do
+
+VRC Ops uses deterministic software logic to analyze racing information and generate outputs such as:
+Race predictions and forecasts;
+Driver and performance analytics;
+Calculated ratings, confidence measures, and performance indicators (the optional global account rating has its own switch in Settings and is explained in the Privacy Policy; it is not covered by this consent);
+Pit Wall tuning recommendations;
+Race Engineer setup guidance;
+Derived statistics and comparisons; and
+Other racing insights generated from information already available to VRC Ops or entered locally into a supported feature.
+"Deterministic" means these features operate using programmed rules, formulas, calculations, weighting systems, and defined business logic.
+The same inputs and system state are intended to produce results according to those defined rules rather than through open-ended generative AI.
+
+2. No external AI or large-language-model processing
+
+VRC Ops does not currently send information used by these features to OpenAI, Anthropic, Google Gemini, or another external generative-AI or large-language-model provider.
+VRC Ops does not currently use an external generative-AI model to produce race predictions, Pit Wall recommendations, Race Engineer recommendations, driver ratings, or related decision-support outputs.
+The current systems are built from VRC Ops-controlled deterministic logic.
+If VRC Ops introduces external AI or materially different machine-learning processing in the future, this consent and the applicable Privacy Policy will be updated before that new processing is used where required.
+Users may be required to review and accept updated terms or provide new consent before accessing the changed feature.
+
+3. Race Predictions
+
+Race Predictions use relevant racing information already available within VRC Ops.
+Depending on the event and available data, prediction calculations may consider information such as:
+Official race results;
+Qualifying results;
+Finishing positions;
+Starting positions;
+DNS, DNF, and DSQ status;
+Lap and race-time information;
+Gaps to the leader;
+Fastest laps;
+Historical driver performance;
+Championship and season performance;
+Recent performance;
+Participation and eligibility information;
+Track, class, region, or event information where applicable;
+Data quality;
+Sample size; and
+Confidence calculations.
+Prediction outputs are estimates derived from available information.
+They do not determine official race results, starting positions, penalties, championship points, standings, or league decisions.
+
+4. Pit Wall and Race Engineer
+
+Pit Wall and Race Engineer features use deterministic rules and calculations to provide racing setup and tuning guidance.
+Depending on the supported game and feature, the system may process information such as:
+Game or simulation;
+Vehicle;
+Track;
+Vehicle class;
+Current tuning and setup values;
+Permitted adjustment ranges;
+Driver feedback;
+Lap information;
+Vehicle behavior reported by the driver;
+Previous recommendations; and
+Feedback about whether a recommended adjustment helped or hurt performance.
+The system uses this information to select and explain setup recommendations according to defined tuning rules and relationships.
+Pit Wall and Race Engineer recommendations are guidance only.
+They do not guarantee improved vehicle behavior, lap times, race results, or competitiveness.
+
+5. Telemetry and Capture information
+
+Raw telemetry Capture data is not uploaded to Supabase for use by these features.
+Raw telemetry captures remain locally on the user's device.
+VRC Ops may parse a raw telemetry capture locally and upload supported parsed racing information to Supabase.
+Depending on the supported telemetry source, parsed information may include information such as:
+Game;
+Vehicle;
+Track;
+Session classification;
+Lap information;
+Sector information;
+Lap or sector times;
+Tire information;
+Fuel information; and
+Other derived racing measurements supported by VRC Ops.
+VRC Ops features may use applicable parsed or derived information already stored in Supabase where that information is relevant to the requested calculation.
+The local console or PlayStation IP address used for Capture is not uploaded as part of these features.
+
+6. Pit Wall information on our servers
+
+Pit Wall tuning sessions, setup inputs, recommendations, and recommendation feedback are stored on VRC Ops servers (Supabase) against your account, so that you can keep and review your setup work.
+This information is private to the account that created it. It is not shown to other members of your leagues, including league Owners and Admins.
+Information entered into Pit Wall is used to provide the requested tuning functionality.
+You can delete your Pit Wall information, and it is deleted when you delete your account. If VRC Ops materially changes how Pit Wall information is stored or used, the applicable Privacy Policy and consent terms will be updated before the changed processing applies where required.
+
+7. Data quality and confidence
+
+The quality of a deterministic output depends on the quality and amount of information available to the system.
+Outputs may be less reliable when information is missing, incorrect, incomplete, outdated, or based on a small number of races or observations.
+Where supported, VRC Ops may use confidence measures, sample-size requirements, weighting, or other deterministic controls to account for data quality.
+These measures reduce uncertainty but do not eliminate it.
+
+8. No guarantee of accuracy
+
+Predictions, analytics, ratings, tuning recommendations, confidence values, and other generated outputs can be wrong.
+A calculation may also become inaccurate because of circumstances the system cannot know or predict, including:
+Driver improvement or decline;
+Penalties;
+Driver substitutions;
+DNS or withdrawal;
+Weather or race conditions;
+Game physics changes;
+Balance-of-performance changes;
+Vehicle setup changes;
+Hardware changes;
+Race incidents;
+Incomplete league records; or
+Incorrect information entered into VRC Ops.
+Generated information should be treated as decision-support information rather than fact or guaranteed future performance.
+
+9. Human control
+
+VRC Ops deterministic features do not replace league administration.
+League Owners, Admins, Marshals, and other authorized organizers remain responsible for official league decisions.
+Predictions and analytics do not automatically determine official results, penalties, standings, eligibility, championship classifications, or disciplinary actions.
+Pit Wall and Race Engineer recommendations do not automatically modify a vehicle or game setup.
+The user decides whether to apply a recommendation.
+
+10. No gambling or financial use
+
+VRC Ops predictions are designed for sim-racing information, competition analysis, and entertainment.
+They are not designed or provided for gambling, betting, wagering, financial decisions, or any other activity where money or something of value is placed at risk based on an outcome.
+VRC Ops does not guarantee the accuracy of a prediction for any such purpose.
+
+11. League information
+
+Prediction and analytics features may process information belonging to the league in which the feature is being used.
+This may include racing records associated with other drivers in that league.
+Access remains subject to VRC Ops authentication, league membership, role permissions, and applicable Row Level Security controls.
+Using a prediction or analytics feature does not grant access to league information the requesting account is not otherwise authorized to access.
+
+12. Data sharing
+
+VRC Ops does not currently send information processed under this consent to an external AI or large-language-model provider.
+Server-side information required by applicable deterministic features may be processed using the VRC Ops Supabase backend.
+Supabase is the primary backend source of truth for server-side VRC Ops information.
+Data handling is also governed by the VRC Ops Privacy Policy.
+
+13. Consent
+
+Certain VRC Ops deterministic prediction, analytics, Pit Wall, Race Engineer, telemetry, or data-sharing functionality may require affirmative consent before the feature can be accessed.
+Your consent authorizes VRC Ops to process the applicable information described in this document for the purpose of operating the feature you choose to use.
+Declining this consent may prevent access to features that depend on the covered processing but does not prevent use of unrelated VRC Ops functionality where that consent is not required.
+VRC Ops may record that you accepted this consent, including the applicable document version and the date or time of acceptance.
+
+14. Withdrawing consent
+
+You can withdraw this consent at any time in Settings, then Legal & Privacy.
+If you cannot use that control, contact:
+debard.chase@outlook.com
+Withdrawal applies to future consent-based processing where applicable and does not invalidate processing that occurred while valid consent was in effect.
+A feature that requires the withdrawn consent may become unavailable after withdrawal.
+
+15. Future AI or machine-learning features
+
+VRC Ops may introduce different prediction, machine-learning, artificial-intelligence, or generative-AI functionality in the future.
+Acceptance of this version does not constitute blanket consent for VRC Ops to send your information to a future external AI provider.
+If a future feature materially changes how covered information is processed, including introducing an external generative-AI or large-language-model provider, VRC Ops will update the relevant legal documents.
+Where required, users will be asked to review and accept the updated terms or provide new consent before that processing begins.
+
+16. Changes to these terms
+
+VRC Ops may update these terms when deterministic features, prediction logic, telemetry processing, Pit Wall functionality, data practices, or supporting technology materially change.
+When these terms are updated, the Last updated date will change.
+If an update materially changes the processing covered by your consent, VRC Ops may require you to review and accept the new version before continuing to use the affected feature.
+
+17. Related documents
+
+Use of these features is also governed by the VRC Ops Terms of Service and Privacy Policy.
+The Privacy Policy explains in more detail how VRC Ops collects, stores, shares, retains, and deletes information.
+If you have questions about these features or this consent, contact:
+Chase DeBard
+VRC Ops
+Postal address: provided on request by email
+Email: debard.chase@outlook.com
+Website: https://vrc-ops.org

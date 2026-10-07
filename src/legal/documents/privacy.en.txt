@@ -1,0 +1,331 @@
+Privacy Policy
+Last updated: October 7, 2026
+This Privacy Policy explains how VRC Ops ("VRC Ops," "the App," "we," "us," or "our") collects, uses, stores, shares, and protects information when you use VRC Ops and its associated services.
+This policy applies to VRC Ops across iOS, iPadOS, macOS, Android, and the VRC Ops website and web application.
+VRC Ops is offered to users in the United States, Canada, and Australia. It is not offered in the European Economic Area, the United Kingdom, or Switzerland.
+The current version of this policy is available on the sign-in screens before you sign in, in the App (Settings, then Legal & Privacy), and at https://vrc-ops.org/legal.
+If you have questions about this Privacy Policy or want to make a privacy request, contact us at debard.chase@outlook.com.
+
+How to read this policy
+
+Sections 1 to 16 apply to everyone. Sections 17, 18, and 19 add information and rights for people in the United States, Canada (including Québec), and Australia. If a regional section gives you a stronger right than an earlier section, the stronger right applies.
+This policy is available in English and in French. The App shows the language your device is set to when it is English or French, and you can switch language where the policy is displayed. The two versions have the same meaning. If they differ, the English version applies, except where the law requires the French version to apply, as it does for consumers in Québec. The French text was prepared with the help of artificial intelligence and has not yet been reviewed by a professional translator, so it may contain inaccuracies.
+This policy is a notice. It tells you what we do with information. It is not a request for your consent to optional features. Optional features ask for their own consent, only when you use them (Section 12).
+
+1. Who we are and how to reach us
+
+VRC Ops is operated by Chase DeBard, an individual based in Pennsylvania, United States.
+VRC Ops is the name of the product and application, and it is made by Chase DeBard. It is not currently operated through a separate corporation, LLC, or other legal entity.
+Chase DeBard is the person responsible for privacy at VRC Ops. You can reach that person at debard.chase@outlook.com. VRC Ops does not publish a postal address. If you need to write by post, ask for a mailing address by email and we will give you one.
+You can use that contact to ask a question, ask for a copy of your information, ask us to correct it, withdraw a consent, or make a complaint.
+Website: https://vrc-ops.org
+
+2. Information we collect
+
+2.1 Account and authentication information
+When you create a VRC Ops account, we collect the email address you use to register.
+VRC Ops currently supports email and password authentication and conditional multi-factor authentication using an authenticator application and time-based one-time passwords (TOTP).
+Authentication is provided through Supabase Auth. VRC Ops does not store your password in plaintext.
+Supabase may process authentication information necessary to authenticate your account, maintain sessions, perform password resets, verify accounts, enforce rate limits, and manage MFA factors.
+We also ask for the month and year you were born, when you create an account and, for accounts created earlier, the first time you sign in on a version of the App that asks. We use it for one purpose: to check that you are at least 14 years old, which is the minimum age for VRC Ops (Section 13). We keep the month and year, not the day, in a private record. No league member can see it, and we do not use it for anything else. You cannot change it in the App once it is entered; if you made a mistake, contact us. If you enter a date that shows you are under 14 while creating an account, no account is created, we do not keep what you entered, and the App on that device will not take another answer for 90 calendar days (the device remembers only that a refusal happened).
+
+2.2 Optional account profile information
+You may optionally provide additional information for your VRC Ops profile, including your name or display name, Discord username or handle, PlayStation Network (PSN) identifier, and profile or driver image where supported.
+Except for the email address required to maintain an account, these profile fields are optional.
+
+2.3 Driver profiles and information about other people
+VRC Ops separates a user account from a league's racing driver records.
+A league Owner or Admin may create a driver record for someone who does not have a VRC Ops account. These records are intended to contain racing-related information and may include a driver or display name, racing number, driver photo, team, class, region, season participation and assignments, account-to-driver association if the driver later has an account, qualifying and race history, championship results and standings, and other in-game racing information used by the league.
+League administrators cannot create a VRC Ops user account on another person's behalf through the driver-profile system. Driver records for people without accounts are not intended to contain account-level information such as email addresses, telephone numbers, birthdays, home addresses, or similar contact information.
+Names, photographs, online identifiers, and similar information can still be personal information even when telephone numbers, addresses, or other contact details are not collected.
+The league administrators who enter this information decide what goes into their league's records. If you provide information or a photograph relating to another person, you are responsible for having appropriate authority or permission to provide it to the league.
+If a league holds information about you that you do not want it to hold, you can ask the league administrator or ask us (Section 11).
+
+2.4 League, championship, season, event, and results information
+VRC Ops stores information necessary to operate racing leagues, including information relating to leagues, championships, seasons, teams, classes, regions, tracks, scheduled events and race weekends, driver eligibility and participation, qualifying sessions, race sessions, starting or grid positions, finishing positions, lap counts, lap and sector times, total race times, gaps to the leader, DNS, DNF, and DSQ statuses, penalties, pole positions, fastest laps, bonus points, championship points, standings, historical driver performance, and other race-management information entered by authorized league members.
+VRC Ops may calculate standings, scores, statistics, predictions, ratings, and other derived information from this data.
+
+2.5 League access and permissions
+League information is not publicly accessible without authentication.
+A person must sign into a VRC Ops account and have permission to access a particular league.
+Current league roles include Owner, Admin, Marshal, Driver, and Viewer.
+The information and controls available to a user depend on their league membership and role.
+
+2.6 Telemetry and Capture
+VRC Ops includes an optional Capture feature for supported racing games and platforms, including supported Gran Turismo 7 telemetry.
+When Capture is used, VRC Ops may communicate with a supported console or device on the user's local network.
+The raw telemetry capture is processed locally and is not uploaded to our servers.
+VRC Ops may create a parsed version of the telemetry and upload that parsed information to our servers. Depending on the available telemetry, parsed information may include information such as the game or simulation, vehicle, track, session information, lap information, sector information, lap or sector times, tire or fuel information, session classification, and other derived racing or telemetry measurements.
+The console or PlayStation IP address entered or detected for Capture is stored locally on the device and is not stored by VRC Ops on our servers as league or account data.
+Raw telemetry artifacts may remain locally on the user's device after a Capture session. These local artifacts are under the control of the device and are not stored by VRC Ops on its backend.
+On Android, Capture runs as a foreground service and shows a notification while it is running, so the App asks for permission to show notifications. Finding a console on your local network uses the device's Wi-Fi multicast capability. Neither is used to find your location.
+
+2.7 Predictions
+VRC Ops provides race-prediction and forecasting functionality using data already available within VRC Ops.
+The current prediction system is deterministic. It is not powered by OpenAI, Anthropic, Google Gemini, or another external generative-AI or large-language-model provider.
+Predictions may use relevant racing information such as historical results, championship data, driver performance, race participation, and other applicable league information.
+Prediction outputs and evaluation history are not sent to an external AI provider.
+
+2.8 Pit Wall and Race Engineer
+Pit Wall and Race Engineer help you plan and review car setups.
+Depending on what you use, VRC Ops stores on our servers, against your account, information such as the game, vehicle, track, and class you are working on, your setup values and changes, run cards and summaries of runs you choose to capture, driver feedback, the recommendations you were shown, and whether they helped.
+This information is private to the account that created it. It is not shown to other members of your leagues, including league Owners and Admins.
+Recommendations are produced by fixed rules and calculations within VRC Ops. They are not produced by an external generative-AI service.
+Raw telemetry stays on your device (Section 2.6).
+
+2.9 Global rating and awards
+VRC Ops can calculate a rating for your account from official results in leagues where a league Owner or Admin has linked your account to a driver record. The rating belongs to your account, not to a single league's driver record.
+The rating is off by default. No rating is calculated for your account, and none of your results are counted toward a rating, until you choose to turn it on. You turn it on in Settings. To do so, two-factor authentication must be switched on for your account. Results from races that begin at least 24 hours after you turn it on are counted. You can turn it off at any time in Settings. Turning it off ends your current rating period and stops new results being counted. If you later turn it on again, you start a new rating period.
+We keep a record of rating changes, corrections, and your decisions to turn the rating on or off, so that a rating can be explained and corrected.
+Ratings are calculated from official results by fixed rules. Results can be corrected or voided by the league, and ratings may be recalculated when that happens.
+Today, no league member can see anyone's rating: the shared display has not started, and the App says it is coming soon. When it starts, other members of a league you belong to will see, next to your driver record, and only if you have turned the rating on and at least one race has counted: your tier (or "provisional" while your rating is still being established), your global rank once it is no longer provisional, a World Champion or National Champion badge if you hold one, and the finalized rating change for a race.
+If you finish a quarter as the World Champion, you may be offered a free subscription period. To offer it, VRC Ops asks Apple's App Store Connect service to create a single-use offer code for the subscription product you hold. The code is kept against your account until redeemed, and we may email you about it. Only accounts that have turned the rating on can be selected.
+
+2.10 Invitations
+When a league Owner or Admin invites another person to VRC Ops, we process the invited person's email address and the inviter's display name for the purpose of sending and validating the invitation.
+Invitation tokens are securely hashed rather than stored as usable plaintext invitation tokens.
+Transactional invitation emails are delivered using Resend.
+An invitation email is sent only because a league Owner or Admin asked us to send it to that address. It contains the invitation and nothing promotional.
+
+2.11 Consent and agreement records
+When you accept the Terms of Service, acknowledge the Privacy Policy, or give a consent for an optional feature, we keep a record of which document and version, when the decision was made, the platform and App version, and the league where relevant.
+Certain functionality requires an explicit consent decision before the feature is used. This includes Predictions, Pit Wall, Telemetry or Capture, and league data sharing.
+You can withdraw an optional consent in Settings, then Legal & Privacy. Withdrawal does not affect processing that lawfully occurred before the withdrawal. Some features may stop working after the consent needed to operate them is withdrawn.
+If you want to withdraw a consent and no control is available in the App, contact debard.chase@outlook.com.
+
+2.12 Subscription and purchase information
+VRC Ops offers paid subscriptions, including subscription-based VRC Ops features.
+Purchases are handled through Apple's App Store and StoreKit. At the date of this policy, paid subscriptions are sold only through Apple's App Store; none are sold through Android, Google Play, or the website.
+VRC Ops does not collect or store your full credit card number, debit card number, or other complete payment-card credentials. Apple processes the actual payment transaction.
+VRC Ops may receive and store information necessary to determine subscription entitlement and provide paid features, including subscription tier, entitlement or subscription status, transaction or entitlement identifiers, purchase or renewal information, expiration information, and receipt-validation or App Store environment information necessary to confirm access.
+VRC Ops does not use RevenueCat, Stripe, Paddle, or another separate subscription-payment processor.
+
+2.13 Transactional email
+VRC Ops uses Resend for transactional email.
+Transactional messages may include league invitations, account-related messages, email verification, password-reset messages, and other service communications required to operate an account or league.
+Resend's email service for VRC Ops runs in the United States. We have not turned on open or click tracking, so Resend does not tell us whether you opened a message or followed a link in it.
+VRC Ops does not send promotional or marketing email campaigns.
+If promotional email is introduced in the future, it will only be sent to people who have chosen to receive it, every message will identify us and include an accessible way to unsubscribe, and this Privacy Policy will be updated first.
+
+2.14 Support and privacy requests
+If you contact us, we keep your message, our reply, and any information we need to confirm who you are and to handle your request, for as long as described in Section 9.
+
+2.15 Diagnostics and technical information
+VRC Ops does not integrate a third-party behavioral analytics platform or third-party crash-reporting SDK.
+If you have chosen to share diagnostics with app developers in your device settings, Apple may make crash and diagnostic information available to us through its standard developer systems. If you install the App from Google Play, Google may provide us with crash and performance information about the App through its developer tools. Crash reports may contain technical information necessary to understand a failure, such as the app version, operating-system information, device characteristics, crash state, and related diagnostic details.
+We use this information to diagnose defects and improve application stability.
+VRC Ops does not intentionally collect device advertising identifiers, precise location, approximate device location, contacts, or behavioral advertising data through the application.
+The App uses your device's photo access only to let you choose pictures you want to add, such as a driver photo or a results image.
+Use of an internet-connected backend necessarily involves network-level information being received by infrastructure providers. In particular, Supabase authentication and API infrastructure may automatically receive and log request metadata such as IP address, user agent, authentication activity, and request information for security, rate limiting, fraud prevention, troubleshooting, and operation of the service.
+VRC Ops does not maintain an IP-address field as part of your user or driver profile and does not use IP addresses for advertising or cross-app tracking.
+
+2.16 The website
+The VRC Ops website does not collect information of its own. If you sign in on the website, you use the same account and the same sign-in as the App, so what this policy says about your account applies there too. The website's pages are hosted on GitHub Pages, a service of GitHub, Inc. in the United States. The domain name vrc-ops.org is registered with IONOS, which also runs its domain name system. Like any website, these services may keep ordinary technical logs of requests, such as IP addresses and the pages requested. The invitation and sign-in links the App uses also pass through this domain.
+
+3. How we use information
+
+We use information described in this policy to create and maintain VRC Ops accounts, authenticate users and provide MFA, maintain account security, operate leagues, championships, seasons, teams, events, and race weekends, maintain driver rosters and racing records, calculate results, points, standings, ratings, and racing statistics, provide prediction functionality, provide Pit Wall and Race Engineer functionality, process supported telemetry Capture information, deliver league invitations, verify subscription entitlements, provide paid functionality, maintain permissions and role-based access, diagnose crashes and application defects, protect VRC Ops against misuse, unauthorized access, and security threats, respond to support and privacy requests, maintain the reliability and integrity of the service, and comply with applicable legal obligations.
+We do not sell personal information.
+We do not share personal information for cross-context behavioral advertising.
+We do not use third-party advertising trackers.
+
+Automated calculations
+Standings, predictions, ratings, and Pit Wall recommendations are calculated automatically from the data in VRC Ops. They are tools to help leagues and drivers. Results and penalties are entered or confirmed by people in the league.
+VRC Ops does not make any decision that has legal or similarly significant effects on you solely by automated means.
+You can ask us to explain how a rating or prediction about you was produced and to correct data that it relied on (Section 11).
+
+4. Data sharing within a league
+
+VRC Ops is a multi-user league-management system.
+Information contained in a league may be visible to other authenticated members of that league according to their role and permissions.
+For example, members may be able to see information such as driver names and images, teams, race participation, qualifying and race results, standings, penalties, and historical racing performance.
+Owners and Admins have broader administrative access than Drivers or Viewers.
+League information is not intended to be accessible to unrelated VRC Ops accounts that have not been granted access to that league.
+League Owners and Admins are responsible for the information they enter about other people and for following any law that applies to them as organizers.
+
+5. Service providers and others who receive information
+
+Supabase
+Supabase provides VRC Ops backend infrastructure, including PostgreSQL database hosting, authentication, MFA functionality, file storage including driver images, API services, Row Level Security, edge and scheduled functions where used, and infrastructure logging and security functionality.
+Supabase is the primary backend source of truth for server-side VRC Ops data.
+Supabase and its infrastructure providers may process limited technical information required to provide, protect, and operate their services. Supabase publishes the list of its own sub-processors on its website.
+
+Resend
+Resend is used to deliver transactional email, including league invitations and other supported account or service messages.
+Resend receives information necessary to deliver the relevant email, including the destination email address and message content.
+
+GitHub and IONOS
+GitHub (GitHub Pages) hosts the pages of the VRC Ops website. IONOS registers the domain name and runs its domain name system. They receive the technical information a visitor's device sends when it loads a page or looks up the domain name, such as the IP address.
+
+Microsoft
+The email address in this policy is an email account provided by Microsoft (Outlook). Messages you send to it, and our replies, are held there.
+
+Apple and Google
+Apple provides services used by VRC Ops on Apple platforms, including App Store distribution, StoreKit and subscription transactions, the App Store Connect service used for offer codes, and Apple-provided crash and diagnostic reporting.
+Payment-card information submitted to Apple for an App Store transaction is processed by Apple and is not provided to VRC Ops as complete card information.
+If you install the Android version, Google provides distribution and may provide crash and performance information as described in Section 2.15.
+VRC Ops does not currently use Apple Push Notification service for production push notifications.
+
+Other disclosures
+We may disclose information where the law requires it, to respond to a valid legal process, to protect the rights, safety, or security of people or of VRC Ops, or to investigate misuse of the service.
+If VRC Ops is transferred to another operator, information needed to run the service would be transferred with it, subject to this policy, and we would tell you before the transfer takes effect.
+VRC Ops does not use any additional external AI, analytics, advertising, payment, or push-notification provider.
+Each provider processes information under its own terms and only to provide its service to us.
+
+6. Where information is processed
+
+VRC Ops stores account and league information on servers in the United States. The primary production backend is a Supabase project hosted in the United States (Amazon Web Services region us-east-2, in Ohio).
+Our service providers (Supabase, Resend, Apple, GitHub, IONOS, Microsoft, and, for Android, Google) may process information in the United States and in other countries. They handle information under their own standard terms and security practices.
+This means that if you are in Canada or Australia, your information is sent to and held in the United States, and may be handled in other countries by our providers. Information held in another country is subject to that country's laws and may be accessible to its courts and authorities.
+
+7. Advertising, analytics, and tracking
+
+VRC Ops does not display third-party advertising, does not contain advertising SDKs, does not use cross-app advertising tracking, does not use IDFA for advertising, does not use third-party behavioral analytics, and does not sell user information to advertisers.
+VRC Ops does not track you across other companies' apps or websites.
+These practices describe VRC Ops as it operates on the date shown at the top of this policy.
+If a future version materially changes these practices, VRC Ops will update this Privacy Policy and present the revised policy as required before the changed practices apply.
+
+8. Security and incidents
+
+We use technical and organizational safeguards intended to protect VRC Ops information.
+These measures include Supabase Row Level Security policies restricting access according to league membership and permissions, authentication requirements before accessing league data, role-based authorization, securely hashed invitation tokens, HTTPS/TLS encryption for communications between VRC Ops and backend services, access controls for production systems, conditional MFA support using authenticator/TOTP factors, and separation of league permissions and authenticated account access.
+No internet-connected system can guarantee absolute security.
+Users are responsible for maintaining the security of their own password, authentication factors, and devices.
+If a security incident involving your personal information creates a risk of harm to you that the law treats as serious, we will tell you by email and tell the regulator, as the law requires. We keep a record of security incidents that involve personal information.
+
+9. Data retention
+
+We generally retain account and league information for as long as it is necessary to operate the applicable account, league, subscription, or VRC Ops functionality. The specific rules are:
+Account profile and sign-in details: until you delete your account.
+Month and year of birth: until you delete your account.
+Memberships and invitations that belong to your account: removed when you delete your account or leave the league.
+Consent and agreement records: removed with your account.
+Private Pit Wall data and capture files: removed when you delete them or delete your account.
+League records (championships, seasons, events, results, standings, rating history, and driver records): kept for as long as the league exists, and kept after a league is closed, as described in Section 10.
+Records of your communications with us about privacy requests: kept in the VRC Ops email account for as long as reasonably needed to handle the request and to show how it was handled.
+Other records, namely unaccepted invitations, subscription and entitlement records, rating audit records, account-deletion request records, and provider logs: we do not run our own automatic deletion schedule for these today. They are kept in our database for as long as the account or league they belong to exists, and deleting an account (Section 10) removes or de-identifies them as described there. Logs and delivery records held by Supabase, Resend, and Apple are kept under those providers' standard retention.
+Information may also be retained where reasonably necessary for security, fraud prevention, troubleshooting, legal compliance, dispute resolution, transaction records, or technical recovery.
+Certain logs, transactional-email records, backup copies, or service-provider records may remain for a limited period after information is deleted from active VRC Ops systems. Where applicable, such residual information may remain for as long as the service provider's standard backup and infrastructure-retention schedule provides, unless a shorter or longer period is required by law.
+Information remaining only in backup or recovery systems will not be intentionally restored for ordinary VRC Ops use except where necessary for legitimate disaster recovery or system restoration.
+Raw telemetry Capture artifacts stored only on your device are not included in VRC Ops server-side retention because VRC Ops does not possess those raw files.
+VRC Ops may suspend or revoke access to the service where appropriate under its Terms of Service.
+
+10. Account deletion
+
+VRC Ops provides an in-app account deletion process. You can find it in Settings. You may also ask for help by contacting debard.chase@outlook.com.
+When an account is deleted, the VRC Ops authentication account is deleted, account-level profile information associated with that account is deleted, your avatar and personal settings are deleted, your consent and agreement records are deleted, your private Pit Wall data and capture files are deleted, and your memberships and invitations are removed.
+
+Driver records after account deletion
+A VRC Ops account and a league driver record are separate records.
+If your account was linked to a driver record, deleting your account unlinks that record. The driver's photo, biography, and platform and racing identifiers are removed from it, and your account is no longer connected to it.
+The record itself stays in the league, so the league's history is not lost. Its name is replaced: the driver's name becomes the word "Driver" followed by the driver's racing number. For example, if the racing number was 73, the driver becomes "Driver 73". If the record has no racing number, it becomes "Driver". The first and last names are removed too.
+A league may retain racing records necessary to preserve legitimate league history, including the racing number, race and qualifying results, championship history, points and standings, and rating history. A retained driver record is not an active login account.
+If a driver record was never linked to an account, the person it describes can ask the league administrator or ask us to replace the name in the same way, while keeping the league's results intact.
+
+League Owners
+If other active members remain in a league you own, you must transfer ownership to one of them before your account can be deleted. VRC Ops does not transfer ownership automatically, and subscription or billing arrangements do not move with it.
+If you are the only active member of a league you own, deleting your account closes the league. A closed league has no owner, cannot be joined or changed, and is not visible to anyone, but VRC Ops keeps its racing records (championships, seasons, events, results, standings, and driver records) so that the history is not lost. Personal information attached to your account is removed or unlinked from the retained records. A league that contains only unused drafts and no racing history is deleted instead.
+Backups and logs are described in Section 9.
+
+11. Your rights and how to use them
+
+Depending on where you live and the request, you may ask us to: tell you what personal information we hold about you and give you a copy; correct information that is wrong; delete information we no longer need; give you your information in a portable form; stop or limit certain uses; explain how an automated calculation about you was produced; or record the withdrawal of a consent.
+How to ask: use Settings, then Legal & Privacy, then Your information, or email debard.chase@outlook.com. Tell us what you are asking for and which account it concerns.
+We may need to confirm that the person asking is the account holder before we share, change, export, or delete information. We will ask only for what we need for that purpose.
+We will reply within 30 days of receiving your request. If we need longer, we will tell you why and when to expect an answer. Where the law gives you a shorter time, we follow the law.
+If your name or photo appears in a league's records, you can also ask us, or the league administrator, to stop showing it or to replace it, while the league's results stay intact. Where the law gives you a right to have information about you no longer shared, we follow it.
+We do not charge for ordinary requests.
+VRC Ops does not currently have an automated export tool. We prepare a copy of your information ourselves.
+If we refuse all or part of a request, we will tell you why in writing and explain how to complain or appeal.
+Information in a league's records may belong to the league as well as to you. Where a request would change the league's official results, we may need to involve the league administrator.
+
+12. Consent, agreement, and optional features
+
+VRC Ops separates four different things:
+The Terms of Service are an agreement. You accept them to use VRC Ops.
+This Privacy Policy is a notice. You acknowledge that you have read it. Acknowledging it is not consent to optional features.
+Optional features each ask for their own consent, only when you first use them. Predictions, Pit Wall and Race Engineer, and Capture information are covered by what the App calls the Deterministic Features Consent. League data sharing is covered by what the App calls the Data & Sharing Consent. You can withdraw these in Settings.
+Marketing consent does not exist because VRC Ops does not send marketing. If that ever changes, it will be a separate choice that is not required to use your account.
+Refusing an optional consent does not stop you from using the rest of VRC Ops.
+
+13. Age and children
+
+You must be at least 14 years old to create or use a VRC Ops account.
+When you create an account we ask for the month and year you were born (Section 2.1). If it shows you are under 14, we do not create the account, and the App on that device will not take another answer for 90 calendar days. If an existing account's month and year show the person is under 14, the account stops working and the App tells them so; that account cannot give a different answer for 90 calendar days, after which it may answer again. They can delete the account from that screen. We may delete an account we know belongs to a person under 14.
+VRC Ops is not directed to children, and we do not knowingly permit children under 14 to create VRC Ops accounts.
+VRC Ops does not verify age by identity documents. We rely on the month and year you give us.
+If you believe information has been collected from a child under 14, contact debard.chase@outlook.com.
+
+14. Complaints
+
+If you are unhappy with how we have handled your information or a request, write to us first at the contact in Section 16. We will acknowledge your complaint, look into it, and reply in writing.
+If you are not satisfied with our reply, you can complain to a regulator. Sections 17, 18, and 19 say which regulators are available where you live.
+
+15. Changes to this policy and future features
+
+We may update this Privacy Policy from time to time to reflect changes to VRC Ops, new features, changes in service providers, changes in data practices, security requirements, or legal or regulatory requirements.
+When the policy changes, the Last updated date at the top will be changed. We will give notice of material changes in the App before they take effect, and we will ask you to acknowledge the new version before you continue.
+VRC Ops may add or modify functionality over time. Future versions may introduce functionality such as push notifications, promotional communications, additional diagnostics or analytics, new integrations, or other functionality that involves new categories or uses of information. The fact that a feature may be considered for the future does not mean VRC Ops currently performs that processing.
+Where a change needs your consent, we will ask for it before the new processing begins.
+
+16. Contact us
+
+For privacy questions, requests, account-deletion assistance, consent withdrawal, data-access or export requests, or complaints, contact:
+Chase DeBard
+VRC Ops
+Postal address: provided on request by email
+Email: debard.chase@outlook.com
+Website: https://vrc-ops.org
+
+17. If you are in the United States
+
+17.1 Your rights
+Some US states give residents rights over their personal information, such as the right to know and access it, correct it, delete it, receive a portable copy, and opt out of the sale of personal information, targeted advertising, or certain profiling. VRC Ops does not sell personal information, does not use it for targeted advertising, and does not use it for profiling that produces legal or similarly significant effects.
+To use a right, follow Section 11. If you disagree with our decision, reply to our response asking for it to be reviewed. We will review it and tell you the outcome in writing within the time the law allows.
+You will not be treated differently for exercising a privacy right.
+
+17.2 California
+Where California privacy law applies, California residents may have the right to know what categories of personal information we collect, request access to specific personal information, request correction of inaccurate personal information, request deletion of eligible personal information, learn which categories of third parties receive information, opt out of any sale or sharing of personal information, and limit certain uses of sensitive personal information.
+In the last 12 months we have collected the categories of information described in Section 2 (identifiers such as email address and account identifiers; profile and image information; racing and results information; purchase and subscription information; internet or app-activity information described in Section 2.15). We collect it from you, from league administrators, and from Apple for subscription status. We use it for the purposes in Section 3 and share it only with the providers in Section 5.
+VRC Ops does not sell personal information and does not share it for cross-context behavioral advertising.
+To make a California request, follow Section 11.
+
+17.3 Children
+VRC Ops is not directed to children and does not knowingly collect personal information from children under 13. Its minimum age is 14 (see Section 13).
+
+18. If you are in Canada
+
+18.1 Everyone in Canada
+We are responsible for the personal information we hold. The person responsible for privacy is named in Section 1.
+We collect and use personal information for the purposes in Sections 2 and 3. We ask for your agreement as described in Section 12. Where information is sensitive, or our use would not be what you would reasonably expect, we ask for your express consent before we use it.
+You can ask to see your personal information, ask us to correct it, withdraw a consent, and challenge how we handle your information (Section 11). We reply within 30 days.
+Your information is stored in the United States and may be handled in other countries by our providers (Section 6).
+If you are not satisfied with our reply, you can complain to the Office of the Privacy Commissioner of Canada (priv.gc.ca) or to the privacy regulator for your province.
+
+18.2 Québec
+The person in charge of the protection of personal information at VRC Ops is Chase DeBard, who can be reached at debard.chase@outlook.com. This policy is published on the VRC Ops website at https://vrc-ops.org/legal, so the person's name and contact details are published there too.
+Your personal information is communicated outside Québec, to servers in the United States and to our providers. Before communicating personal information of people in Québec outside Québec, we assess the privacy risks. The providers that receive it are named in Section 5.
+You must be at least 14 to use VRC Ops, so we do not knowingly collect personal information from people under 14 (Section 13).
+Some features calculate ratings and predictions about your racing performance (Sections 2.7 and 2.9). The global rating is off until you turn it on, and you can turn it off again in Settings.
+We reply to access and rectification requests within 30 days.
+This policy and the App are available in French. The App shows French when your device is set to French.
+If you are not satisfied with our reply, you can bring a complaint to the Commission d'accès à l'information du Québec.
+
+19. If you are in Australia
+
+19.1 Our approach
+We handle the personal information of people in Australia in line with the Privacy Act 1988 and the Australian Privacy Principles, to the extent they apply to us.
+We collect your information to run your account and your leagues, as described in Sections 2 and 3. If you do not give us the information we need (for example, your email address), we cannot create your account.
+
+19.2 Overseas disclosure
+We are likely to disclose your personal information to recipients outside Australia. They are our service providers in the United States and, depending on the provider, in other countries (Sections 5 and 6).
+
+19.3 Access, correction, and complaints
+You can ask for access to your personal information or ask us to correct it (Section 11). We reply within 30 days.
+If you want to complain, write to us first (Section 14). If you are not satisfied with our reply, you can complain to the Office of the Australian Information Commissioner (oaic.gov.au).
+
+19.4 Automated processing
+Standings, predictions, ratings, and Pit Wall recommendations use automated calculations (Section 3). See Section 3 for what they do and do not decide.
+
+19.5 Data breaches
+If a data breach involving your personal information is likely to result in serious harm to you, we will notify you and the regulator as the law requires.
