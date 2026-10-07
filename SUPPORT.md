@@ -2,7 +2,7 @@
 
 **Last updated:** July 13, 2026
 
-VRC Ops is maintained by an independent developer without a dedicated support team or guaranteed response time. For account, app, website, or purchase help, email [povchaos@gmail.com](mailto:povchaos@gmail.com). Support is provided on a best-effort basis.
+VRC Ops is maintained by an independent developer without a dedicated support team or guaranteed response time. For account, app, website, or purchase help, email [debard.chase@outlook.com](mailto:debard.chase@outlook.com). Support is provided on a best-effort basis.
 
 ## Before contacting support
 
@@ -66,10 +66,10 @@ Confirm you are signed into the same VRC Ops account used in the Apple-platform 
 
 ## Account deletion and privacy requests
 
-You can start account deletion from Settings in the app or website. If you are the sole Owner of a league, you must first transfer ownership or otherwise resolve the league. For help with deletion or a privacy request, email [povchaos@gmail.com](mailto:povchaos@gmail.com).
+You can start account deletion from Settings in the app or website. If you are the sole Owner of a league, you must first transfer ownership or otherwise resolve the league. For help with deletion or a privacy request, email [debard.chase@outlook.com](mailto:debard.chase@outlook.com).
 
 ## Contact
 
-Email: [povchaos@gmail.com](mailto:povchaos@gmail.com)
+Email: [debard.chase@outlook.com](mailto:debard.chase@outlook.com)
 
 This address is also the contact for security and privacy reports. Please provide enough detail to reproduce a technical issue while avoiding passwords, authentication codes, or other secrets.
