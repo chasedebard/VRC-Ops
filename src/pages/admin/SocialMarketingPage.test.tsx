@@ -30,6 +30,7 @@ vi.mock(
   }),
 );
 import Page from "./SocialMarketingPage";
+import { paintSocialCard } from "@/utils/socialCard";
 const dashboard = {
   campaign: {
     league_id: "league",
@@ -72,6 +73,7 @@ const dashboard = {
 beforeEach(() => {
   permission = resolvePermissions(["owner"]);
   vi.clearAllMocks();
+  vi.mocked(paintSocialCard).mockReset().mockResolvedValue(undefined);
   load.mockResolvedValue(dashboard);
   review.mockResolvedValue(undefined);
   stop.mockResolvedValue(undefined);
@@ -110,6 +112,18 @@ describe("Social marketing approval boundary", () => {
       brand: true,
       moderation: true,
     });
+  });
+  it("blocks approval when official brand artwork cannot be verified", async () => {
+    vi.mocked(paintSocialCard).mockRejectedValue(
+      new Error("Official logo unavailable"),
+    );
+    render(<Page />);
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Official VRC artwork could not be verified",
+    );
+    for (const check of screen.getAllByRole("checkbox")) fireEvent.click(check);
+    expect(screen.getByRole("button", { name: "Approve" })).toBeDisabled();
+    expect(review).not.toHaveBeenCalled();
   });
   it("permits rejection without approving the content", async () => {
     render(<Page />);

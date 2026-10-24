@@ -21,6 +21,7 @@ import {
 import {
   downloadBlob,
   paintSocialCard,
+  SOCIAL_BRAND,
   socialCardBlob,
 } from "@/utils/socialCard";
 
@@ -336,15 +337,33 @@ function Post(
   const canvas = useRef<HTMLCanvasElement>(null),
     [checks, setChecks] = useState<Record<string, boolean>>({}),
     [asset, setAsset] = useState<string | null>(null);
+  const [brandError, setBrandError] = useState<string | null>(null);
+  const [brandReady, setBrandReady] = useState(false);
   const [when, setWhen] = useState(() => {
     const d = new Date(p.scheduled_at);
     return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString()
       .slice(0, 16);
   });
   useEffect(() => {
+    let current = true;
+    setBrandError(null);
+    setBrandReady(false);
     if (canvas.current) {
-      paintSocialCard(canvas.current, p, p.network === "youtube");
+      Promise.resolve(
+        paintSocialCard(canvas.current, p, p.network === "youtube"),
+      ).then(() => {
+        if (current) setBrandReady(true);
+      }).catch(() => {
+        if (current) {
+          setBrandError(
+            "Official VRC artwork could not be verified. Graphic export and approval are stopped.",
+          );
+        }
+      });
     }
+    return () => {
+      current = false;
+    };
   }, [p]);
   useEffect(() => {
     setAsset(null);
@@ -367,7 +386,8 @@ function Post(
     rights: "League and media permissions cover this post",
     privacy:
       "Only approved aliases; no real names, driver pictures or private details",
-    brand: "Caption, graphic and app call to action are correct",
+    brand:
+      "Official logo is unchanged; colors, caption and app call to action are correct",
     moderation: "Content is original, respectful and suitable for this channel",
   };
   return (
@@ -384,6 +404,7 @@ function Post(
         aria-label={`Graphic preview: ${p.title}`}
         className="w-full max-w-xs rounded-lg"
       />
+      {brandError && <p role="alert">{brandError}</p>}
       <p className="whitespace-pre-wrap text-sm">{p.caption}</p>
       <a
         className="text-sm underline"
@@ -437,9 +458,12 @@ function Post(
           variant="secondary"
           onClick={() =>
             downloadBlob(
-              new Blob([JSON.stringify(p, null, 2)], {
-                type: "application/json",
-              }),
+              new Blob(
+                [JSON.stringify({ ...p, brand: SOCIAL_BRAND }, null, 2)],
+                {
+                  type: "application/json",
+                },
+              ),
               `${p.id}.json`,
             )}
         >
@@ -509,7 +533,8 @@ function Post(
           </fieldset>
           <div className="flex gap-2">
             <Button
-              disabled={busy || !all || (needsMedia && !p.asset_path)}
+              disabled={busy || !brandReady || !!brandError || !all ||
+                (needsMedia && !p.asset_path)}
               onClick={() =>
                 action(
                   () =>
