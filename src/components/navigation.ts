@@ -74,6 +74,7 @@ export function subNavigation(itemKey: string, permissions: LeaguePermissions): 
         { to: '/admin/members', label: 'Members' },
         { to: '/admin/invitations', label: 'Invitations' },
         { to: '/admin/announcements', label: 'Announcements' },
+        { to: '/admin/social-marketing', label: 'Social marketing' },
         { to: '/admin/league-plus', label: 'League Plus' },
       ]
     case 'settings':

@@ -42,6 +42,7 @@ const AdminHubPage = lazy(() => import('@/pages/admin/AdminHubPage'))
 const MembersPage = lazy(() => import('@/pages/admin/MembersPage'))
 const InvitationsPage = lazy(() => import('@/pages/admin/InvitationsPage'))
 const AnnouncementsPage = lazy(() => import('@/pages/admin/AnnouncementsPage'))
+const SocialMarketingPage = lazy(() => import('@/pages/admin/SocialMarketingPage'))
 import { ProGate } from '@/components/ProGate'
 import { LoadingState } from '@/components/States'
 import LegalSupportPage from '@/pages/LegalSupportPage'
@@ -132,6 +133,7 @@ export function AppRoutes() {
         <Route path="/admin/members" element={<MembersPage />} />
         <Route path="/admin/invitations" element={<InvitationsPage />} />
         <Route path="/admin/announcements" element={<AnnouncementsPage />} />
+        <Route path="/admin/social-marketing" element={<SocialMarketingPage />} />
         <Route path="/admin/*" element={<Navigate to="/admin" replace />} />
       </Route>
 

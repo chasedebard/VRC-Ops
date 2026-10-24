@@ -13,6 +13,7 @@ interface Row {
 }
 
 const PEOPLE: Row[] = [
+  { to: '/admin/social-marketing', title: 'Social marketing', subtitle: 'Review verified app marketing, media permissions and publishing activity.' },
   { to: '/admin/members', title: 'Members & roles', subtitle: 'Who is in the league, their roles, and driver account assignments.' },
   { to: '/admin/invitations', title: 'Invitations', subtitle: 'Email invites or manual codes, with one or more roles.' },
   { to: '/admin/announcements', title: 'Announcements', subtitle: 'Messages every member sees on Home.' },
